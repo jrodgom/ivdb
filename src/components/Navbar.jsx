@@ -1,29 +1,27 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
-export default function Navbar() {
+export default function Navbar({ user, logout }) {
   const [open, setOpen] = useState(false);
+  const [profileMenu, setProfileMenu] = useState(false);
 
   return (
     <nav className="fixed top-0 w-full z-50 backdrop-blur-lg bg-black/40 border-b border-gray-800 shadow-[0_0_25px_#6366f155] transition-all duration-300">
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center relative">
-        {/* === LOGO ANIMADO CON EFECTO NEÓN === */}
+        {/* === LOGO === */}
         <Link
           to="/"
           className="relative text-3xl font-extrabold tracking-tight transition-all duration-300 group"
         >
-          {/* Capa del texto con gradiente animado */}
           <span className="relative z-10 bg-linear-to-r from-indigo-400 via-fuchsia-500 to-indigo-400 bg-size[:200%_auto] animate-gradient-x text-transparent bg-clip-text drop-shadow-[0_0_10px_#7c3aedaa]">
             IVDB
           </span>
-
-          {/* Glow difuminado detrás del texto */}
           <span className="absolute inset-0 blur-lg opacity-60 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-indigo-400 rounded-md scale-105 group-hover:opacity-80 transition-all duration-500"></span>
         </Link>
 
         {/* === LINKS DESKTOP === */}
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex space-x-8 items-center">
           {[
             { to: "/", label: "Inicio" },
             { to: "/add-game", label: "Añadir juego" },
@@ -34,23 +32,58 @@ export default function Navbar() {
               key={to}
               to={to}
               className={({ isActive }) =>
-                `text-gray-300 font-medium hover:text-indigo-400 transition ${
-                  isActive ? "text-indigo-400" : ""
-                }`
+                `text-gray-300 font-medium hover:text-indigo-400 transition ${isActive ? "text-indigo-400" : ""}`
               }
             >
               {label}
             </NavLink>
           ))}
-        </div>
 
-        {/* === PERFIL BOTÓN === */}
-        <Link
-          to="/perfil"
-          className="hidden md:inline-block bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
-        >
-          Perfil
-        </Link>
+          {/* === PERFIL DESKTOP === */}
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setProfileMenu(!profileMenu)}
+                className="flex items-center bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
+              >
+                {user.username}
+                <ChevronDown className="ml-2" size={18} />
+              </button>
+              {profileMenu && (
+                <div className="absolute right-0 mt-2 w-40 bg-gray-900 border border-gray-700 rounded-lg shadow-lg overflow-hidden animate-fadeIn">
+                  <Link
+                    to="/perfil"
+                    onClick={() => setProfileMenu(false)}
+                    className="block px-4 py-2 text-gray-200 hover:bg-indigo-500 hover:text-white transition"
+                  >
+                    Perfil
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="w-full text-left px-4 py-2 text-gray-200 hover:bg-indigo-500 hover:text-white transition"
+                  >
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex space-x-2">
+              <Link
+                to="/login"
+                className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
+              >
+                Iniciar sesión
+              </Link>
+              <Link
+                to="/register"
+                className="px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
+              >
+                Registrarse
+              </Link>
+            </div>
+          )}
+        </div>
 
         {/* === MENÚ MÓVIL === */}
         <button
@@ -79,18 +112,46 @@ export default function Navbar() {
               {label}
             </NavLink>
           ))}
-          <Link
-            to="/perfil"
-            onClick={() => setOpen(false)}
-            className="inline-block bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
-          >
-            Perfil
-          </Link>
+
+          {user ? (
+            <>
+              <Link
+                to="/perfil"
+                onClick={() => setOpen(false)}
+                className="block px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
+              >
+                Perfil
+              </Link>
+              <button
+                onClick={() => {
+                  logout();
+                  setOpen(false);
+                }}
+                className="block w-full px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
+              >
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="block px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
+              >
+                Iniciar sesión
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setOpen(false)}
+                className="block px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-lg font-semibold shadow-[0_0_10px_#6366f1aa] transition"
+              >
+                Registrarse
+              </Link>
+            </>
+          )}
         </div>
       )}
-
-      {/* === RESPLANDOR INFERIOR NEÓN === */}
-      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-linear-to-r from-transparent via-indigo-500 to-transparent blur-sm opacity-80"></div>
     </nav>
   );
 }

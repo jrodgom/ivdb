@@ -65,7 +65,7 @@ export default function Home() {
               }}
             >
               {/* Gradiente superior e inferior */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-black/80"></div>
+              <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/30 to-black/80"></div>
 
               {/* Contenido */}
               <div className="absolute inset-0 flex flex-col justify-center items-center px-6 text-center z-10">
