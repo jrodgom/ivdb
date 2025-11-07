@@ -110,9 +110,8 @@ export default function Home() {
             <span
               key={i}
               onClick={() => setCurrentHero(i)}
-              className={`w-4 h-4 rounded-full cursor-pointer transition-all ${
-                i === currentHero ? "bg-indigo-400 scale-125" : "bg-gray-600"
-              }`}
+              className={`w-4 h-4 rounded-full cursor-pointer transition-all ${i === currentHero ? "bg-indigo-400 scale-125" : "bg-gray-600"
+                }`}
             />
           ))}
         </div>
@@ -191,7 +190,7 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="max-w-7xl mx-auto px-6 pt-24 py-12 animate-fadeIn">
       {!loading && <HeroCarousel />}
       {!loading && (
         <>
@@ -212,4 +211,5 @@ export default function Home() {
       )}
     </div>
   );
+
 }
