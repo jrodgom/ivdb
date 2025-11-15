@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getGames } from "../api/games";
+import { gameService } from "../services/gameService";
 
 export default function CategoryPage() {
   const { categoria } = useParams();
@@ -13,16 +13,16 @@ export default function CategoryPage() {
     const loadCategoryGames = async () => {
       setLoading(true);
       try {
-        const all = await getGames();
-        let filtered = all.data;
+        const result = await gameService.getGames();
+        let filtered = result.data;
 
         if (categoria === "accion") {
           filtered = filtered.filter((g) =>
-            g.genre.toLowerCase().includes("action")
+            g.genre && g.genre.toLowerCase().includes("action")
           );
         } else if (categoria === "aventura") {
           filtered = filtered.filter((g) =>
-            g.genre.toLowerCase().includes("adventure")
+            g.genre && g.genre.toLowerCase().includes("adventure")
           );
         } else if (categoria === "top") {
           filtered = filtered.slice(0, 100);
@@ -45,7 +45,7 @@ export default function CategoryPage() {
   const paginatedGames = games.slice((page - 1) * pageSize, page * pageSize);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="max-w-7xl mx-auto px-6 py-12 pt-24">
       <h1 className="text-4xl font-bold text-indigo-400 mb-6 text-center">
         {categoria === "top"
           ? "Top Juegos"

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { getGames } from "../api/games";
+import { gameService } from "../services/gameService";
 
 export default function Home() {
   const [topGames, setTopGames] = useState([]);
@@ -14,12 +14,12 @@ export default function Home() {
     const loadGames = async () => {
       setLoading(true);
       try {
-        const all = await getGames();
-        const games = all.data;
+        const result = await gameService.getGames();
+        const games = result.data;
 
         setTopGames(games.slice(0, 10));
-        setActionGames(games.filter((g) => g.genre.toLowerCase().includes("action")));
-        setAdventureGames(games.filter((g) => g.genre.toLowerCase().includes("adventure")));
+        setActionGames(games.filter((g) => g.genre && g.genre.toLowerCase().includes("action")));
+        setAdventureGames(games.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure")));
       } catch (error) {
         console.error(error);
       } finally {
@@ -37,7 +37,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [topGames]);
 
-  // 🎠 Hero Carousel
+  // === 🎠 Hero principal ===
   const HeroCarousel = () => {
     if (!topGames.length) return null;
     const phrases = [
@@ -49,7 +49,7 @@ export default function Home() {
     ];
 
     return (
-      <div className="relative w-full h-[70vh] mb-16 overflow-hidden rounded-2xl animate-fadeIn shadow-[0_0_30px_#1f1f1f55]">
+      <div className="relative w-full h-[70vh] mb-20 overflow-hidden rounded-3xl shadow-[0_0_40px_#000a] border border-gray-800/60 backdrop-blur-sm animate-fadeIn">
         <div
           className="flex transition-transform duration-1000 ease-in-out h-full"
           style={{ transform: `translateX(-${currentHero * 100}%)` }}
@@ -64,20 +64,17 @@ export default function Home() {
                 backgroundPosition: "center",
               }}
             >
-              {/* Gradiente superior e inferior */}
-              <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/30 to-black/80"></div>
-
-              {/* Contenido */}
+              <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/40 to-black/90" />
               <div className="absolute inset-0 flex flex-col justify-center items-center px-6 text-center z-10">
-                <h2 className="text-5xl sm:text-6xl font-extrabold text-indigo-400 drop-shadow-[0_0_10px_#0008] mb-4">
+                <h2 className="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-fuchsia-500 drop-shadow-[0_0_10px_#0008] mb-4 animate-pulse-slow">
                   {game.title}
                 </h2>
-                <p className="text-gray-200 text-lg sm:text-xl mb-6 drop-shadow-[0_0_6px_#000]">
+                <p className="text-gray-300 text-lg sm:text-xl mb-6 drop-shadow-[0_0_6px_#000]">
                   {phrases[index % phrases.length]}
                 </p>
                 <Link
                   to="#top-juegos"
-                  className="px-8 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-[0_0_15px_#6366f155] hover:shadow-[0_0_20px_#6366f1aa] transition-all duration-300"
+                  className="px-8 py-3 bg-indigo-500/90 hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-[0_0_15px_#6366f155] hover:shadow-[0_0_25px_#6366f1aa] transition-all duration-300"
                 >
                   Explorar
                 </Link>
@@ -86,7 +83,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Flechas */}
+        {/* Flechas laterales */}
         <button
           onClick={() =>
             setCurrentHero((prev) => (prev - 1 + topGames.length) % topGames.length)
@@ -120,15 +117,14 @@ export default function Home() {
     );
   };
 
-  // 🎮 Carousel de secciones sin scrollbar y hover completo
+  // === 🎮 Carrusel por categoría ===
   const CarouselSection = ({ title, games, category }) => {
     const rowRef = useRef(null);
-
-    const scroll = (direction) => {
+    const scroll = (dir) => {
       if (!rowRef.current) return;
-      const cardWidth = rowRef.current.firstChild.offsetWidth + 20; // ancho + gap
+      const cardWidth = rowRef.current.firstChild.offsetWidth + 20;
       rowRef.current.scrollBy({
-        left: direction === "left" ? -cardWidth : cardWidth,
+        left: dir === "left" ? -cardWidth : cardWidth,
         behavior: "smooth",
       });
     };
@@ -136,7 +132,9 @@ export default function Home() {
     return (
       <section className="mb-16 relative group">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-200">{title}</h2>
+          <h2 className="text-2xl font-bold text-gray-100 tracking-tight">
+            {title}
+          </h2>
           <Link
             to={`/categoria/${category}`}
             className="text-indigo-400 hover:text-indigo-300 font-semibold"
@@ -146,14 +144,11 @@ export default function Home() {
         </div>
 
         <div className="relative overflow-visible">
-          <div
-            ref={rowRef}
-            className="flex gap-5 overflow-hidden pb-3 px-1"
-          >
+          <div ref={rowRef} className="flex gap-5 overflow-hidden pb-3 px-1">
             {games.map((game) => (
               <div
                 key={game.id}
-                className="relative shrink-0 w-[200px] sm:w-[230px] md:w-[250px] bg-gray-900 rounded-2xl shadow-md overflow-visible transform hover:scale-105 hover:z-10 hover:shadow-[0_0_20px_#6366f155] transition-all duration-300 cursor-pointer"
+                className="relative shrink-0 w-[200px] sm:w-[230px] md:w-[250px] bg-gray-900/80 border border-gray-800/60 rounded-2xl shadow-md overflow-visible transform hover:scale-105 hover:z-10 hover:shadow-[0_0_25px_#6366f155] transition-all duration-300 cursor-pointer backdrop-blur-sm"
               >
                 {game.cover_image && (
                   <img
@@ -163,7 +158,9 @@ export default function Home() {
                   />
                 )}
                 <div className="p-3">
-                  <h3 className="text-indigo-300 font-bold truncate">{game.title}</h3>
+                  <h3 className="text-indigo-300 font-bold truncate">
+                    {game.title}
+                  </h3>
                   <p className="text-gray-400 text-sm">{game.genre}</p>
                 </div>
               </div>
@@ -188,18 +185,25 @@ export default function Home() {
     );
   };
 
+  // === Render principal ===
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-24 py-12 animate-fadeIn">
-      {!loading && <HeroCarousel />}
-      {!loading && (
-        <>
-          <div id="top-juegos">
-            <CarouselSection title="Top Juegos" games={topGames} category="top" />
-          </div>
-          <CarouselSection title="Juegos de Acción" games={actionGames} category="accion" />
-          <CarouselSection title="Juegos de Aventura" games={adventureGames} category="aventura" />
-        </>
-      )}
+    <div className="relative min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900 bg-size-[200%_200%] animate-gradient-x overflow-hidden pt-20">
+      {/* Glow ambiental */}
+      <div className="absolute inset-0 blur-3xl bg-linear-to-tr from-indigo-600/20 via-fuchsia-600/10 to-transparent" />
+
+      <div className="relative max-w-7xl mx-auto px-6 pt-24 pb-16 animate-fadeIn">
+        {!loading && <HeroCarousel />}
+        {!loading && (
+          <>
+            <div id="top-juegos">
+              <CarouselSection title="Top Juegos" games={topGames} category="top" />
+            </div>
+            <CarouselSection title="Juegos de Acción" games={actionGames} category="accion" />
+            <CarouselSection title="Juegos de Aventura" games={adventureGames} category="aventura" />
+          </>
+        )}
+      </div>
+      
     </div>
   );
 }

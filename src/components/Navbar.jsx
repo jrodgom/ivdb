@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
-export default function Navbar({ user, logout }) {
+export default function Navbar() {
+  const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const [profileMenu, setProfileMenu] = useState(false);
 
