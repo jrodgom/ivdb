@@ -29,13 +29,13 @@ export const authService = {
     }
   },
 
-  async register(username, password) {
+  async register(username, password, email) {
     try {
       // Primero crea el usuario usando el endpoint de accounts
       const response = await fetch(`${API_URL}/accounts/register/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, email }),
       });
       
       if (!response.ok) {
@@ -62,12 +62,38 @@ export const authService = {
       });
       
       if (!response.ok) {
+        // Si es 401, el token expiró (es normal)
+        if (response.status === 401) {
+          throw new Error("Token expirado");
+        }
         throw new Error("No se pudo obtener el perfil");
       }
       
       return await response.json();
     } catch (error) {
-      console.error("Get profile error:", error);
+      // Solo loguear si no es un token expirado (401)
+      if (!error.message.includes("Token expirado")) {
+        console.error("Get profile error:", error);
+      }
+      throw error;
+    }
+  },
+
+  async deleteAccount(token) {
+    try {
+      const response = await fetch(`${API_URL}/accounts/profile/`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (!response.ok) {
+        throw new Error("No se pudo eliminar la cuenta");
+      }
+      
+      this.logout();
+      return await response.json();
+    } catch (error) {
+      console.error("Delete account error:", error);
       throw error;
     }
   },

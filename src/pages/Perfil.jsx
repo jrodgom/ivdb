@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { User, Mail, Calendar, Edit2, Save, X } from "lucide-react";
+import { reviewService } from "../services/reviewService";
+import { User, Mail, Calendar, Edit2, Save, X, Trash2, AlertTriangle, Star, MessageSquare } from "lucide-react";
 
 export default function Perfil() {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ export default function Perfil() {
     bio: "",
   });
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [myReviews, setMyReviews] = useState([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -27,8 +29,20 @@ export default function Perfil() {
         email: user.email || "",
         bio: user.bio || "",
       });
+      
+      // Cargar reseñas del usuario
+      loadMyReviews();
     }
   }, [user]);
+
+  const loadMyReviews = async () => {
+    try {
+      const reviews = await reviewService.getMyReviews();
+      setMyReviews(reviews);
+    } catch (error) {
+      console.error("Error loading reviews:", error);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -52,6 +66,27 @@ export default function Perfil() {
       bio: user.bio || "",
     });
     setIsEditing(false);
+  };
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmation !== user.username) {
+      alert("El nombre de usuario no coincide");
+      return;
+    }
+    
+    try {
+      const { authService } = await import("../services/authService");
+      const currentToken = localStorage.getItem("token");
+      await authService.deleteAccount(currentToken);
+      logout();
+      navigate("/");
+    } catch (err) {
+      console.error("Error eliminando cuenta:", err);
+      alert("Error al eliminar la cuenta. Por favor intenta de nuevo.");
+    }
   };
 
   if (loading) {
@@ -212,7 +247,7 @@ export default function Perfil() {
             <p className="text-gray-400 text-sm">Juegos favoritos</p>
           </div>
           <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a]">
-            <p className="text-3xl font-bold text-fuchsia-400 mb-2">0</p>
+            <p className="text-3xl font-bold text-fuchsia-400 mb-2">{myReviews.length}</p>
             <p className="text-gray-400 text-sm">Reseñas escritas</p>
           </div>
           <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a]">
@@ -220,6 +255,125 @@ export default function Perfil() {
             <p className="text-gray-400 text-sm">Listas creadas</p>
           </div>
         </div>
+
+        {/* Mis Reseñas */}
+        {myReviews.length > 0 && (
+          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#000a]">
+            <div className="flex items-center gap-3 mb-6">
+              <MessageSquare className="text-indigo-400" size={24} />
+              <h2 className="text-2xl font-bold text-indigo-400">Tus Reseñas</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {myReviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 hover:bg-gray-800 transition"
+                >
+                  <div className="flex items-start gap-4">
+                    {review.game_details?.cover_image && (
+                      <img
+                        src={review.game_details.cover_image}
+                        alt={review.game_details.title}
+                        className="w-20 h-20 object-cover rounded"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-white truncate mb-1">
+                        {review.game_details?.title || "Juego desconocido"}
+                      </h3>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Star className="fill-yellow-400 text-yellow-400" size={16} />
+                        <span className="text-yellow-400 font-bold">{review.rating}/10</span>
+                        {review.game_details?.genre && (
+                          <span className="text-gray-500 text-xs">• {review.game_details.genre}</span>
+                        )}
+                      </div>
+                      {review.comment && (
+                        <p className="text-gray-400 text-sm line-clamp-2 italic">
+                          "{review.comment}"
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Zona de peligro */}
+        <div className="bg-red-900/20 border border-red-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#00000a]">
+          <div className="flex items-center gap-3 mb-4">
+            <AlertTriangle className="text-red-500" size={24} />
+            <h2 className="text-2xl font-bold text-red-400">Zona de peligro</h2>
+          </div>
+          <p className="text-gray-300 mb-4">
+            Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, estate seguro.
+          </p>
+          <button
+            onClick={() => setShowDeleteModal(true)}
+            className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-300 flex items-center gap-2"
+          >
+            <Trash2 size={18} />
+            Eliminar mi cuenta
+          </button>
+        </div>
+
+        {/* Modal de confirmación de eliminación */}
+        {showDeleteModal && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-900 border border-red-800/60 rounded-2xl p-8 max-w-md w-full shadow-[0_0_50px_#00000a] animate-fadeIn">
+              <div className="flex items-center gap-3 mb-4">
+                <AlertTriangle className="text-red-500" size={32} />
+                <h3 className="text-2xl font-bold text-red-400">¿Estás seguro?</h3>
+              </div>
+              
+              <p className="text-gray-300 mb-4">
+                Esta acción es <strong className="text-red-400">permanente</strong> y eliminará:
+              </p>
+              
+              <ul className="list-disc list-inside text-gray-400 mb-6 space-y-1">
+                <li>Tu perfil y toda tu información</li>
+                <li>Tus reseñas y calificaciones</li>
+                <li>Tus listas de juegos</li>
+                <li>Todo tu historial en la plataforma</li>
+              </ul>
+              
+              <p className="text-gray-300 mb-2">
+                Para confirmar, escribe tu nombre de usuario: <strong className="text-indigo-400">{user.username}</strong>
+              </p>
+              
+              <input
+                type="text"
+                value={deleteConfirmation}
+                onChange={(e) => setDeleteConfirmation(e.target.value)}
+                placeholder="Escribe tu nombre de usuario"
+                className="w-full p-3 mb-4 rounded-lg bg-gray-800 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDeleteAccount}
+                  disabled={deleteConfirmation !== user.username}
+                  className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Trash2 size={18} />
+                  Eliminar cuenta
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDeleteConfirmation("");
+                  }}
+                  className="flex-1 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-300"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

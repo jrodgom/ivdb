@@ -16,9 +16,12 @@ export const AuthProvider = ({ children }) => {
         try {
           const userData = await authService.getProfile(token);
           setUser(userData);
-        } catch {
+        } catch (error) {
+          console.log("Token inválido o expirado, limpiando sesión...");
+          // Token inválido o expirado, limpiar todo
           setUser(null);
           setToken(null);
+          localStorage.removeItem("token");
         } finally {
           setLoading(false);
         }
@@ -40,9 +43,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (username, password) => {
+  const register = async (username, password, email) => {
     try {
-      const data = await authService.register(username, password);
+      const data = await authService.register(username, password, email);
       setToken(data.token);
       setUser(data.user);
       return true;
