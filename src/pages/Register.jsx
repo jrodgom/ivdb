@@ -13,13 +13,37 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    
     if (password !== password2) {
       setError("Las contraseñas no coinciden");
       return;
     }
-    const success = await register(username, password);
-    if (success) navigate("/");
-    else setError("Error al registrar el usuario");
+    
+    try {
+      const success = await register(username, password);
+      if (success) {
+        navigate("/");
+      } else {
+        setError("Error al registrar el usuario");
+      }
+    } catch (err) {
+      console.error("Error en registro:", err);
+      
+      // Intentar parsear el error para mostrar mensaje útil
+      let errorMsg = "Error al registrar. ";
+      if (err.message) {
+        try {
+          const errorObj = JSON.parse(err.message);
+          if (errorObj.username) errorMsg += `Usuario: ${errorObj.username.join(", ")}. `;
+          if (errorObj.password) errorMsg += `Contraseña: ${errorObj.password.join(", ")}. `;
+          if (errorObj.detail) errorMsg += errorObj.detail;
+        } catch {
+          errorMsg += err.message;
+        }
+      }
+      setError(errorMsg || "Verifica la consola para más detalles.");
+    }
   };
 
   return (

@@ -12,9 +12,18 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await login(username, password);
-    if (success) navigate("/");
-    else setError("Usuario o contraseña incorrectos");
+    setError("");
+    try {
+      const success = await login(username, password);
+      if (success) {
+        navigate("/");
+      } else {
+        setError("Usuario o contraseña incorrectos");
+      }
+    } catch (err) {
+      console.error("Error en login:", err);
+      setError(err.message || "Error al iniciar sesión. Verifica la consola para más detalles.");
+    }
   };
 
   return (
