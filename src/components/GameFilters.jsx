@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Filter, X, ChevronDown } from "lucide-react";
 
-export default function GameFilters({ onFilterChange, initialFilters = {} }) {
-  const [showFilters, setShowFilters] = useState(false);
+export default function GameFilters({ onFilterChange, onSearch, initialFilters = {} }) {
+  const [showFilters, setShowFilters] = useState(true); // Ahora siempre visible por defecto
   const [filters, setFilters] = useState({
     genre: initialFilters.genre || "",
     platform: initialFilters.platform || "",
@@ -75,28 +75,19 @@ export default function GameFilters({ onFilterChange, initialFilters = {} }) {
 
   return (
     <div className="mb-8">
-      {/* Toggle Button */}
-      <button
-        onClick={() => setShowFilters(!showFilters)}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-800/80 border border-gray-700 hover:border-indigo-500/50 rounded-lg text-white transition-all duration-200"
-      >
-        <Filter size={20} />
-        <span className="font-semibold">Filtros</span>
-        {hasActiveFilters && (
-          <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs rounded-full">
-            {[filters.genre, filters.platform].filter(Boolean).length}
-          </span>
-        )}
-        <ChevronDown
-          size={18}
-          className={`transition-transform duration-200 ${showFilters ? "rotate-180" : ""}`}
-        />
-      </button>
-
-      {/* Filters Panel */}
-      {showFilters && (
-        <div className="mt-4 bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 animate-fadeIn">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Filters Panel - Siempre visible, diseño compacto */}
+      <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <Filter size={18} className="text-indigo-400" />
+          <h3 className="text-white font-semibold">Filtrar juegos</h3>
+          {hasActiveFilters && (
+            <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs rounded-full">
+              {[filters.genre, filters.platform].filter(Boolean).length}
+            </span>
+          )}
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Genre Filter */}
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-2" htmlFor="filter-genre">
@@ -160,42 +151,41 @@ export default function GameFilters({ onFilterChange, initialFilters = {} }) {
             </div>
           </div>
 
-          {/* Active Filters & Clear */}
-          {hasActiveFilters && (
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <span className="text-sm text-gray-400">Filtros activos:</span>
-              {filters.genre && (
-                <span className="px-3 py-1 bg-indigo-600/30 border border-indigo-500/50 rounded-full text-indigo-300 text-sm flex items-center gap-2">
-                  Género: {filters.genre}
-                  <button
-                    onClick={() => handleFilterChange("genre", "")}
-                    className="hover:text-white transition"
-                  >
-                    <X size={14} />
-                  </button>
-                </span>
-              )}
-              {filters.platform && (
-                <span className="px-3 py-1 bg-indigo-600/30 border border-indigo-500/50 rounded-full text-indigo-300 text-sm flex items-center gap-2">
-                  Plataforma: {filters.platform}
-                  <button
-                    onClick={() => handleFilterChange("platform", "")}
-                    className="hover:text-white transition"
-                  >
-                    <X size={14} />
-                  </button>
-                </span>
-              )}
-              <button
-                onClick={clearFilters}
-                className="ml-auto px-4 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-all duration-200"
-              >
-                Limpiar todo
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+        {/* Active Filters & Clear */}
+        {hasActiveFilters && (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="text-sm text-gray-400">Filtros activos:</span>
+            {filters.genre && (
+              <span className="px-3 py-1 bg-indigo-600/30 border border-indigo-500/50 rounded-full text-indigo-300 text-sm flex items-center gap-2">
+                Género: {filters.genre}
+                <button
+                  onClick={() => handleFilterChange("genre", "")}
+                  className="hover:text-white transition"
+                >
+                  <X size={14} />
+                </button>
+              </span>
+            )}
+            {filters.platform && (
+              <span className="px-3 py-1 bg-indigo-600/30 border border-indigo-500/50 rounded-full text-indigo-300 text-sm flex items-center gap-2">
+                Plataforma: {filters.platform}
+                <button
+                  onClick={() => handleFilterChange("platform", "")}
+                  className="hover:text-white transition"
+                >
+                  <X size={14} />
+                </button>
+              </span>
+            )}
+            <button
+              onClick={clearFilters}
+              className="ml-auto px-4 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-all duration-200"
+            >
+              Limpiar todo
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

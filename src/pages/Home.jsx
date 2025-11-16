@@ -5,6 +5,7 @@ import { gameService } from "../services/gameService";
 import { rawgService } from "../services/rawgService";
 import SearchBar from "../components/SearchBar";
 import GameFilters from "../components/GameFilters";
+import GameCard from "../components/GameCard";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -23,13 +24,36 @@ export default function Home() {
   const loadGames = async () => {
     setLoading(true);
     try {
-      const result = await gameService.getGames("", 1, 100, filters);
-      const games = result.data || [];
+      // Cargar más juegos para tener variedad después de eliminar duplicados
+      const result = await gameService.getGames("", 1, 100, {});
+      let games = result.data || [];
 
-      setAllGames(games);
-      setTopGames(games.slice(0, 10));
-      setActionGames(games.filter((g) => g.genre && g.genre.toLowerCase().includes("action")));
-      setAdventureGames(games.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure")));
+      // Eliminar duplicados por título (case-insensitive)
+      const uniqueGames = [];
+      const seenTitles = new Set();
+      
+      for (const game of games) {
+        const normalizedTitle = game.title.toLowerCase().trim();
+        if (!seenTitles.has(normalizedTitle)) {
+          seenTitles.add(normalizedTitle);
+          uniqueGames.push(game);
+        }
+      }
+
+      setAllGames(uniqueGames);
+      
+      // Ordenar por rating para el carrusel (mejor valorados primero)
+      const sortedByRating = [...uniqueGames].sort((a, b) => {
+        return (b.average_rating || b.rating || 0) - (a.average_rating || a.rating || 0);
+      });
+      setTopGames(sortedByRating.slice(0, 10));
+      
+      // Filtrar por género con variedad
+      const actionFiltered = uniqueGames.filter((g) => g.genre && g.genre.toLowerCase().includes("action"));
+      const adventureFiltered = uniqueGames.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure"));
+      
+      setActionGames(actionFiltered.slice(0, 10));
+      setAdventureGames(adventureFiltered.slice(0, 10));
     } catch (error) {
       console.error(error);
     } finally {
@@ -88,13 +112,11 @@ export default function Home() {
                 }`}
               >
                 {/* Imagen de fondo */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage: `url(${game.cover_image})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
+                <img
+                  src={game.cover_image}
+                  alt={game.title}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
                 
                 {/* Overlay oscuro */}
@@ -159,47 +181,14 @@ export default function Home() {
 
         {/* Secciones de géneros */}
         <div className="max-w-7xl mx-auto px-6 pb-20">
-          {/* Filtros */}
-          <GameFilters onFilterChange={setFilters} />
-
-          {/* Todos los Juegos Filtrados */}
-          {(filters.genre || filters.platform || filters.ordering !== "-created_at") && allGames.length > 0 && (
-            <section className="mb-16">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-white">
-                  Juegos 
-                  {filters.genre && ` - ${filters.genre}`}
-                  {filters.platform && ` - ${filters.platform}`}
-                </h2>
-                <span className="text-gray-400">{allGames.length} resultados</span>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {allGames.map((game) => (
-                  <div
-                    key={game.id}
-                    onClick={() => handleGameClick(game)}
-                    className="cursor-pointer"
-                  >
-                    <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 transition-all duration-300 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1">
-                      <div className="aspect-3/4 relative overflow-hidden">
-                        <img
-                          src={game.cover_image || "/placeholder-game.jpg"}
-                          alt={game.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="p-3">
-                        <h3 className="text-white font-semibold text-sm truncate">
-                          {game.title}
-                        </h3>
-                        <p className="text-gray-400 text-xs mt-1 truncate">{game.genre}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+          {/* Filtros - Ahora con resultados */}
+          <GameFilters onFilterChange={setFilters} onSearch={(filteredGames) => {
+            if (filteredGames && filteredGames.length > 0) {
+              // Navegar a una página de resultados o actualizar vista
+              setActionGames(filteredGames.filter((g) => g.genre && g.genre.toLowerCase().includes("action")).slice(0, 10));
+              setAdventureGames(filteredGames.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure")).slice(0, 10));
+            }
+          }} />
 
           {/* Top Juegos */}
           <section className="mb-16">
@@ -211,27 +200,13 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
               {topGames.slice(0, 10).map((game) => (
-                <div
+                <GameCard
                   key={game.id}
+                  game={game}
                   onClick={() => handleGameClick(game)}
-                  className="cursor-pointer"
-                >
-                  <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 transition-all duration-300 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1">
-                    <div className="aspect-3/4 relative overflow-hidden">
-                      <img
-                        src={game.cover_image}
-                        alt={game.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-3">
-                      <h3 className="text-white font-semibold text-sm truncate">
-                        {game.title}
-                      </h3>
-                      <p className="text-gray-400 text-xs mt-1 truncate">{game.genre}</p>
-                    </div>
-                  </div>
-                </div>
+                  showRating={true}
+                  showFavorite={true}
+                />
               ))}
             </div>
           </section>
@@ -247,27 +222,13 @@ export default function Home() {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {actionGames.slice(0, 10).map((game) => (
-                  <div
+                  <GameCard
                     key={game.id}
+                    game={game}
                     onClick={() => handleGameClick(game)}
-                    className="cursor-pointer"
-                  >
-                    <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 transition-all duration-300 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1">
-                      <div className="aspect-3/4 relative overflow-hidden">
-                        <img
-                          src={game.cover_image}
-                          alt={game.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="p-3">
-                        <h3 className="text-white font-semibold text-sm truncate">
-                          {game.title}
-                        </h3>
-                        <p className="text-gray-400 text-xs mt-1 truncate">{game.genre}</p>
-                      </div>
-                    </div>
-                  </div>
+                    showRating={true}
+                    showFavorite={true}
+                  />
                 ))}
               </div>
             </section>
@@ -284,27 +245,13 @@ export default function Home() {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {adventureGames.slice(0, 10).map((game) => (
-                  <div
+                  <GameCard
                     key={game.id}
+                    game={game}
                     onClick={() => handleGameClick(game)}
-                    className="cursor-pointer"
-                  >
-                    <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 transition-all duration-300 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1">
-                      <div className="aspect-3/4 relative overflow-hidden">
-                        <img
-                          src={game.cover_image}
-                          alt={game.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="p-3">
-                        <h3 className="text-white font-semibold text-sm truncate">
-                          {game.title}
-                        </h3>
-                        <p className="text-gray-400 text-xs mt-1 truncate">{game.genre}</p>
-                      </div>
-                    </div>
-                  </div>
+                    showRating={true}
+                    showFavorite={true}
+                  />
                 ))}
               </div>
             </section>
