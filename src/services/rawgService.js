@@ -66,4 +66,29 @@ export const rawgService = {
       return [];
     }
   },
+
+  async getGames(params = {}) {
+    try {
+      if (!RAWG_API_KEY || RAWG_API_KEY === "YOUR_API_KEY_HERE") {
+        console.warn("⚠️ RAWG API key no configurada");
+        return { results: [], count: 0, error: "API key no configurada" };
+      }
+
+      const queryParams = new URLSearchParams({
+        key: RAWG_API_KEY,
+        ...params,
+      });
+
+      const response = await fetch(`${RAWG_API_URL}/games?${queryParams}`);
+      
+      if (!response.ok) {
+        throw new Error("Error al obtener juegos");
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error("Get games error:", error);
+      return { results: [], count: 0, error: error.message };
+    }
+  },
 };

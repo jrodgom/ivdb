@@ -54,13 +54,13 @@ export default function GameCard({ game, onClick, showRating = true, showFavorit
       onClick={onClick}
       className="cursor-pointer group"
     >
-      <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 transition-all duration-300 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1">
+      <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 transition-all duration-300 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/40 hover:-translate-y-2 hover:scale-[1.02]">
         <div className="aspect-3/4 relative overflow-hidden">
           <img
             src={game.cover_image || "/placeholder-game.jpg"}
             alt={game.title}
             loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-115 group-hover:brightness-110"
           />
           
           <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

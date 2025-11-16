@@ -7,6 +7,7 @@ import SearchBar from "../components/SearchBar";
 import GameFilters from "../components/GameFilters";
 import GameCard from "../components/GameCard";
 import GameCardSkeleton from "../components/SkeletonLoaders";
+import GlobalStats from "../components/GlobalStats";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function Home() {
   const loadInitialGames = async () => {
     setLoading(true);
     try {
-      const result = await gameService.getGames("", 1, 100, {});
+      const result = await gameService.getGames("", 1, 300, {});
       let games = result.data || [];
 
       // Eliminar duplicados
@@ -61,14 +62,62 @@ export default function Home() {
 
       setAllGames(uniqueGames);
       
-      // Ordenar por rating
-      const sortedByRating = [...uniqueGames].sort((a, b) => {
-        return (b.average_rating || b.rating || 0) - (a.average_rating || a.rating || 0);
+      // Ordenar juegos por calidad/popularidad
+      // Prioridad: Metacritic alto > Rating alto > Los demás
+      const sortedByPopularity = [...uniqueGames].sort((a, b) => {
+        // Si ambos tienen Metacritic, comparar por eso
+        if (a.metacritic && b.metacritic) {
+          return b.metacritic - a.metacritic;
+        }
+        // Si solo uno tiene Metacritic >= 70, ese va primero
+        if (a.metacritic && a.metacritic >= 70) return -1;
+        if (b.metacritic && b.metacritic >= 70) return 1;
+        
+        // Si no tienen Metacritic alto, comparar por rating
+        const ratingA = a.average_rating || a.rating || 0;
+        const ratingB = b.average_rating || b.rating || 0;
+        if (ratingA !== ratingB) {
+          return ratingB - ratingA;
+        }
+        
+        // Si tienen mismo rating, el que tenga Metacritic va primero
+        if (a.metacritic && !b.metacritic) return -1;
+        if (!a.metacritic && b.metacritic) return 1;
+        
+        return 0;
       });
-      setTopGames(sortedByRating.slice(0, 10));
       
-      const actionFiltered = uniqueGames.filter((g) => g.genre && g.genre.toLowerCase().includes("action"));
-      const adventureFiltered = uniqueGames.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure"));
+      setTopGames(sortedByPopularity.slice(0, 10));
+      
+      // Para acción y aventura, mismo sistema de ordenamiento
+      const sortGames = (gameList) => {
+        return gameList.sort((a, b) => {
+          if (a.metacritic && b.metacritic) {
+            return b.metacritic - a.metacritic;
+          }
+          if (a.metacritic && a.metacritic >= 70) return -1;
+          if (b.metacritic && b.metacritic >= 70) return 1;
+          
+          const ratingA = a.average_rating || a.rating || 0;
+          const ratingB = b.average_rating || b.rating || 0;
+          if (ratingA !== ratingB) {
+            return ratingB - ratingA;
+          }
+          
+          if (a.metacritic && !b.metacritic) return -1;
+          if (!a.metacritic && b.metacritic) return 1;
+          
+          return 0;
+        });
+      };
+      
+      const actionFiltered = sortGames(
+        uniqueGames.filter((g) => g.genre && g.genre.toLowerCase().includes("action"))
+      );
+      
+      const adventureFiltered = sortGames(
+        uniqueGames.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure"))
+      );
       
       setActionGames(actionFiltered.slice(0, 10));
       setAdventureGames(adventureFiltered.slice(0, 10));
@@ -151,7 +200,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900">
       <div className="pt-20">
-        <div className="relative w-full h-[500px] overflow-hidden">
+        <div className="relative w-full h-[400px] overflow-hidden">
           <div className="relative h-full">
             {topGames.map((game, index) => (
               <div
@@ -215,16 +264,19 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Barra de búsqueda */}
-        <div className="max-w-4xl mx-auto px-6 py-12">
-          <SearchBar />
-          <p className="text-center text-gray-400 text-sm mt-3">
-            Busca entre más de 800,000 juegos de todas las plataformas
-          </p>
-        </div>
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <GlobalStats />
 
-        <div className="max-w-7xl mx-auto px-6 pb-20">
-          <GameFilters onFilterChange={setFilters} />
+          {/* Barra de búsqueda y filtros */}
+          <div className="mb-12">
+            <div className="max-w-2xl mx-auto mb-8">
+              <SearchBar />
+              <p className="text-center text-gray-400 text-sm mt-3">
+                Busca entre más de 800,000 juegos de todas las plataformas
+              </p>
+            </div>
+            <GameFilters onFilterChange={setFilters} />
+          </div>
 
           {isFiltering && (
             <section className="mb-16">
@@ -320,36 +372,38 @@ export default function Home() {
 
           {!isFiltering && (
             <section className="mb-16">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-bold text-white">Top Juegos</h2>
-              <Link to="/categoria/top" className="text-indigo-400 hover:text-indigo-300 font-semibold">
-                Ver más →
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {loading ? (
-                [...Array(10)].map((_, i) => <GameCardSkeleton key={i} />)
-              ) : (
-                topGames.slice(0, 10).map((game) => (
-                  <GameCard
-                    key={game.id}
-                    game={game}
-                    onClick={() => handleGameClick(game)}
-                    showRating={true}
-                    showFavorite={true}
-                  />
-                ))
-              )}
-            </div>
-          </section>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-3xl font-bold text-white">⭐ Top Juegos</h2>
+                <Link to="/categoria/top" className="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-2 group">
+                  Ver más 
+                  <ChevronRight className="group-hover:translate-x-1 transition-transform" size={20} />
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {loading ? (
+                  [...Array(10)].map((_, i) => <GameCardSkeleton key={i} />)
+                ) : (
+                  topGames.slice(0, 10).map((game) => (
+                    <GameCard
+                      key={game.id}
+                      game={game}
+                      onClick={() => handleGameClick(game)}
+                      showRating={true}
+                      showFavorite={true}
+                    />
+                  ))
+                )}
+              </div>
+            </section>
           )}
 
           {!isFiltering && (loading || actionGames.length > 0) && (
             <section className="mb-16">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-white">Juegos de Acción</h2>
-                <Link to="/categoria/accion" className="text-indigo-400 hover:text-indigo-300 font-semibold">
-                  Ver más →
+                <h2 className="text-3xl font-bold text-white">🎯 Juegos de Acción</h2>
+                <Link to="/categoria/accion" className="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-2 group">
+                  Ver más
+                  <ChevronRight className="group-hover:translate-x-1 transition-transform" size={20} />
                 </Link>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
@@ -373,9 +427,10 @@ export default function Home() {
           {!isFiltering && (loading || adventureGames.length > 0) && (
             <section>
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-white">Juegos de Aventura</h2>
-                <Link to="/categoria/aventura" className="text-indigo-400 hover:text-indigo-300 font-semibold">
-                  Ver más →
+                <h2 className="text-3xl font-bold text-white">🗺️ Juegos de Aventura</h2>
+                <Link to="/categoria/aventura" className="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-2 group">
+                  Ver más
+                  <ChevronRight className="group-hover:translate-x-1 transition-transform" size={20} />
                 </Link>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">

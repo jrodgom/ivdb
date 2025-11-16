@@ -3,10 +3,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Breadcrumbs from "./components/Breadcrumbs";
+import ScrollToTop from "./components/ScrollToTop";
 import { AuthProvider } from "./context/AuthContext";
 
 const Home = lazy(() => import("./pages/Home"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
+const SearchResults = lazy(() => import("./pages/SearchResults"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Perfil = lazy(() => import("./pages/Perfil"));
@@ -29,11 +31,13 @@ export default function App() {
     <AuthProvider>
       <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col">
         <BrowserRouter>
+          <ScrollToTop />
           <Navbar />
           <Breadcrumbs />
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/search" element={<SearchResults />} />
               <Route path="/categoria/:categoria" element={<CategoryPage />} />
               <Route path="/game/:id" element={<GameDetail />} />
               <Route path="/game/:id/edit" element={<EditGame />} />
