@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { reviewService } from "../services/reviewService";
-import { User, Mail, Calendar, Edit2, Save, X, Trash2, AlertTriangle, Star, MessageSquare } from "lucide-react";
+import { User, Mail, Calendar, Edit2, Save, X, Trash2, AlertTriangle, Star, MessageSquare, Heart, Gamepad2 } from "lucide-react";
 
 export default function Perfil() {
   const { user, loading, logout } = useAuth();
@@ -12,9 +12,11 @@ export default function Perfil() {
     username: "",
     email: "",
     bio: "",
+    password: "",
   });
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [myReviews, setMyReviews] = useState([]);
+  const [myFavorites, setMyFavorites] = useState([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -28,10 +30,12 @@ export default function Perfil() {
         username: user.username || "",
         email: user.email || "",
         bio: user.bio || "",
+        password: "",
       });
       
-      // Cargar reseñas del usuario
+      // Cargar reseñas y favoritos del usuario
       loadMyReviews();
+      loadMyFavorites();
     }
   }, [user]);
 
@@ -44,6 +48,16 @@ export default function Perfil() {
     }
   };
 
+  const loadMyFavorites = async () => {
+    try {
+      const { favoriteService } = await import("../services/favoriteService");
+      const favorites = await favoriteService.getMyFavorites();
+      setMyFavorites(favorites);
+    } catch (error) {
+      console.error("Error loading favorites:", error);
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -52,11 +66,34 @@ export default function Perfil() {
   };
 
   const handleSave = async () => {
-    // TODO: Llamar API para actualizar perfil
-    // await authService.updateProfile(formData);
-    setSaveSuccess(true);
-    setIsEditing(false);
-    setTimeout(() => setSaveSuccess(false), 3000);
+    try {
+      const { authService } = await import("../services/authService");
+      
+      // Preparar datos para enviar (solo enviar password si se cambió)
+      const updateData = {
+        email: formData.email,
+        bio: formData.bio,
+      };
+      
+      if (formData.password && formData.password.trim() !== "") {
+        updateData.password = formData.password;
+      }
+      
+      await authService.updateProfile(updateData);
+      
+      // Limpiar el campo de contraseña después de guardar
+      setFormData(prev => ({ ...prev, password: "" }));
+      
+      setSaveSuccess(true);
+      setIsEditing(false);
+      setTimeout(() => setSaveSuccess(false), 3000);
+      
+      // Recargar el perfil para obtener los datos actualizados
+      window.location.reload();
+    } catch (error) {
+      console.error("Error actualizando perfil:", error);
+      alert("Error al actualizar el perfil. Por favor intenta de nuevo.");
+    }
   };
 
   const handleCancel = () => {
@@ -64,6 +101,7 @@ export default function Perfil() {
       username: user.username || "",
       email: user.email || "",
       bio: user.bio || "",
+      password: "",
     });
     setIsEditing(false);
   };
@@ -79,8 +117,7 @@ export default function Perfil() {
     
     try {
       const { authService } = await import("../services/authService");
-      const currentToken = localStorage.getItem("token");
-      await authService.deleteAccount(currentToken);
+      await authService.deleteAccount();
       logout();
       navigate("/");
     } catch (err) {
@@ -168,10 +205,12 @@ export default function Perfil() {
               </label>
               {isEditing ? (
                 <input
+                  id="profile-username"
                   type="text"
                   name="username"
                   value={formData.username}
                   onChange={handleChange}
+                  autoComplete="username"
                   className="w-full p-3 rounded-lg bg-gray-800/80 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
                 />
               ) : (
@@ -186,16 +225,38 @@ export default function Perfil() {
               </label>
               {isEditing ? (
                 <input
+                  id="profile-email"
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  autoComplete="email"
                   className="w-full p-3 rounded-lg bg-gray-800/80 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
                 />
               ) : (
                 <p className="text-gray-100 p-3 bg-gray-800/50 rounded-lg">{user.email || "No especificado"}</p>
               )}
             </div>
+
+            {/* Password (solo visible en modo edición) */}
+            {isEditing && (
+              <div>
+                <label className="block text-gray-300 font-semibold mb-2">
+                  Nueva contraseña
+                </label>
+                <input
+                  id="profile-new-password"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Dejar en blanco para mantener la actual"
+                  autoComplete="new-password"
+                  className="w-full p-3 rounded-lg bg-gray-800/80 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+                />
+                <p className="text-gray-400 text-sm mt-1">Solo completa este campo si deseas cambiar tu contraseña</p>
+              </div>
+            )}
 
             {/* Bio */}
             <div>
@@ -204,6 +265,7 @@ export default function Perfil() {
               </label>
               {isEditing ? (
                 <textarea
+                  id="profile-bio"
                   name="bio"
                   value={formData.bio}
                   onChange={handleChange}
@@ -243,7 +305,7 @@ export default function Perfil() {
         {/* Estadísticas del usuario */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
           <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a]">
-            <p className="text-3xl font-bold text-indigo-400 mb-2">0</p>
+            <p className="text-3xl font-bold text-indigo-400 mb-2">{myFavorites.length}</p>
             <p className="text-gray-400 text-sm">Juegos favoritos</p>
           </div>
           <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a]">
@@ -255,6 +317,54 @@ export default function Perfil() {
             <p className="text-gray-400 text-sm">Listas creadas</p>
           </div>
         </div>
+
+        {/* Mis Favoritos */}
+        {myFavorites.length > 0 && (
+          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#000a]">
+            <div className="flex items-center gap-3 mb-6">
+              <Heart className="text-red-400 fill-red-400" size={24} />
+              <h2 className="text-2xl font-bold text-red-400">Tus Favoritos</h2>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {myFavorites.map((favorite) => (
+                <Link
+                  key={favorite.id}
+                  to={`/game/${favorite.game}`}
+                  className="group relative overflow-hidden rounded-lg border border-gray-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer"
+                >
+                  <div className="aspect-[3/4] relative">
+                    {favorite.game_details?.cover_image ? (
+                      <img
+                        src={favorite.game_details.cover_image}
+                        alt={favorite.game_details.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                        <Gamepad2 className="text-gray-600" size={48} />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute top-2 right-2">
+                      <Heart className="text-red-500 fill-red-500" size={20} />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent">
+                    <h3 className="font-bold text-white text-sm truncate">
+                      {favorite.game_details?.title || "Juego"}
+                    </h3>
+                    {favorite.game_details?.genre && (
+                      <p className="text-gray-400 text-xs truncate">
+                        {favorite.game_details.genre}
+                      </p>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Mis Reseñas */}
         {myReviews.length > 0 && (
@@ -345,10 +455,13 @@ export default function Perfil() {
               </p>
               
               <input
+                id="delete-confirmation"
+                name="deleteConfirmation"
                 type="text"
                 value={deleteConfirmation}
                 onChange={(e) => setDeleteConfirmation(e.target.value)}
                 placeholder="Escribe tu nombre de usuario"
+                autoComplete="off"
                 className="w-full p-3 mb-4 rounded-lg bg-gray-800 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
               />
               

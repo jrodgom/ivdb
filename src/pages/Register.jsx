@@ -139,11 +139,13 @@ export default function Register() {
           {/* Username */}
           <div>
             <input
+              id="register-username"
               type="text"
               name="username"
               placeholder="Nombre de usuario"
               value={formData.username}
               onChange={handleChange}
+              autoComplete="username"
               className="w-full p-3 rounded-lg bg-gray-800/80 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
               required
               minLength={3}
@@ -156,11 +158,13 @@ export default function Register() {
           {/* Email */}
           <div>
             <input
+              id="register-email"
               type="email"
               name="email"
               placeholder="Correo electrónico"
               value={formData.email}
               onChange={handleChange}
+              autoComplete="email"
               className="w-full p-3 rounded-lg bg-gray-800/80 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
               required
             />
@@ -173,11 +177,13 @@ export default function Register() {
           <div>
             <div className="relative">
               <input
+                id="register-password"
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Contraseña"
                 value={formData.password}
                 onChange={handleChange}
+                autoComplete="new-password"
                 className="w-full p-3 pr-12 rounded-lg bg-gray-800/80 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                 required
                 minLength={8}
@@ -218,11 +224,13 @@ export default function Register() {
           <div>
             <div className="relative">
               <input
+                id="register-password2"
                 type={showPassword2 ? "text" : "password"}
                 name="password2"
                 placeholder="Confirmar contraseña"
                 value={formData.password2}
                 onChange={handleChange}
+                autoComplete="new-password"
                 className="w-full p-3 pr-12 rounded-lg bg-gray-800/80 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                 required
               />

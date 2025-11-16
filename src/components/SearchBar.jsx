@@ -72,11 +72,14 @@ export default function SearchBar() {
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input
+          id="game-search"
+          name="search"
           type="text"
           value={query}
           onChange={handleInputChange}
           onFocus={() => query.length >= 2 && results.length > 0 && setShowResults(true)}
           placeholder="Buscar entre más de 800,000 juegos..."
+          autoComplete="off"
           className="w-full pl-12 pr-12 py-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition"
         />
         {query && (

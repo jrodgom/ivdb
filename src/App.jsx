@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Perfil from "./pages/Perfil";
 import GameDetail from "./pages/GameDetail";
+import AddGame from "./pages/AddGame";
+import EditGame from "./pages/EditGame";
 import { AuthProvider } from "./context/AuthContext"; // si ya lo creaste
 
 export default function App() {
@@ -18,6 +20,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/categoria/:categoria" element={<CategoryPage />} />
             <Route path="/game/:id" element={<GameDetail />} />
+            <Route path="/game/:id/edit" element={<EditGame />} />
+            <Route path="/add-game" element={<AddGame />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/perfil" element={<Perfil />} />

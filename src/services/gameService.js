@@ -26,10 +26,14 @@ gameApi.interceptors.response.use(
 );
 
 export const gameService = {
-  async getGames(search = "", page = 1, pageSize = 20) {
+  async getGames(search = "", page = 1, pageSize = 20, filters = {}) {
     try {
       const params = { page, pageSize };
       if (search) params.search = search;
+      if (filters.genre) params.genre = filters.genre;
+      if (filters.platform) params.platform = filters.platform;
+      if (filters.ordering) params.ordering = filters.ordering;
+      
       const response = await gameApi.get("/", { params });
       return { 
         data: Array.isArray(response.data) ? response.data : response.data.results || [],
@@ -57,6 +61,26 @@ export const gameService = {
       return await gameApi.post("/", gameData);
     } catch (error) {
       console.error("createGame error:", error);
+      throw error;
+    }
+  },
+
+  async updateGame(id, gameData) {
+    try {
+      const response = await gameApi.patch(`${id}/`, gameData);
+      return response.data;
+    } catch (error) {
+      console.error("updateGame error:", error);
+      throw error;
+    }
+  },
+
+  async deleteGame(id) {
+    try {
+      await gameApi.delete(`${id}/`);
+      return { success: true };
+    } catch (error) {
+      console.error("deleteGame error:", error);
       throw error;
     }
   },

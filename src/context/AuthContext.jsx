@@ -6,29 +6,38 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [loading, setLoading] = useState(!!token);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    // Cargar perfil solo una vez al montar
+    const loadProfile = async () => {
+      const savedToken = localStorage.getItem("token");
+      
+      if (savedToken) {
+        try {
+          const userData = await authService.getProfile();
+          setUser(userData);
+          setToken(savedToken);
+        } catch (error) {
+          console.log("No se pudo cargar el perfil, sesión expirada");
+          localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          setUser(null);
+          setToken(null);
+        }
+      }
+      setLoading(false);
+    };
+
+    loadProfile();
+  }, []); // Solo ejecutar una vez al montar
+
+  // Sincronizar token con localStorage cuando cambia
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
-      // obtener perfil
-      (async () => {
-        try {
-          const userData = await authService.getProfile(token);
-          setUser(userData);
-        } catch (error) {
-          console.log("Token inválido o expirado, limpiando sesión...");
-          // Token inválido o expirado, limpiar todo
-          setUser(null);
-          setToken(null);
-          localStorage.removeItem("token");
-        } finally {
-          setLoading(false);
-        }
-      })();
     } else {
       localStorage.removeItem("token");
-      setLoading(false);
     }
   }, [token]);
 

@@ -1,3 +1,5 @@
+import { fetchWithAuth, apiPost } from "../utils/apiClient";
+
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export const reviewService = {
@@ -12,11 +14,8 @@ export const reviewService = {
       let gameId;
 
       // Primero, intentar buscar si el juego ya existe
-      const searchResponse = await fetch(
-        `${API_URL}/game/games/?search=${encodeURIComponent(gameData.title)}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const searchResponse = await fetchWithAuth(
+        `/game/games/?search=${encodeURIComponent(gameData.title)}`
       );
 
       if (searchResponse.ok) {
@@ -39,12 +38,8 @@ export const reviewService = {
           release_date: gameData.release_date || null,
         };
 
-        const gameResponse = await fetch(`${API_URL}/game/games/`, {
+        const gameResponse = await fetchWithAuth(`/game/games/`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
           body: JSON.stringify(cleanGameData),
         });
 
@@ -64,12 +59,8 @@ export const reviewService = {
       }
 
       // Crear la reseña
-      const reviewResponse = await fetch(`${API_URL}/review/reviews/`, {
+      const reviewResponse = await fetchWithAuth(`/review/reviews/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
         body: JSON.stringify({
           game: gameId,
           rating,
@@ -113,11 +104,8 @@ export const reviewService = {
         return null;
       }
 
-      const response = await fetch(
-        `${API_URL}/review/reviews/user_review/?game_title=${encodeURIComponent(gameTitle)}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const response = await fetchWithAuth(
+        `/review/reviews/user_review/?game_title=${encodeURIComponent(gameTitle)}`
       );
 
       if (response.ok) {
@@ -139,9 +127,7 @@ export const reviewService = {
         throw new Error("Debes iniciar sesión");
       }
 
-      const response = await fetch(`${API_URL}/review/reviews/my_reviews/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetchWithAuth(`/review/reviews/my_reviews/`);
 
       if (!response.ok) {
         throw new Error("Error al obtener tus reseñas");
@@ -151,6 +137,58 @@ export const reviewService = {
     } catch (error) {
       console.error("Get my reviews error:", error);
       return [];
+    }
+  },
+
+  async updateReview(reviewId, rating, comment = "") {
+    try {
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        throw new Error("Debes iniciar sesión para editar una reseña");
+      }
+
+      const response = await fetchWithAuth(`/review/reviews/${reviewId}/`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          rating,
+          comment,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Error al actualizar la reseña");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Update review error:", error);
+      throw error;
+    }
+  },
+
+  async deleteReview(reviewId) {
+    try {
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        throw new Error("Debes iniciar sesión para eliminar una reseña");
+      }
+
+      const response = await fetchWithAuth(`/review/reviews/${reviewId}/`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Error al eliminar la reseña");
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error("Delete review error:", error);
+      throw error;
     }
   },
 };

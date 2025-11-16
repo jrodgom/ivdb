@@ -4,33 +4,38 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { gameService } from "../services/gameService";
 import { rawgService } from "../services/rawgService";
 import SearchBar from "../components/SearchBar";
+import GameFilters from "../components/GameFilters";
 
 export default function Home() {
   const navigate = useNavigate();
   const [topGames, setTopGames] = useState([]);
   const [actionGames, setActionGames] = useState([]);
   const [adventureGames, setAdventureGames] = useState([]);
+  const [allGames, setAllGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [filters, setFilters] = useState({});
 
   useEffect(() => {
-    const loadGames = async () => {
-      setLoading(true);
-      try {
-        const result = await gameService.getGames();
-        const games = result.data || [];
-
-        setTopGames(games.slice(0, 10));
-        setActionGames(games.filter((g) => g.genre && g.genre.toLowerCase().includes("action")));
-        setAdventureGames(games.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure")));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
     loadGames();
-  }, []);
+  }, [filters]);
+
+  const loadGames = async () => {
+    setLoading(true);
+    try {
+      const result = await gameService.getGames("", 1, 100, filters);
+      const games = result.data || [];
+
+      setAllGames(games);
+      setTopGames(games.slice(0, 10));
+      setActionGames(games.filter((g) => g.genre && g.genre.toLowerCase().includes("action")));
+      setAdventureGames(games.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure")));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!topGames.length) return;
@@ -154,6 +159,48 @@ export default function Home() {
 
         {/* Secciones de géneros */}
         <div className="max-w-7xl mx-auto px-6 pb-20">
+          {/* Filtros */}
+          <GameFilters onFilterChange={setFilters} />
+
+          {/* Todos los Juegos Filtrados */}
+          {(filters.genre || filters.platform || filters.ordering !== "-created_at") && allGames.length > 0 && (
+            <section className="mb-16">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-3xl font-bold text-white">
+                  Juegos 
+                  {filters.genre && ` - ${filters.genre}`}
+                  {filters.platform && ` - ${filters.platform}`}
+                </h2>
+                <span className="text-gray-400">{allGames.length} resultados</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {allGames.map((game) => (
+                  <div
+                    key={game.id}
+                    onClick={() => handleGameClick(game)}
+                    className="cursor-pointer"
+                  >
+                    <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 transition-all duration-300 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1">
+                      <div className="aspect-3/4 relative overflow-hidden">
+                        <img
+                          src={game.cover_image || "/placeholder-game.jpg"}
+                          alt={game.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="p-3">
+                        <h3 className="text-white font-semibold text-sm truncate">
+                          {game.title}
+                        </h3>
+                        <p className="text-gray-400 text-xs mt-1 truncate">{game.genre}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Top Juegos */}
           <section className="mb-16">
             <div className="flex justify-between items-center mb-6">

@@ -17,6 +17,9 @@ export const authService = {
       const data = await response.json();
       console.log("Login exitoso:", data);
       
+      // Guardar refresh token en localStorage para persistencia
+      localStorage.setItem("refreshToken", data.refresh);
+      
       // JWT devuelve { access, refresh }
       return { 
         token: data.access, 
@@ -55,35 +58,88 @@ export const authService = {
     }
   },
 
-  async getProfile(token) {
+  async refreshToken() {
     try {
-      const response = await fetch(`${API_URL}/accounts/profile/`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        throw new Error("No hay refresh token disponible");
+      }
+
+      const response = await fetch(`${API_URL}/api/token/refresh/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh: refreshToken }),
       });
+
+      if (!response.ok) {
+        // Si el refresh token también expiró, limpiar todo
+        this.logout();
+        throw new Error("Sesión expirada");
+      }
+
+      const data = await response.json();
+      
+      // Actualizar tokens
+      localStorage.setItem("token", data.access);
+      if (data.refresh) {
+        // Si ROTATE_REFRESH_TOKENS está activo, se genera uno nuevo
+        localStorage.setItem("refreshToken", data.refresh);
+      }
+      
+      return data.access;
+    } catch (error) {
+      console.error("Refresh token error:", error);
+      throw error;
+    }
+  },
+
+  async getProfile() {
+    try {
+      // Usar fetchWithAuth para manejo automático de refresh
+      const { fetchWithAuth } = await import("../utils/apiClient");
+      
+      const response = await fetchWithAuth(`/accounts/profile/`);
       
       if (!response.ok) {
-        // Si es 401, el token expiró (es normal)
-        if (response.status === 401) {
-          throw new Error("Token expirado");
-        }
         throw new Error("No se pudo obtener el perfil");
       }
       
       return await response.json();
     } catch (error) {
-      // Solo loguear si no es un token expirado (401)
-      if (!error.message.includes("Token expirado")) {
-        console.error("Get profile error:", error);
-      }
+      console.error("Get profile error:", error);
       throw error;
     }
   },
 
-  async deleteAccount(token) {
+  async updateProfile(profileData) {
     try {
-      const response = await fetch(`${API_URL}/accounts/profile/`, {
+      // Importar dinámicamente para evitar dependencia circular
+      const { fetchWithAuth } = await import("../utils/apiClient");
+      
+      const response = await fetchWithAuth(`/accounts/profile/`, {
+        method: "PATCH",
+        body: JSON.stringify(profileData),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || "No se pudo actualizar el perfil");
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error("Update profile error:", error);
+      throw error;
+    }
+  },
+
+  async deleteAccount() {
+    try {
+      // Importar dinámicamente para evitar dependencia circular
+      const { fetchWithAuth } = await import("../utils/apiClient");
+      
+      const response = await fetchWithAuth(`/accounts/profile/`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
       });
       
       if (!response.ok) {
@@ -91,6 +147,10 @@ export const authService = {
       }
       
       this.logout();
+      // DELETE puede no devolver contenido
+      if (response.status === 204) {
+        return { success: true };
+      }
       return await response.json();
     } catch (error) {
       console.error("Delete account error:", error);
@@ -100,5 +160,6 @@ export const authService = {
 
   logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
   },
 };
