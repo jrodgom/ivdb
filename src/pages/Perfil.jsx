@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { reviewService } from "../services/reviewService";
 import { User, Mail, Calendar, Edit2, Save, X, Trash2, AlertTriangle, Star, MessageSquare, Heart, Gamepad2 } from "lucide-react";
@@ -52,9 +52,28 @@ export default function Perfil() {
     try {
       const { favoriteService } = await import("../services/favoriteService");
       const favorites = await favoriteService.getMyFavorites();
+      console.log("Favoritos cargados:", favorites);
       setMyFavorites(favorites);
     } catch (error) {
       console.error("Error loading favorites:", error);
+    }
+  };
+
+  const handleGameClick = async (e, gameTitle) => {
+    e.preventDefault();
+    try {
+      const { rawgService } = await import("../services/rawgService");
+      const searchResults = await rawgService.searchGames(gameTitle, 1, 1);
+      
+      if (searchResults.results && searchResults.results.length > 0) {
+        const rawgGame = searchResults.results[0];
+        navigate(`/game/${rawgGame.id}`);
+      } else {
+        alert(`No se encontró "${gameTitle}" en la base de datos global.`);
+      }
+    } catch (error) {
+      console.error("Error buscando juego:", error);
+      alert("Error al buscar el juego");
     }
   };
 
@@ -154,7 +173,7 @@ export default function Perfil() {
                 <User size={64} className="text-white" />
               </div>
               <div className="absolute -bottom-2 -right-2 bg-indigo-500 rounded-full p-2 shadow-lg">
-                <span className="text-white text-xs font-bold">LV {Math.floor(Math.random() * 50) + 1}</span>
+                <span className="text-white text-xs font-bold">LV {Math.min(Math.floor(myReviews.length / 5) + 1, 99)}</span>
               </div>
             </div>
 
@@ -169,7 +188,7 @@ export default function Perfil() {
               </p>
               <p className="text-gray-500 flex items-center justify-center sm:justify-start gap-2 text-sm">
                 <Calendar size={16} />
-                Miembro desde {new Date().toLocaleDateString()}
+                Miembro desde {user.date_joined ? new Date(user.date_joined).toLocaleDateString('es-ES') : 'Fecha desconocida'}
               </p>
             </div>
 
@@ -304,23 +323,26 @@ export default function Perfil() {
 
         {/* Estadísticas del usuario */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
-          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a]">
+          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a] hover:border-indigo-500/50 transition-all duration-300 cursor-default group">
+            <Heart className="mx-auto mb-3 text-red-400 fill-red-400 group-hover:scale-110 transition-transform" size={32} />
             <p className="text-3xl font-bold text-indigo-400 mb-2">{myFavorites.length}</p>
             <p className="text-gray-400 text-sm">Juegos favoritos</p>
           </div>
-          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a]">
+          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a] hover:border-fuchsia-500/50 transition-all duration-300 cursor-default group">
+            <MessageSquare className="mx-auto mb-3 text-fuchsia-400 group-hover:scale-110 transition-transform" size={32} />
             <p className="text-3xl font-bold text-fuchsia-400 mb-2">{myReviews.length}</p>
             <p className="text-gray-400 text-sm">Reseñas escritas</p>
           </div>
-          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a]">
-            <p className="text-3xl font-bold text-indigo-400 mb-2">0</p>
-            <p className="text-gray-400 text-sm">Listas creadas</p>
+          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-6 text-center shadow-[0_0_15px_#000a] hover:border-indigo-500/50 transition-all duration-300 cursor-default group">
+            <Gamepad2 className="mx-auto mb-3 text-indigo-400 group-hover:scale-110 transition-transform" size={32} />
+            <p className="text-3xl font-bold text-indigo-400 mb-2">LV {Math.min(Math.floor(myReviews.length / 5) + 1, 99)}</p>
+            <p className="text-gray-400 text-sm">Nivel de jugador</p>
           </div>
         </div>
 
         {/* Mis Favoritos */}
         {myFavorites.length > 0 && (
-          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#000a]">
+          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#000a] animate-fadeIn">
             <div className="flex items-center gap-3 mb-6">
               <Heart className="text-red-400 fill-red-400" size={24} />
               <h2 className="text-2xl font-bold text-red-400">Tus Favoritos</h2>
@@ -328,12 +350,12 @@ export default function Perfil() {
             
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {myFavorites.map((favorite) => (
-                <Link
+                <div
                   key={favorite.id}
-                  to={`/game/${favorite.game}`}
+                  onClick={(e) => handleGameClick(e, favorite.game_details?.title || "Juego")}
                   className="group relative overflow-hidden rounded-lg border border-gray-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer"
                 >
-                  <div className="aspect-[3/4] relative">
+                  <div className="aspect-3/4 relative">
                     {favorite.game_details?.cover_image ? (
                       <img
                         src={favorite.game_details.cover_image}
@@ -345,12 +367,12 @@ export default function Perfil() {
                         <Gamepad2 className="text-gray-600" size={48} />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute top-2 right-2">
                       <Heart className="text-red-500 fill-red-500" size={20} />
                     </div>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-linear-to-t from-black to-transparent">
                     <h3 className="font-bold text-white text-sm truncate">
                       {favorite.game_details?.title || "Juego"}
                     </h3>
@@ -360,7 +382,7 @@ export default function Perfil() {
                       </p>
                     )}
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -368,7 +390,7 @@ export default function Perfil() {
 
         {/* Mis Reseñas */}
         {myReviews.length > 0 && (
-          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#000a]">
+          <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#000a] animate-fadeIn">
             <div className="flex items-center gap-3 mb-6">
               <MessageSquare className="text-indigo-400" size={24} />
               <h2 className="text-2xl font-bold text-indigo-400">Tus Reseñas</h2>
@@ -378,7 +400,8 @@ export default function Perfil() {
               {myReviews.map((review) => (
                 <div
                   key={review.id}
-                  className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 hover:bg-gray-800 transition"
+                  onClick={(e) => handleGameClick(e, review.game_details?.title || "Juego desconocido")}
+                  className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 hover:bg-gray-800 hover:border-indigo-500/50 transition-all duration-300 cursor-pointer group"
                 >
                   <div className="flex items-start gap-4">
                     {review.game_details?.cover_image && (
@@ -389,15 +412,36 @@ export default function Perfil() {
                       />
                     )}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-white truncate mb-1">
+                      <h3 className="font-bold text-white group-hover:text-indigo-400 truncate mb-1 transition-colors">
                         {review.game_details?.title || "Juego desconocido"}
                       </h3>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Star className="fill-yellow-400 text-yellow-400" size={16} />
-                        <span className="text-yellow-400 font-bold">{review.rating}/10</span>
-                        {review.game_details?.genre && (
-                          <span className="text-gray-500 text-xs">• {review.game_details.genre}</span>
-                        )}
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2">
+                          <Star className="fill-yellow-400 text-yellow-400" size={16} />
+                          <span className="text-yellow-400 font-bold">{review.rating}/10</span>
+                          {review.game_details?.genre && (
+                            <span className="text-gray-500 text-xs">• {review.game_details.genre}</span>
+                          )}
+                        </div>
+                        <button
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (window.confirm('¿Eliminar esta reseña?')) {
+                              try {
+                                await reviewService.deleteReview(review.id);
+                                await loadMyReviews();
+                              } catch (error) {
+                                console.error("Error:", error);
+                                alert("Error al eliminar reseña");
+                              }
+                            }
+                          }}
+                          className="p-1.5 hover:bg-red-500/20 rounded-lg transition-colors group/delete"
+                          title="Eliminar reseña"
+                        >
+                          <Trash2 size={14} className="text-gray-500 group-hover/delete:text-red-400 transition-colors" />
+                        </button>
                       </div>
                       {review.comment && (
                         <p className="text-gray-400 text-sm line-clamp-2 italic">
@@ -412,22 +456,32 @@ export default function Perfil() {
           </div>
         )}
 
-        {/* Zona de peligro */}
-        <div className="bg-red-900/20 border border-red-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#00000a]">
-          <div className="flex items-center gap-3 mb-4">
-            <AlertTriangle className="text-red-500" size={24} />
-            <h2 className="text-2xl font-bold text-red-400">Zona de peligro</h2>
+        {/* Configuración de cuenta */}
+        <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl p-8 mt-6 shadow-[0_0_15px_#000a]">
+          <h2 className="text-2xl font-bold text-gray-300 mb-6">Configuración de cuenta</h2>
+          
+          <div className="space-y-4">
+            <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-200 mb-2 flex items-center gap-2">
+                    <Trash2 className="text-gray-400" size={20} />
+                    Eliminar cuenta
+                  </h3>
+                  <p className="text-gray-400 text-sm">
+                    Esta acción es permanente y eliminará todos tus datos, reseñas y favoritos.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowDeleteModal(true)}
+                  className="px-5 py-2.5 bg-red-600/10 hover:bg-red-600/20 border border-red-600/50 hover:border-red-600 text-red-400 hover:text-red-300 font-semibold rounded-lg transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
+                >
+                  <Trash2 size={16} />
+                  Eliminar
+                </button>
+              </div>
+            </div>
           </div>
-          <p className="text-gray-300 mb-4">
-            Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, estate seguro.
-          </p>
-          <button
-            onClick={() => setShowDeleteModal(true)}
-            className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-300 flex items-center gap-2"
-          >
-            <Trash2 size={18} />
-            Eliminar mi cuenta
-          </button>
         </div>
 
         {/* Modal de confirmación de eliminación */}

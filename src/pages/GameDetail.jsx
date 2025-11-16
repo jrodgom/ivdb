@@ -5,6 +5,8 @@ import { reviewService } from "../services/reviewService";
 import { favoriteService } from "../services/favoriteService";
 import { useAuth } from "../hooks/useAuth";
 import { Star, Calendar, Users, Gamepad2, Trophy, MessageSquare, Edit2, Trash2, X, Save, Heart, Settings } from "lucide-react";
+import { GameDetailSkeleton } from "../components/SkeletonLoaders";
+import Tooltip from "../components/Tooltip";
 
 export default function GameDetail() {
   const { id } = useParams();
@@ -96,11 +98,8 @@ export default function GameDetail() {
         setIsEditing(false);
         alert("¡Reseña actualizada con éxito!");
       } else {
-        // Crear nueva reseña
-        // Validar y formatear la fecha
         let releaseDate = null;
         if (game.released) {
-          // La API de RAWG devuelve fechas en formato YYYY-MM-DD que Django acepta
           releaseDate = game.released;
         }
 
@@ -112,6 +111,8 @@ export default function GameDetail() {
           platform: game.platforms?.[0]?.platform?.name || "",
           developer: game.developers?.[0]?.name || "",
           cover_image: game.background_image || "",
+          metacritic: game.metacritic || null,
+          rating: game.rating || null,
         };
 
         const newReview = await reviewService.createReview(gameData, rating, comment);
@@ -216,6 +217,8 @@ export default function GameDetail() {
           platform: game.platforms?.[0]?.platform?.name || "",
           developer: game.developers?.[0]?.name || "",
           cover_image: game.background_image || "",
+          metacritic: game.metacritic || null,
+          rating: game.rating || null,
         };
 
         const createResponse = await fetchWithAuth(`/game/games/`, {
@@ -242,14 +245,7 @@ export default function GameDetail() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900 pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-500 mx-auto mb-4"></div>
-          <p className="text-gray-400 text-xl">Cargando juego...</p>
-        </div>
-      </div>
-    );
+    return <GameDetailSkeleton />;
   }
 
   if (!game) {
@@ -262,10 +258,8 @@ export default function GameDetail() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900 relative">
-      {/* Glow ambiental */}
       <div className="absolute inset-0 blur-3xl bg-linear-to-tr from-indigo-600/20 via-fuchsia-600/10 to-transparent pointer-events-none" />
 
-      {/* Hero Section */}
       <div className="relative h-[500px] overflow-hidden">
         <img
           src={game.background_image || "/placeholder-game.jpg"}
@@ -281,32 +275,34 @@ export default function GameDetail() {
               </h1>
               <div className="flex gap-2">
                 {user?.is_staff && gameDbId && (
-                  <button
-                    onClick={() => navigate(`/game/${gameDbId}/edit`)}
-                    className="p-4 rounded-full bg-indigo-600/80 hover:bg-indigo-700/80 backdrop-blur-md transition-all duration-300 shadow-[0_0_20px_#6366f1aa]"
-                    title="Editar juego (Admin)"
-                  >
-                    <Settings size={28} className="text-white" />
-                  </button>
+                  <Tooltip text="Editar juego (Admin)" position="bottom">
+                    <button
+                      onClick={() => navigate(`/game/${id}/edit`)}
+                      className="p-4 rounded-full bg-indigo-600/80 hover:bg-indigo-700/80 backdrop-blur-md transition-all duration-300 shadow-[0_0_20px_#6366f1aa]"
+                    >
+                      <Settings size={28} className="text-white" />
+                    </button>
+                  </Tooltip>
                 )}
                 {user && (
-                  <button
-                    onClick={handleToggleFavorite}
-                    disabled={isFavoriteLoading}
-                    className={`p-4 rounded-full backdrop-blur-md transition-all duration-300 ${
-                      isFavorite
-                        ? "bg-red-600/80 hover:bg-red-700/80 shadow-[0_0_20px_#dc2626aa]"
-                        : "bg-gray-900/60 hover:bg-gray-800/80 border border-gray-700"
-                    } disabled:opacity-50`}
-                    title={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
-                  >
-                    <Heart
-                      size={28}
-                      className={`transition-all duration-300 ${
-                        isFavorite ? "fill-white text-white" : "text-gray-300"
-                      }`}
-                    />
-                  </button>
+                  <Tooltip text={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"} position="bottom">
+                    <button
+                      onClick={handleToggleFavorite}
+                      disabled={isFavoriteLoading}
+                      className={`p-4 rounded-full backdrop-blur-md transition-all duration-300 ${
+                        isFavorite
+                          ? "bg-red-600/80 hover:bg-red-700/80 shadow-[0_0_20px_#dc2626aa]"
+                          : "bg-gray-900/60 hover:bg-gray-800/80 border border-gray-700"
+                      } disabled:opacity-50`}
+                    >
+                      <Heart
+                        size={28}
+                        className={`transition-all duration-300 ${
+                          isFavorite ? "fill-white text-white" : "text-gray-300"
+                        }`}
+                      />
+                    </button>
+                  </Tooltip>
                 )}
               </div>
             </div>
@@ -336,9 +332,7 @@ export default function GameDetail() {
 
       <div className="relative max-w-7xl mx-auto p-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* About */}
             <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-6">
               <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-fuchsia-500 mb-4">
                 Acerca de
@@ -351,7 +345,6 @@ export default function GameDetail() {
               />
             </div>
 
-            {/* Rating Section */}
             {user && (
               <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-6">
                 <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-fuchsia-500 mb-4">
@@ -408,7 +401,6 @@ export default function GameDetail() {
                 )}
                 
                 <form onSubmit={handleSubmitReview} className="space-y-6">
-                  {/* Star Rating */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-300 mb-3">
                       Puntuación (1-10) *
@@ -442,7 +434,6 @@ export default function GameDetail() {
                     </div>
                   </div>
 
-                  {/* Comment (Optional) */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-300 mb-2" htmlFor="review-comment">
                       Reseña (opcional)
@@ -519,9 +510,7 @@ export default function GameDetail() {
             )}
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6">
-            {/* Game Info */}
             <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-6">
               <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-fuchsia-500 mb-4">
                 Información
@@ -588,7 +577,6 @@ export default function GameDetail() {
               </div>
             </div>
 
-            {/* Screenshots */}
             {game.short_screenshots && game.short_screenshots.length > 1 && (
               <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-6">
                 <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-fuchsia-500 mb-4">
@@ -614,7 +602,6 @@ export default function GameDetail() {
         </div>
       </div>
 
-      {/* Modal de confirmación de eliminación */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-gray-900 border border-red-800/60 rounded-2xl p-8 max-w-md w-full shadow-[0_0_50px_#dc262688]">

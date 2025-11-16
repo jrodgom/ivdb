@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { gameService } from "../services/gameService";
+import GameCardSkeleton from "./SkeletonLoaders";
 
 export default function GameList() {
   const [games, setGames] = useState([]);
@@ -28,47 +29,33 @@ export default function GameList() {
     const value = e.target.value;
     setSearch(value);
     
-    // Limpiar debounce anterior
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
     }
     
-    // Nuevo debounce: esperar 300ms sin cambios antes de llamar API
+    // Esperar 300ms antes de buscar
     debounceTimer.current = setTimeout(() => {
       loadGames(value);
     }, 300);
   };
 
-  // Componente Skeleton para carga
-  const SkeletonCard = () => (
-    <div className="bg-gray-800 text-white rounded-xl shadow-md overflow-hidden animate-pulse">
-      <div className="w-full h-60 bg-gray-700" />
-      <div className="p-3">
-        <div className="h-4 bg-gray-700 rounded mb-2" />
-        <div className="h-3 bg-gray-700 rounded w-3/4" />
-      </div>
-    </div>
-  );
-
   return (
     <div className="mt-10">
-      {/* 🧠 Barra de búsqueda */}
       <div className="flex justify-center mb-8">
         <input
           type="text"
           value={search}
           onChange={handleSearch}
-          placeholder="🔍 Buscar juegos..."
+          placeholder="Buscar juegos..."
           aria-label="Buscar juegos por título o género"
           className="w-full sm:w-1/2 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200 placeholder-gray-500"
         />
       </div>
 
-      {/* 🔄 Estado de carga */}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {[...Array(10)].map((_, i) => (
-            <SkeletonCard key={i} />
+            <GameCardSkeleton key={i} />
           ))}
         </div>
       ) : games.length === 0 ? (

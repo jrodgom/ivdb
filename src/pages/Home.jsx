@@ -6,6 +6,7 @@ import { rawgService } from "../services/rawgService";
 import SearchBar from "../components/SearchBar";
 import GameFilters from "../components/GameFilters";
 import GameCard from "../components/GameCard";
+import GameCardSkeleton from "../components/SkeletonLoaders";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -16,19 +17,37 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [filters, setFilters] = useState({});
+  const [filteredGames, setFilteredGames] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const [loadingFiltered, setLoadingFiltered] = useState(false);
+  const gamesPerPage = 10;
 
   useEffect(() => {
-    loadGames();
+    loadInitialGames();
+  }, []);
+
+  useEffect(() => {
+    const hasFilters = filters.genre || filters.platform || (filters.ordering && filters.ordering !== "-created_at");
+    
+    if (hasFilters) {
+      setIsFiltering(true);
+      setCurrentPage(1);
+      loadFilteredGames(1);
+    } else {
+      setIsFiltering(false);
+      setFilteredGames([]);
+    }
   }, [filters]);
 
-  const loadGames = async () => {
+  const loadInitialGames = async () => {
     setLoading(true);
     try {
-      // Cargar más juegos para tener variedad después de eliminar duplicados
       const result = await gameService.getGames("", 1, 100, {});
       let games = result.data || [];
 
-      // Eliminar duplicados por título (case-insensitive)
+      // Eliminar duplicados
       const uniqueGames = [];
       const seenTitles = new Set();
       
@@ -42,13 +61,12 @@ export default function Home() {
 
       setAllGames(uniqueGames);
       
-      // Ordenar por rating para el carrusel (mejor valorados primero)
+      // Ordenar por rating
       const sortedByRating = [...uniqueGames].sort((a, b) => {
         return (b.average_rating || b.rating || 0) - (a.average_rating || a.rating || 0);
       });
       setTopGames(sortedByRating.slice(0, 10));
       
-      // Filtrar por género con variedad
       const actionFiltered = uniqueGames.filter((g) => g.genre && g.genre.toLowerCase().includes("action"));
       const adventureFiltered = uniqueGames.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure"));
       
@@ -59,6 +77,40 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadFilteredGames = async (page) => {
+    setLoadingFiltered(true);
+    try {
+      const result = await gameService.getGames("", page, gamesPerPage, filters);
+      let games = result.data || [];
+
+      // Eliminar duplicados
+      const uniqueGames = [];
+      const seenTitles = new Set();
+      
+      for (const game of games) {
+        const normalizedTitle = game.title.toLowerCase().trim();
+        if (!seenTitles.has(normalizedTitle)) {
+          seenTitles.add(normalizedTitle);
+          uniqueGames.push(game);
+        }
+      }
+
+      setFilteredGames(uniqueGames);
+      setTotalPages(Math.ceil((result.total || uniqueGames.length) / gamesPerPage));
+    } catch (error) {
+      console.error("Error loading filtered games:", error);
+      setFilteredGames([]);
+    } finally {
+      setLoadingFiltered(false);
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    loadFilteredGames(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -98,11 +150,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900">
-      {/* Contenedor principal con padding-top para el navbar */}
       <div className="pt-20">
-        {/* Hero Carousel - Altura controlada */}
         <div className="relative w-full h-[500px] overflow-hidden">
-          {/* Slides */}
           <div className="relative h-full">
             {topGames.map((game, index) => (
               <div
@@ -111,7 +160,6 @@ export default function Home() {
                   index === currentSlide ? "opacity-100" : "opacity-0"
                 }`}
               >
-                {/* Imagen de fondo */}
                 <img
                   src={game.cover_image}
                   alt={game.title}
@@ -119,10 +167,8 @@ export default function Home() {
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 
-                {/* Overlay oscuro */}
                 <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-black/80" />
                 
-                {/* Contenido centrado */}
                 <div className="relative h-full flex flex-col justify-center items-center text-center px-6 z-10">
                   <h2 className="text-4xl sm:text-6xl font-black text-white mb-4 drop-shadow-2xl">
                     {game.title}
@@ -138,10 +184,9 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-            ))}
+            ))})
           </div>
 
-          {/* Controles del carrusel */}
           <button
             onClick={prevSlide}
             className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-indigo-600 p-3 rounded-full text-white transition-all duration-300 z-20"
@@ -155,7 +200,6 @@ export default function Home() {
             <ChevronRight size={24} />
           </button>
 
-          {/* Indicadores (dots) */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
             {topGames.map((_, index) => (
               <button
@@ -179,19 +223,103 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Secciones de géneros */}
         <div className="max-w-7xl mx-auto px-6 pb-20">
-          {/* Filtros - Ahora con resultados */}
-          <GameFilters onFilterChange={setFilters} onSearch={(filteredGames) => {
-            if (filteredGames && filteredGames.length > 0) {
-              // Navegar a una página de resultados o actualizar vista
-              setActionGames(filteredGames.filter((g) => g.genre && g.genre.toLowerCase().includes("action")).slice(0, 10));
-              setAdventureGames(filteredGames.filter((g) => g.genre && g.genre.toLowerCase().includes("adventure")).slice(0, 10));
-            }
-          }} />
+          <GameFilters onFilterChange={setFilters} />
 
-          {/* Top Juegos */}
-          <section className="mb-16">
+          {isFiltering && (
+            <section className="mb-16">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-3xl font-bold text-white">
+                  Resultados
+                  {filters.genre && ` - ${filters.genre}`}
+                  {filters.platform && ` - ${filters.platform}`}
+                </h2>
+                <span className="text-gray-400">
+                  {filteredGames.length} juegos
+                </span>
+              </div>
+
+              {loadingFiltered ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                  {[...Array(10)].map((_, i) => (
+                    <GameCardSkeleton key={i} />
+                  ))}
+                </div>
+              ) : filteredGames.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-8">
+                    {filteredGames.map((game) => (
+                      <GameCard
+                        key={game.id}
+                        game={game}
+                        onClick={() => handleGameClick(game)}
+                        showRating={true}
+                        showFavorite={true}
+                      />
+                    ))}
+                  </div>
+
+                  {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-2 mt-8">
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="px-4 py-2 bg-gray-800 hover:bg-indigo-600 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-800"
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+
+                      <div className="flex gap-2">
+                        {[...Array(totalPages)].map((_, index) => {
+                          const pageNum = index + 1;
+                          if (
+                            pageNum === 1 ||
+                            pageNum === totalPages ||
+                            (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                          ) {
+                            return (
+                              <button
+                                key={pageNum}
+                                onClick={() => handlePageChange(pageNum)}
+                                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                                  currentPage === pageNum
+                                    ? "bg-indigo-600 text-white"
+                                    : "bg-gray-800 hover:bg-gray-700 text-gray-300"
+                                }`}
+                              >
+                                {pageNum}
+                              </button>
+                            );
+                          } else if (
+                            pageNum === currentPage - 2 ||
+                            pageNum === currentPage + 2
+                          ) {
+                            return <span key={pageNum} className="text-gray-500 px-2">...</span>;
+                          }
+                          return null;
+                        })}
+                      </div>
+
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-4 py-2 bg-gray-800 hover:bg-indigo-600 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-800"
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-20">
+                  <p className="text-gray-400 text-lg">No se encontraron juegos con estos filtros</p>
+                </div>
+              )}
+            </section>
+          )}
+
+          {!isFiltering && (
+            <section className="mb-16">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-3xl font-bold text-white">Top Juegos</h2>
               <Link to="/categoria/top" className="text-indigo-400 hover:text-indigo-300 font-semibold">
@@ -199,20 +327,24 @@ export default function Home() {
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {topGames.slice(0, 10).map((game) => (
-                <GameCard
-                  key={game.id}
-                  game={game}
-                  onClick={() => handleGameClick(game)}
-                  showRating={true}
-                  showFavorite={true}
-                />
-              ))}
+              {loading ? (
+                [...Array(10)].map((_, i) => <GameCardSkeleton key={i} />)
+              ) : (
+                topGames.slice(0, 10).map((game) => (
+                  <GameCard
+                    key={game.id}
+                    game={game}
+                    onClick={() => handleGameClick(game)}
+                    showRating={true}
+                    showFavorite={true}
+                  />
+                ))
+              )}
             </div>
           </section>
+          )}
 
-          {/* Juegos de Acción */}
-          {actionGames.length > 0 && (
+          {!isFiltering && (loading || actionGames.length > 0) && (
             <section className="mb-16">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-3xl font-bold text-white">Juegos de Acción</h2>
@@ -221,21 +353,24 @@ export default function Home() {
                 </Link>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {actionGames.slice(0, 10).map((game) => (
-                  <GameCard
-                    key={game.id}
-                    game={game}
-                    onClick={() => handleGameClick(game)}
-                    showRating={true}
-                    showFavorite={true}
-                  />
-                ))}
+                {loading ? (
+                  [...Array(10)].map((_, i) => <GameCardSkeleton key={i} />)
+                ) : (
+                  actionGames.slice(0, 10).map((game) => (
+                    <GameCard
+                      key={game.id}
+                      game={game}
+                      onClick={() => handleGameClick(game)}
+                      showRating={true}
+                      showFavorite={true}
+                    />
+                  ))
+                )}
               </div>
             </section>
           )}
 
-          {/* Juegos de Aventura */}
-          {adventureGames.length > 0 && (
+          {!isFiltering && (loading || adventureGames.length > 0) && (
             <section>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-3xl font-bold text-white">Juegos de Aventura</h2>
@@ -244,15 +379,19 @@ export default function Home() {
                 </Link>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {adventureGames.slice(0, 10).map((game) => (
-                  <GameCard
-                    key={game.id}
-                    game={game}
-                    onClick={() => handleGameClick(game)}
-                    showRating={true}
-                    showFavorite={true}
-                  />
-                ))}
+                {loading ? (
+                  [...Array(10)].map((_, i) => <GameCardSkeleton key={i} />)
+                ) : (
+                  adventureGames.slice(0, 10).map((game) => (
+                    <GameCard
+                      key={game.id}
+                      game={game}
+                      onClick={() => handleGameClick(game)}
+                      showRating={true}
+                      showFavorite={true}
+                    />
+                  ))
+                )}
               </div>
             </section>
           )}

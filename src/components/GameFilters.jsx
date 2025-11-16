@@ -7,6 +7,8 @@ export default function GameFilters({ onFilterChange, onSearch, initialFilters =
     genre: initialFilters.genre || "",
     platform: initialFilters.platform || "",
     ordering: initialFilters.ordering || "-created_at",
+    minRating: initialFilters.minRating || "",
+    minMetacritic: initialFilters.minMetacritic || "",
   });
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -45,10 +47,12 @@ export default function GameFilters({ onFilterChange, onSearch, initialFilters =
     { value: "-title", label: "Z-A" },
     { value: "release_date", label: "Fecha (antigua)" },
     { value: "-release_date", label: "Fecha (reciente)" },
+    { value: "-metacritic", label: "Metacritic (mayor)" },
+    { value: "metacritic", label: "Metacritic (menor)" },
   ];
 
   useEffect(() => {
-    // Solo llamar onFilterChange después del mount inicial para evitar bucles
+    // Evitar llamadas en el primer render
     if (isInitialized) {
       onFilterChange(filters);
     } else {
@@ -68,27 +72,27 @@ export default function GameFilters({ onFilterChange, onSearch, initialFilters =
       genre: "",
       platform: "",
       ordering: "-created_at",
+      minRating: "",
+      minMetacritic: "",
     });
   };
 
-  const hasActiveFilters = filters.genre || filters.platform || filters.ordering !== "-created_at";
+  const hasActiveFilters = filters.genre || filters.platform || filters.ordering !== "-created_at" || filters.minRating || filters.minMetacritic;
 
   return (
     <div className="mb-8">
-      {/* Filters Panel - Siempre visible, diseño compacto */}
       <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl p-4">
         <div className="flex items-center gap-2 mb-4">
           <Filter size={18} className="text-indigo-400" />
           <h3 className="text-white font-semibold">Filtrar juegos</h3>
           {hasActiveFilters && (
             <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs rounded-full">
-              {[filters.genre, filters.platform].filter(Boolean).length}
+              {[filters.genre, filters.platform, filters.minRating, filters.minMetacritic].filter(Boolean).length}
             </span>
           )}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Genre Filter */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-2" htmlFor="filter-genre">
                 Género
@@ -109,7 +113,6 @@ export default function GameFilters({ onFilterChange, onSearch, initialFilters =
               </select>
             </div>
 
-            {/* Platform Filter */}
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-2" htmlFor="filter-platform">
                 Plataforma
@@ -130,7 +133,6 @@ export default function GameFilters({ onFilterChange, onSearch, initialFilters =
               </select>
             </div>
 
-            {/* Ordering */}
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-2" htmlFor="filter-ordering">
                 Ordenar por
@@ -149,9 +151,45 @@ export default function GameFilters({ onFilterChange, onSearch, initialFilters =
                 ))}
               </select>
             </div>
+            
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2" htmlFor="filter-min-rating">
+                Valoración mínima
+              </label>
+              <select
+                id="filter-min-rating"
+                name="minRating"
+                value={filters.minRating}
+                onChange={(e) => handleFilterChange("minRating", e.target.value)}
+                className="w-full px-4 py-2 bg-gray-800/80 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              >
+                <option value="">Cualquier valoración</option>
+                <option value="4">⭐ 4+ estrellas</option>
+                <option value="3">⭐ 3+ estrellas</option>
+                <option value="2">⭐ 2+ estrellas</option>
+                <option value="1">⭐ 1+ estrellas</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2" htmlFor="filter-min-metacritic">
+                Metacritic mínimo
+              </label>
+              <select
+                id="filter-min-metacritic"
+                name="minMetacritic"
+                value={filters.minMetacritic}
+                onChange={(e) => handleFilterChange("minMetacritic", e.target.value)}
+                className="w-full px-4 py-2 bg-gray-800/80 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              >
+                <option value="">Cualquier puntuación</option>
+                <option value="90">90+ (Universal acclaim)</option>
+                <option value="75">75+ (Generally favorable)</option>
+                <option value="50">50+ (Mixed reviews)</option>
+              </select>
+            </div>
           </div>
 
-        {/* Active Filters & Clear */}
         {hasActiveFilters && (
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="text-sm text-gray-400">Filtros activos:</span>
@@ -171,6 +209,28 @@ export default function GameFilters({ onFilterChange, onSearch, initialFilters =
                 Plataforma: {filters.platform}
                 <button
                   onClick={() => handleFilterChange("platform", "")}
+                  className="hover:text-white transition"
+                >
+                  <X size={14} />
+                </button>
+              </span>
+            )}
+            {filters.minRating && (
+              <span className="px-3 py-1 bg-indigo-600/30 border border-indigo-500/50 rounded-full text-indigo-300 text-sm flex items-center gap-2">
+                Rating: {filters.minRating}+ ⭐
+                <button
+                  onClick={() => handleFilterChange("minRating", "")}
+                  className="hover:text-white transition"
+                >
+                  <X size={14} />
+                </button>
+              </span>
+            )}
+            {filters.minMetacritic && (
+              <span className="px-3 py-1 bg-indigo-600/30 border border-indigo-500/50 rounded-full text-indigo-300 text-sm flex items-center gap-2">
+                Metacritic: {filters.minMetacritic}+
+                <button
+                  onClick={() => handleFilterChange("minMetacritic", "")}
                   className="hover:text-white transition"
                 >
                   <X size={14} />

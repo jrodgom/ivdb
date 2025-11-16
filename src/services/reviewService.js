@@ -13,7 +13,6 @@ export const reviewService = {
 
       let gameId;
 
-      // Primero, intentar buscar si el juego ya existe
       const searchResponse = await fetchWithAuth(
         `/game/games/?search=${encodeURIComponent(gameData.title)}`
       );
@@ -26,13 +25,10 @@ export const reviewService = {
         
         if (existingGame) {
           gameId = existingGame.id;
-          console.log("Juego encontrado en BD:", existingGame);
         }
       }
 
-      // Si no existe, crearlo
       if (!gameId) {
-        // Limpiar la fecha para que sea compatible con Django
         const cleanGameData = {
           ...gameData,
           release_date: gameData.release_date || null,
@@ -46,7 +42,6 @@ export const reviewService = {
         if (gameResponse.ok) {
           const game = await gameResponse.json();
           gameId = game.id;
-          console.log("Juego creado:", game);
         } else {
           const errorData = await gameResponse.json();
           console.error("Error al crear juego:", errorData);
@@ -58,7 +53,6 @@ export const reviewService = {
         throw new Error("No se pudo obtener el ID del juego");
       }
 
-      // Crear la reseña
       const reviewResponse = await fetchWithAuth(`/review/reviews/`, {
         method: "POST",
         body: JSON.stringify({

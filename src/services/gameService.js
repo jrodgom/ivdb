@@ -1,4 +1,3 @@
-// src/services/gameService.js
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
@@ -7,7 +6,6 @@ const gameApi = axios.create({
   baseURL: `${API_URL}/game/games/`,
 });
 
-// Interceptor para agregar token
 gameApi.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -16,7 +14,6 @@ gameApi.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor para manejo de errores
 gameApi.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -26,18 +23,20 @@ gameApi.interceptors.response.use(
 );
 
 export const gameService = {
-  async getGames(search = "", page = 1, pageSize = 20, filters = {}) {
+  async getGames(search = "", page = 1, pageSize = 10, filters = {}) {
     try {
-      const params = { page, pageSize };
+      const params = { page };
       if (search) params.search = search;
       if (filters.genre) params.genre = filters.genre;
       if (filters.platform) params.platform = filters.platform;
       if (filters.ordering) params.ordering = filters.ordering;
+      if (filters.minRating) params.min_rating = filters.minRating;
+      if (filters.minMetacritic) params.min_metacritic = filters.minMetacritic;
       
       const response = await gameApi.get("/", { params });
       return { 
-        data: Array.isArray(response.data) ? response.data : response.data.results || [],
-        total: response.data.total || 0,
+        data: response.data.results || [],
+        total: response.data.count || 0,
         page,
         pageSize
       };

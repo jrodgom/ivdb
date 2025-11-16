@@ -66,7 +66,9 @@ export const favoriteService = {
         throw new Error("Error al obtener tus favoritos");
       }
 
-      return await response.json();
+      const data = await response.json();
+      // Django REST devuelve resultados paginados
+      return data.results || data;
     } catch (error) {
       console.error("Get favorites error:", error);
       return [];

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, User, LogOut, Plus, Home, Trophy, Info } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import Tooltip from "./Tooltip";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -11,7 +12,6 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 backdrop-blur-lg bg-black/40 border-b border-gray-800 shadow-[0_0_25px_#6366f155] transition-all duration-300">
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center relative">
-        {/* === LOGO === */}
         <Link
           to="/"
           className="relative text-3xl font-extrabold tracking-tight transition-all duration-300 group"
@@ -22,7 +22,6 @@ export default function Navbar() {
           <span className="absolute inset-0 blur-lg opacity-60 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-indigo-400 rounded-md scale-105 group-hover:opacity-80 transition-all duration-500"></span>
         </Link>
 
-        {/* === LINKS DESKTOP === */}
         <div className="hidden md:flex space-x-8 items-center">
           {[
             { to: "/", label: "Inicio" },
@@ -41,7 +40,6 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          {/* === PERFIL DESKTOP === */}
           {user ? (
             <div className="relative">
               <button
@@ -52,19 +50,21 @@ export default function Navbar() {
                 <ChevronDown className="ml-2" size={18} />
               </button>
               {profileMenu && (
-                <div className="absolute right-0 mt-2 w-40 bg-gray-900 border border-gray-700 rounded-lg shadow-lg overflow-hidden animate-fadeIn">
+                <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-lg shadow-lg overflow-hidden animate-fadeIn">
                   <Link
                     to="/perfil"
                     onClick={() => setProfileMenu(false)}
-                    className="block px-4 py-2 text-gray-200 hover:bg-indigo-500 hover:text-white transition"
+                    className="flex items-center gap-2 px-4 py-2 text-gray-200 hover:bg-indigo-500 hover:text-white transition"
                   >
-                    Perfil
+                    <User size={16} />
+                    <span>Mi perfil</span>
                   </Link>
                   <button
                     onClick={logout}
-                    className="w-full text-left px-4 py-2 text-gray-200 hover:bg-indigo-500 hover:text-white transition"
+                    className="w-full flex items-center gap-2 text-left px-4 py-2 text-gray-200 hover:bg-indigo-500 hover:text-white transition"
                   >
-                    Cerrar sesión
+                    <LogOut size={16} />
+                    <span>Cerrar sesión</span>
                   </button>
                 </div>
               )}
@@ -87,7 +87,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* === MENÚ MÓVIL === */}
         <button
           onClick={() => setOpen(!open)}
           className="md:hidden text-gray-300 hover:text-indigo-400 transition"
@@ -96,7 +95,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* === PANEL MÓVIL === */}
       {open && (
         <div className="md:hidden bg-black/90 backdrop-blur-xl border-t border-gray-800 py-4 space-y-4 text-center animate-fadeIn">
           {[

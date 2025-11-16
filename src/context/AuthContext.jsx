@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
           setUser(userData);
           setToken(savedToken);
         } catch (error) {
-          console.log("No se pudo cargar el perfil, sesión expirada");
+          // Sesión expirada o inválida
           localStorage.removeItem("token");
           localStorage.removeItem("refreshToken");
           setUser(null);

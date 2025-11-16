@@ -15,7 +15,6 @@ export const authService = {
       }
       
       const data = await response.json();
-      console.log("Login exitoso:", data);
       
       // Guardar refresh token en localStorage para persistencia
       localStorage.setItem("refreshToken", data.refresh);
@@ -48,7 +47,6 @@ export const authService = {
       }
       
       const data = await response.json();
-      console.log("Registro exitoso:", data);
       
       // Después de registrar, hacer login automático
       return await this.login(username, password);

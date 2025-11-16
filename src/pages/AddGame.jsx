@@ -114,11 +114,9 @@ export default function AddGame() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900 bg-size-[200%_200%] animate-gradient-x relative overflow-hidden">
-      {/* Glow ambiental */}
       <div className="absolute inset-0 blur-3xl bg-linear-to-tr from-indigo-600/20 via-fuchsia-600/10 to-transparent pointer-events-none"></div>
 
       <div className="relative max-w-4xl mx-auto px-6 pt-24 pb-16 animate-fadeIn">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center p-4 bg-indigo-600/20 rounded-full mb-4">
             <Gamepad2 size={48} className="text-indigo-400" />
@@ -131,19 +129,16 @@ export default function AddGame() {
           </p>
         </div>
 
-        {/* Success Message */}
         {success && (
           <div className="bg-green-900/30 border border-green-600/50 rounded-xl p-4 mb-6 animate-fadeIn">
             <p className="text-green-400 font-semibold text-center">
-              ✓ ¡Juego añadido con éxito! Redirigiendo...
+              ¡Juego añadido con éxito! Redirigiendo...
             </p>
           </div>
         )}
 
-        {/* Form */}
         <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Title */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-title">
                 <Gamepad2 size={18} />
@@ -161,7 +156,6 @@ export default function AddGame() {
               />
             </div>
 
-            {/* Description */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-description">
                 <FileText size={18} />
@@ -178,9 +172,7 @@ export default function AddGame() {
               />
             </div>
 
-            {/* Two columns */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Release Date */}
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-release-date">
                   <Calendar size={18} />
@@ -196,7 +188,6 @@ export default function AddGame() {
                 />
               </div>
 
-              {/* Genre */}
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-genre">
                   <Tag size={18} />
@@ -213,7 +204,6 @@ export default function AddGame() {
                 />
               </div>
 
-              {/* Platform */}
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-platform">
                   <Monitor size={18} />
@@ -230,7 +220,6 @@ export default function AddGame() {
                 />
               </div>
 
-              {/* Developer */}
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-developer">
                   <Users size={18} />
@@ -248,7 +237,6 @@ export default function AddGame() {
               </div>
             </div>
 
-            {/* Cover Image URL */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-cover-image">
                 <Image size={18} />
@@ -278,14 +266,12 @@ export default function AddGame() {
               )}
             </div>
 
-            {/* Error Message */}
             {error && (
               <div className="bg-red-900/30 border border-red-600/50 rounded-lg p-3 animate-fadeIn">
                 <p className="text-red-400 text-sm">{error}</p>
               </div>
             )}
 
-            {/* Buttons */}
             <div className="flex gap-4 pt-4">
               <button
                 type="submit"
@@ -321,10 +307,9 @@ export default function AddGame() {
           </form>
         </div>
 
-        {/* Info box */}
         <div className="mt-6 bg-indigo-900/20 border border-indigo-800/40 rounded-xl p-4">
           <p className="text-indigo-300 text-sm">
-            <strong>💡 Consejo:</strong> Asegúrate de que la información sea correcta antes de añadir el juego. 
+            <strong>Consejo:</strong> Asegúrate de que la información sea correcta antes de añadir el juego. 
             Los usuarios podrán valorar y comentar sobre este juego.
           </p>
         </div>
