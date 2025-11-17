@@ -36,10 +36,26 @@ export default function GlobalStats() {
         totalReviews += game.review_count || 0;
       });
 
+      // Obtener número real de usuarios
+      let totalUsers = 0;
+      try {
+        const usersResponse = await fetch('http://localhost:8000/accounts/stats/', {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        if (usersResponse.ok) {
+          const usersData = await usersResponse.json();
+          totalUsers = usersData.total_users || 0;
+        }
+      } catch (error) {
+        console.error('Error loading users count:', error);
+      }
+
       setStats({
         totalGames,
         totalReviews,
-        totalUsers: 156, // Placeholder - puedes conectar con API de usuarios
+        totalUsers,
         totalGenres: uniqueGenres.size,
       });
     } catch (error) {

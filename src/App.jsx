@@ -33,7 +33,6 @@ export default function App() {
         <BrowserRouter>
           <ScrollToTop />
           <Navbar />
-          <Breadcrumbs />
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               <Route path="/" element={<Home />} />

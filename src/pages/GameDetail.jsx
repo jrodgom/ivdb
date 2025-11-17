@@ -4,7 +4,7 @@ import { rawgService } from "../services/rawgService";
 import { reviewService } from "../services/reviewService";
 import { favoriteService } from "../services/favoriteService";
 import { useAuth } from "../hooks/useAuth";
-import { Star, Calendar, Users, Gamepad2, Trophy, MessageSquare, Edit2, Trash2, X, Save, Heart, Settings } from "lucide-react";
+import { Star, Calendar, Users, Gamepad2, Trophy, MessageSquare, Edit2, Trash2, X, Save, Heart } from "lucide-react";
 import { GameDetailSkeleton } from "../components/SkeletonLoaders";
 import Tooltip from "../components/Tooltip";
 
@@ -257,7 +257,7 @@ export default function GameDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900 relative">
+    <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900 relative pt-24">
       <div className="absolute inset-0 blur-3xl bg-linear-to-tr from-indigo-600/20 via-fuchsia-600/10 to-transparent pointer-events-none" />
 
       <div className="relative h-[500px] overflow-hidden">
@@ -274,16 +274,6 @@ export default function GameDetail() {
                 {game.name}
               </h1>
               <div className="flex gap-2">
-                {user?.is_staff && gameDbId && (
-                  <Tooltip text="Editar juego (Admin)" position="bottom">
-                    <button
-                      onClick={() => navigate(`/game/${id}/edit`)}
-                      className="p-4 rounded-full bg-indigo-600/80 hover:bg-indigo-700/80 backdrop-blur-md transition-all duration-300 shadow-[0_0_20px_#6366f1aa]"
-                    >
-                      <Settings size={28} className="text-white" />
-                    </button>
-                  </Tooltip>
-                )}
                 {user && (
                   <Tooltip text={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"} position="bottom">
                     <button

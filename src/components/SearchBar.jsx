@@ -129,7 +129,7 @@ export default function SearchBar({ compact = false }) {
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => query.length >= 2 && results.length > 0 && setShowResults(true)}
-          placeholder="Buscar entre más de 800,000 juegos... (Enter para ver todos)"
+          placeholder="Buscar entre más de 800,000 juegos..."
           autoComplete="off"
           className="w-full pl-12 pr-12 py-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition"
         />

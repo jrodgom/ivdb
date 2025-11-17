@@ -17,7 +17,8 @@ export default function Breadcrumbs() {
   if (pathnames.length === 0) return null;
 
   return (
-    <nav className="flex items-center gap-2 text-sm mb-6 px-6">
+    <nav className="w-full bg-gray-950 pt-24 pb-4">
+      <div className="flex items-center gap-2 text-sm px-6">
       <Link
         to="/"
         className="flex items-center gap-1 text-gray-400 hover:text-indigo-400 transition-colors"
@@ -47,6 +48,7 @@ export default function Breadcrumbs() {
           </div>
         );
       })}
+      </div>
     </nav>
   );
 }

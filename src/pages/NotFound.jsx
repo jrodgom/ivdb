@@ -3,8 +3,11 @@ import { Home, Search, Gamepad2 } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-900 via-indigo-950 to-purple-900 flex items-center justify-center px-6">
-      <div className="text-center max-w-2xl">
+    <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900 flex items-center justify-center px-6 relative">
+      {/* Glow ambiental */}
+      <div className="absolute inset-0 blur-3xl bg-linear-to-tr from-indigo-600/20 via-fuchsia-600/10 to-transparent pointer-events-none" />
+      
+      <div className="relative text-center max-w-2xl animate-fadeIn">
         <div className="mb-8 flex justify-center">
           <Gamepad2 className="text-indigo-400/20" size={120} strokeWidth={1.5} />
         </div>
@@ -24,7 +27,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/"
-            className="flex items-center gap-2 justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all duration-300 hover:scale-105 shadow-lg shadow-indigo-500/20"
+            className="flex items-center gap-2 justify-center px-8 py-3 bg-linear-to-r from-indigo-500 to-fuchsia-600 hover:from-indigo-600 hover:to-fuchsia-700 text-white font-bold rounded-lg shadow-[0_0_20px_#6366f1aa] hover:shadow-[0_0_25px_#a855f7aa] transition-all duration-300"
           >
             <Home size={20} />
             <span>Volver al inicio</span>
@@ -32,7 +35,7 @@ export default function NotFound() {
           
           <Link
             to="/"
-            className="flex items-center gap-2 justify-center px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all duration-300 hover:scale-105 border border-gray-700"
+            className="flex items-center gap-2 justify-center px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg border border-gray-700 hover:border-indigo-500/50 transition-all duration-300"
           >
             <Search size={20} />
             <span>Buscar juegos</span>

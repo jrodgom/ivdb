@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { gameService } from "../services/gameService";
 import { rawgService } from "../services/rawgService";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import GameCard from "../components/GameCard";
 import GameCardSkeleton from "../components/SkeletonLoaders";
 
 export default function CategoryPage() {
@@ -132,50 +133,13 @@ export default function CategoryPage() {
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-12">
               {games.map((game) => (
-                <div
+                <GameCard
                   key={game.id}
+                  game={game}
                   onClick={() => handleGameClick(game)}
-                  className="cursor-pointer group"
-                >
-                  <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 transition-all duration-300 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1">
-                    <div className="aspect-3/4 relative overflow-hidden">
-                      {game.cover_image ? (
-                        <img
-                          src={game.cover_image}
-                          alt={game.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                          <span className="text-gray-500">Sin imagen</span>
-                        </div>
-                      )}
-                      
-                      {game.rating && (
-                        <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
-                          <Star className="fill-yellow-400 text-yellow-400" size={14} />
-                          <span className="text-white font-bold text-sm">{game.rating.toFixed(1)}</span>
-                        </div>
-                      )}
-                      
-                      {game.metacritic && (
-                        <div className={`absolute top-2 right-2 px-2 py-1 rounded-lg flex items-center gap-1 font-bold text-xs ${
-                          game.metacritic >= 75 ? 'bg-green-600' : 
-                          game.metacritic >= 50 ? 'bg-yellow-600' : 
-                          'bg-red-600'
-                        }`}>
-                          <span className="text-white">{game.metacritic}</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-3">
-                      <h3 className="text-white font-semibold text-sm truncate">
-                        {game.title}
-                      </h3>
-                      <p className="text-gray-400 text-xs mt-1 truncate">{game.genre || "Sin género"}</p>
-                    </div>
-                  </div>
-                </div>
+                  showRating={true}
+                  showFavorite={true}
+                />
               ))}
             </div>
 
