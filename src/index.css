@@ -28,3 +28,85 @@ html {
 .animate-pulse-slow {
   animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Estilos para descripción de juegos con HTML */
+.game-description p {
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
+}
+
+.game-description h1,
+.game-description h2,
+.game-description h3,
+.game-description h4 {
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #a78bfa;
+}
+
+.game-description h1 {
+  font-size: 1.5rem;
+}
+
+.game-description h2 {
+  font-size: 1.25rem;
+}
+
+.game-description h3 {
+  font-size: 1.125rem;
+}
+
+.game-description ul,
+.game-description ol {
+  margin-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
+}
+
+.game-description ul {
+  list-style-type: disc;
+}
+
+.game-description ol {
+  list-style-type: decimal;
+}
+
+.game-description li {
+  margin-bottom: 0.25rem;
+}
+
+.game-description strong,
+.game-description b {
+  font-weight: 600;
+  color: #c4b5fd;
+}
+
+.game-description em,
+.game-description i {
+  font-style: italic;
+}
+
+.game-description a {
+  color: #818cf8;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.game-description a:hover {
+  color: #a78bfa;
+}
+
+.game-description br {
+  display: block;
+  content: "";
+  margin-top: 0.5rem;
+}
+
+/* Solucionar recorte de texto en gradientes */
+.bg-clip-text {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-bottom: 0.1em;
+  line-height: 1.2;
+}

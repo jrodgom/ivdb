@@ -29,23 +29,53 @@ export const reviewService = {
       }
 
       if (!gameId) {
-        const cleanGameData = {
-          ...gameData,
-          release_date: gameData.release_date || null,
-        };
+        // Si tenemos rawg_id, usar el endpoint de importación para traer requisitos
+        if (gameData.rawg_id) {
+          const importResponse = await fetchWithAuth(`/game/import-from-rawg/`, {
+            method: "POST",
+            body: JSON.stringify({ rawg_id: gameData.rawg_id }),
+          });
 
-        const gameResponse = await fetchWithAuth(`/game/games/`, {
-          method: "POST",
-          body: JSON.stringify(cleanGameData),
-        });
-
-        if (gameResponse.ok) {
-          const game = await gameResponse.json();
-          gameId = game.id;
+          if (importResponse.ok) {
+            const game = await importResponse.json();
+            gameId = game.id;
+          } else {
+            // Si falla la importación (ej: ya existe), buscar de nuevo
+            const searchResponse2 = await fetchWithAuth(
+              `/game/games/?search=${encodeURIComponent(gameData.title)}`
+            );
+            
+            if (searchResponse2.ok) {
+              const searchData2 = await searchResponse2.json();
+              const existingGame2 = searchData2.results?.find(
+                (g) => g.title.toLowerCase() === gameData.title.toLowerCase()
+              );
+              
+              if (existingGame2) {
+                gameId = existingGame2.id;
+              }
+            }
+          }
         } else {
-          const errorData = await gameResponse.json();
-          console.error("Error al crear juego:", errorData);
-          throw new Error(`No se pudo crear el juego: ${JSON.stringify(errorData)}`);
+          // Si no tenemos rawg_id, crear normalmente sin requisitos
+          const cleanGameData = {
+            ...gameData,
+            release_date: gameData.release_date || null,
+          };
+
+          const gameResponse = await fetchWithAuth(`/game/games/`, {
+            method: "POST",
+            body: JSON.stringify(cleanGameData),
+          });
+
+          if (gameResponse.ok) {
+            const game = await gameResponse.json();
+            gameId = game.id;
+          } else {
+            const errorData = await gameResponse.json();
+            console.error("Error al crear juego:", errorData);
+            throw new Error(`No se pudo crear el juego: ${JSON.stringify(errorData)}`);
+          }
         }
       }
 

@@ -1,97 +1,76 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { Gamepad2, Upload, Calendar, Tag, Monitor, Users, Image, FileText, Save, X } from "lucide-react";
+import { Gamepad2, Search, Calendar, Tag, Monitor, Users, Download, CheckCircle, Star } from "lucide-react";
 import { fetchWithAuth } from "../utils/apiClient";
+import { rawgService } from "../services/rawgService";
 
 export default function AddGame() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [importedGames, setImportedGames] = useState([]);
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    release_date: "",
-    genre: "",
-    platform: "",
-    developer: "",
-    cover_image: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     
-    if (!formData.title.trim()) {
-      setError("El título es obligatorio");
+    if (!searchQuery.trim()) {
+      setError("Escribe el nombre de un juego para buscar");
       return;
     }
 
-    if (!user) {
-      setError("Debes iniciar sesión para añadir un juego");
-      return;
-    }
+    setIsSearching(true);
+    setError("");
+    setSearchResults([]);
 
-    setIsSubmitting(true);
+    try {
+      const results = await rawgService.searchGames(searchQuery);
+      setSearchResults(results.results || []);
+      
+      if (results.results.length === 0) {
+        setError("No se encontraron juegos con ese nombre");
+      }
+    } catch (err) {
+      console.error("Error searching games:", err);
+      setError("Error al buscar juegos. Inténtalo de nuevo.");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleImportGame = async (game) => {
+    setIsImporting(true);
     setError("");
 
     try {
-      const gameData = {
-        title: formData.title.trim(),
-        description: formData.description.trim(),
-        release_date: formData.release_date || null,
-        genre: formData.genre.trim(),
-        platform: formData.platform.trim(),
-        developer: formData.developer.trim(),
-        cover_image: formData.cover_image.trim(),
-      };
-
-      const response = await fetchWithAuth(`/game/games/`, {
+      // Llamar al endpoint para importar el juego completo desde RAWG
+      const response = await fetchWithAuth(`/game/import-from-rawg/`, {
         method: "POST",
-        body: JSON.stringify(gameData),
+        body: JSON.stringify({ rawg_id: game.id }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.title?.[0] || "Error al añadir el juego");
+        throw new Error(errorData.error || "Error al importar el juego");
       }
 
-      const newGame = await response.json();
-      setSuccess(true);
+      const importedGame = await response.json();
+      setImportedGames([...importedGames, game.id]);
       
+      // Mostrar mensaje de éxito breve y redirigir
       setTimeout(() => {
-        navigate(`/game/${newGame.id}`);
-      }, 2000);
+        navigate(`/game/${game.id}`);
+      }, 1000);
     } catch (err) {
-      console.error("Error adding game:", err);
-      setError(err.message || "Error al añadir el juego. Inténtalo de nuevo.");
+      console.error("Error importing game:", err);
+      setError(err.message || "Error al importar el juego. Puede que ya exista en la base de datos.");
     } finally {
-      setIsSubmitting(false);
+      setIsImporting(false);
     }
-  };
-
-  const handleReset = () => {
-    setFormData({
-      title: "",
-      description: "",
-      release_date: "",
-      genre: "",
-      platform: "",
-      developer: "",
-      cover_image: "",
-    });
-    setError("");
-    setSuccess(false);
   };
 
   if (!user) {
@@ -116,154 +95,53 @@ export default function AddGame() {
     <div className="min-h-screen bg-linear-to-br from-gray-950 via-indigo-950 to-gray-900 bg-size-[200%_200%] animate-gradient-x relative overflow-hidden">
       <div className="absolute inset-0 blur-3xl bg-linear-to-tr from-indigo-600/20 via-fuchsia-600/10 to-transparent pointer-events-none"></div>
 
-      <div className="relative max-w-4xl mx-auto px-6 pt-24 pb-16 animate-fadeIn">
+      <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-16 animate-fadeIn">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center p-4 bg-indigo-600/20 rounded-full mb-4">
             <Gamepad2 size={48} className="text-indigo-400" />
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-fuchsia-500 mb-3">
-            Añadir Nuevo Juego
+            Importar Juego desde RAWG
           </h1>
           <p className="text-gray-400 text-lg">
-            Comparte tus juegos favoritos con la comunidad
+            Busca y añade juegos a la base de datos con toda su información
           </p>
         </div>
 
-        {success && (
-          <div className="bg-green-900/30 border border-green-600/50 rounded-xl p-4 mb-6 animate-fadeIn">
-            <p className="text-green-400 font-semibold text-center">
-              ¡Juego añadido con éxito! Redirigiendo...
-            </p>
-          </div>
-        )}
-
-        <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-8 mb-8">
+          <form onSubmit={handleSearch} className="space-y-4">
             <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-title">
-                <Gamepad2 size={18} />
-                Título del juego *
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="search-game">
+                <Search size={18} />
+                Buscar juego
               </label>
-              <input
-                id="add-game-title"
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="Ej: The Legend of Zelda: Breath of the Wild"
-                required
-                className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-              />
-            </div>
-
-            <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-description">
-                <FileText size={18} />
-                Descripción
-              </label>
-              <textarea
-                id="add-game-description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Escribe una descripción del juego..."
-                rows={5}
-                className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 resize-none"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-release-date">
-                  <Calendar size={18} />
-                  Fecha de lanzamiento
-                </label>
+              <div className="flex gap-3">
                 <input
-                  id="add-game-release-date"
-                  type="date"
-                  name="release_date"
-                  value={formData.release_date}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-                />
-              </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-genre">
-                  <Tag size={18} />
-                  Género
-                </label>
-                <input
-                  id="add-game-genre"
+                  id="search-game"
                   type="text"
-                  name="genre"
-                  value={formData.genre}
-                  onChange={handleChange}
-                  placeholder="Ej: RPG, Action, Adventure"
-                  className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Ej: The Witcher 3, GTA V, Elden Ring..."
+                  className="flex-1 px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                 />
+                <button
+                  type="submit"
+                  disabled={isSearching}
+                  className="px-6 py-3 bg-linear-to-r from-indigo-500 to-fuchsia-600 hover:from-indigo-600 hover:to-fuchsia-700 disabled:from-gray-700 disabled:to-gray-700 text-white font-bold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isSearching ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                      Buscando...
+                    </>
+                  ) : (
+                    <>
+                      <Search size={20} />
+                      Buscar
+                    </>
+                  )}
+                </button>
               </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-platform">
-                  <Monitor size={18} />
-                  Plataforma
-                </label>
-                <input
-                  id="add-game-platform"
-                  type="text"
-                  name="platform"
-                  value={formData.platform}
-                  onChange={handleChange}
-                  placeholder="Ej: PlayStation, Xbox, PC"
-                  className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-                />
-              </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-developer">
-                  <Users size={18} />
-                  Desarrollador
-                </label>
-                <input
-                  id="add-game-developer"
-                  type="text"
-                  name="developer"
-                  value={formData.developer}
-                  onChange={handleChange}
-                  placeholder="Ej: Nintendo, Rockstar Games"
-                  className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-2" htmlFor="add-game-cover-image">
-                <Image size={18} />
-                URL de la imagen de portada
-              </label>
-              <input
-                id="add-game-cover-image"
-                type="url"
-                name="cover_image"
-                value={formData.cover_image}
-                onChange={handleChange}
-                placeholder="https://ejemplo.com/imagen.jpg"
-                className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-              />
-              {formData.cover_image && (
-                <div className="mt-3">
-                  <p className="text-gray-400 text-sm mb-2">Vista previa:</p>
-                  <img
-                    src={formData.cover_image}
-                    alt="Preview"
-                    className="w-full max-w-xs h-48 object-cover rounded-lg border border-gray-700"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
-                  />
-                </div>
-              )}
             </div>
 
             {error && (
@@ -271,47 +149,111 @@ export default function AddGame() {
                 <p className="text-red-400 text-sm">{error}</p>
               </div>
             )}
-
-            <div className="flex gap-4 pt-4">
-              <button
-                type="submit"
-                disabled={isSubmitting || success}
-                className="flex-1 py-3 bg-linear-to-r from-indigo-500 to-fuchsia-600 hover:from-indigo-600 hover:to-fuchsia-700 disabled:from-gray-700 disabled:to-gray-700 text-white font-bold rounded-lg shadow-[0_0_20px_#6366f1aa] hover:shadow-[0_0_25px_#a855f7aa] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                    Añadiendo...
-                  </>
-                ) : (
-                  <>
-                    <Save size={20} />
-                    Añadir Juego
-                  </>
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={handleReset}
-                disabled={isSubmitting}
-                className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
-              >
-                <X size={20} />
-                Limpiar
-              </button>
-            </div>
-
-            <p className="text-gray-500 text-sm text-center mt-4">
-              * Campos obligatorios
-            </p>
           </form>
         </div>
 
-        <div className="mt-6 bg-indigo-900/20 border border-indigo-800/40 rounded-xl p-4">
-          <p className="text-indigo-300 text-sm">
-            <strong>Consejo:</strong> Asegúrate de que la información sea correcta antes de añadir el juego. 
-            Los usuarios podrán valorar y comentar sobre este juego.
-          </p>
+        {/* Resultados de búsqueda */}
+        {searchResults.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Resultados de búsqueda ({searchResults.length})
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {searchResults.map((game) => {
+                const isImported = importedGames.includes(game.id);
+                
+                return (
+                  <div
+                    key={game.id}
+                    className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      {game.background_image ? (
+                        <img
+                          src={game.background_image}
+                          alt={game.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                          <Gamepad2 size={48} className="text-gray-600" />
+                        </div>
+                      )}
+                      {game.metacritic && (
+                        <div className="absolute top-2 right-2 bg-green-500 text-white font-bold px-2 py-1 rounded">
+                          {game.metacritic}
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">
+                        {game.name}
+                      </h3>
+                      
+                      <div className="space-y-2 mb-4 text-sm">
+                        {game.released && (
+                          <div className="flex items-center gap-2 text-gray-400">
+                            <Calendar size={14} />
+                            {new Date(game.released).toLocaleDateString("es-ES")}
+                          </div>
+                        )}
+                        {game.rating && (
+                          <div className="flex items-center gap-2 text-gray-400">
+                            <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                            {game.rating.toFixed(1)} / 5
+                          </div>
+                        )}
+                        {game.genres && game.genres.length > 0 && (
+                          <div className="flex items-center gap-2 text-gray-400">
+                            <Tag size={14} />
+                            <span className="line-clamp-1">
+                              {game.genres.slice(0, 2).map(g => g.name).join(", ")}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {isImported ? (
+                        <div className="flex items-center justify-center gap-2 py-2 bg-green-900/30 border border-green-600/50 rounded-lg text-green-400">
+                          <CheckCircle size={18} />
+                          Importado
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleImportGame(game)}
+                          disabled={isImporting}
+                          className="w-full py-2 bg-linear-to-r from-indigo-500 to-fuchsia-600 hover:from-indigo-600 hover:to-fuchsia-700 disabled:from-gray-700 disabled:to-gray-700 text-white font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                          {isImporting ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                              Importando...
+                            </>
+                          ) : (
+                            <>
+                              <Download size={18} />
+                              Importar
+                            </>
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        <div className="mt-8 bg-indigo-900/20 border border-indigo-800/40 rounded-xl p-6">
+          <h3 className="text-indigo-300 font-semibold mb-2">💡 ¿Cómo funciona?</h3>
+          <ul className="text-indigo-200 text-sm space-y-2 list-disc list-inside">
+            <li>Busca cualquier juego en la base de datos de RAWG</li>
+            <li>Importa el juego con toda su información: descripción, imágenes, géneros, etc.</li>
+            <li>Se añadirán automáticamente los requisitos del sistema (si están disponibles)</li>
+            <li>Los usuarios podrán valorar y comentar sobre el juego</li>
+          </ul>
         </div>
       </div>
     </div>

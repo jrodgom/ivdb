@@ -15,6 +15,7 @@ export default function CategoryPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     loadCategoryGames();
   }, [categoria, page]);
 

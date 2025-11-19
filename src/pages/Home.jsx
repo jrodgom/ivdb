@@ -35,6 +35,7 @@ export default function Home() {
     if (hasFilters) {
       setIsFiltering(true);
       setCurrentPage(1);
+      window.scrollTo({ top: 0, behavior: 'instant' });
       loadFilteredGames(1);
     } else {
       setIsFiltering(false);
@@ -157,9 +158,9 @@ export default function Home() {
   };
 
   const handlePageChange = (newPage) => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     setCurrentPage(newPage);
     loadFilteredGames(newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {

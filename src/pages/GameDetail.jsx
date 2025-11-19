@@ -7,6 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 import { Star, Calendar, Users, Gamepad2, Trophy, MessageSquare, Edit2, Trash2, X, Save, Heart } from "lucide-react";
 import { GameDetailSkeleton } from "../components/SkeletonLoaders";
 import Tooltip from "../components/Tooltip";
+import SystemRequirements from "../components/SystemRequirements";
 
 export default function GameDetail() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export default function GameDetail() {
   const { user } = useAuth();
   const [game, setGame] = useState(null);
   const [gameDbId, setGameDbId] = useState(null);
+  const [gameDbData, setGameDbData] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [userReview, setUserReview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,6 +58,7 @@ export default function GameDetail() {
         
         if (existingGame) {
           setGameDbId(existingGame.id);
+          setGameDbData(existingGame);
         }
       }
 
@@ -113,6 +116,7 @@ export default function GameDetail() {
           cover_image: game.background_image || "",
           metacritic: game.metacritic || null,
           rating: game.rating || null,
+          rawg_id: game.id, // Pasar el ID de RAWG para importar con requisitos
         };
 
         const newReview = await reviewService.createReview(gameData, rating, comment);
@@ -325,15 +329,23 @@ export default function GameDetail() {
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-6">
               <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-fuchsia-500 mb-4">
-                Acerca de
+                Descripción
               </h2>
               <div
-                className="text-gray-300 leading-relaxed"
+                className="game-description text-gray-300 leading-relaxed space-y-3"
                 dangerouslySetInnerHTML={{
                   __html: game.description || game.description_raw || "Sin descripción disponible",
                 }}
               />
             </div>
+
+            {/* Requisitos del Sistema */}
+            {gameDbData && (gameDbData.minimum_requirements || gameDbData.recommended_requirements) && (
+              <SystemRequirements
+                minimum={gameDbData.minimum_requirements}
+                recommended={gameDbData.recommended_requirements}
+              />
+            )}
 
             {user && (
               <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-6">
