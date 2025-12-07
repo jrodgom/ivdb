@@ -1,12 +1,8 @@
-// Cliente API con manejo automático de refresh token
+// Configuración de la API
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-/**
- * Función helper para hacer peticiones autenticadas con manejo automático de token refresh
- * @param {string} url - URL del endpoint (sin el dominio base)
- * @param {object} options - Opciones de fetch
- * @returns {Promise<Response>}
- */
+// Función para hacer peticiones con autenticación
+// Si el token expira, lo refresca automáticamente
 export async function fetchWithAuth(url, options = {}) {
   // Obtener token actual
   let token = localStorage.getItem("token");
@@ -71,9 +67,7 @@ export async function fetchWithAuth(url, options = {}) {
   return response;
 }
 
-/**
- * Helper para hacer peticiones GET autenticadas
- */
+// Peticiones GET
 export async function apiGet(url) {
   const response = await fetchWithAuth(url);
   if (!response.ok) {
@@ -82,9 +76,7 @@ export async function apiGet(url) {
   return response.json();
 }
 
-/**
- * Helper para hacer peticiones POST autenticadas
- */
+// Peticiones POST
 export async function apiPost(url, data) {
   const response = await fetchWithAuth(url, {
     method: "POST",
@@ -97,9 +89,7 @@ export async function apiPost(url, data) {
   return response.json();
 }
 
-/**
- * Helper para hacer peticiones PUT autenticadas
- */
+// Peticiones PUT
 export async function apiPut(url, data) {
   const response = await fetchWithAuth(url, {
     method: "PUT",
@@ -112,9 +102,7 @@ export async function apiPut(url, data) {
   return response.json();
 }
 
-/**
- * Helper para hacer peticiones PATCH autenticadas
- */
+// Peticiones PATCH
 export async function apiPatch(url, data) {
   const response = await fetchWithAuth(url, {
     method: "PATCH",
@@ -127,9 +115,7 @@ export async function apiPatch(url, data) {
   return response.json();
 }
 
-/**
- * Helper para hacer peticiones DELETE autenticadas
- */
+// Peticiones DELETE
 export async function apiDelete(url) {
   const response = await fetchWithAuth(url, {
     method: "DELETE",
