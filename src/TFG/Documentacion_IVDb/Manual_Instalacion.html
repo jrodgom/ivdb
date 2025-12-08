@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Instalación y Configuración - IVDb</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        .portada {
+            text-align: center;
+            padding: 100px 0;
+        }
+        h1 {
+            color: #980000;
+            font-family: 'Arial', sans-serif;
+            font-size: 24pt;
+            margin-top: 40px;
+        }
+        h2 {
+            color: #b45f06;
+            font-family: 'Arial', sans-serif;
+            font-size: 18pt;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #000;
+            font-family: 'Arial', sans-serif;
+            font-size: 14pt;
+            margin-top: 20px;
+        }
+        .comando {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .paso {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #b45f06;
+        }
+        .nota {
+            background-color: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .advertencia {
+            background-color: #f8d7da;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #dc3545;
+        }
+        .exito {
+            background-color: #d4edda;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #980000;
+            color: white;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 40px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="portada">
+    <h1 style="color: #000; margin-top: 0;">MANUAL DE INSTALACIÓN Y CONFIGURACIÓN</h1>
+    <h1 style="font-size: 32pt; margin: 60px 0;">IVDb</h1>
+    <h2 style="color: #666;">Base de Datos Interactiva de Videojuegos</h2>
+    <p style="margin-top: 100px; font-size: 14pt;">
+        Versión: 1.0<br>
+        Fecha: 07/12/2025<br>
+        Autor: Jesús Rodríguez Gómez
+    </p>
+</div>
+
+<div style="page-break-before: always;"></div>
+
+<h2>ÍNDICE</h2>
+<ol>
+    <li><a href="#introduccion">Introducción</a></li>
+    <li><a href="#requisitos">Requisitos del Sistema</a></li>
+    <li><a href="#instalacion-backend">Instalación del Backend</a></li>
+    <li><a href="#instalacion-frontend">Instalación del Frontend</a></li>
+    <li><a href="#configuracion">Configuración del Sistema</a></li>
+    <li><a href="#bd">Configuración de Base de Datos</a></li>
+    <li><a href="#api-rawg">Configuración API RAWG</a></li>
+    <li><a href="#despliegue">Despliegue y Puesta en Marcha</a></li>
+    <li><a href="#verificacion">Verificación de Instalación</a></li>
+    <li><a href="#problemas">Solución de Problemas Comunes</a></li>
+</ol>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="introduccion">1. INTRODUCCIÓN</h1>
+
+<h2>1.1 Propósito del Documento</h2>
+<p>Este manual proporciona instrucciones detalladas para instalar, configurar y desplegar IVDb (Interactive Video Game Database) en un entorno de desarrollo o producción.</p>
+
+<h2>1.2 Audiencia</h2>
+<p>Este documento está dirigido a:</p>
+<ul>
+    <li>Desarrolladores que necesiten configurar el entorno de desarrollo</li>
+    <li>Administradores de sistemas responsables del despliegue</li>
+    <li>Personal técnico encargado del mantenimiento</li>
+</ul>
+
+<h2>1.3 Arquitectura del Sistema</h2>
+<p>IVDb consta de dos componentes principales:</p>
+<ul>
+    <li><strong>Backend:</strong> API REST desarrollada con Django 5.2.7 y Django REST Framework</li>
+    <li><strong>Frontend:</strong> Aplicación SPA desarrollada con React 18.3 y Vite 6.0</li>
+</ul>
+
+<div class="nota">
+    <strong>Nota:</strong> Ambos componentes deben instalarse y configurarse por separado, aunque se comunican entre sí mediante API REST.
+</div>
+
+<h1 id="requisitos">2. REQUISITOS DEL SISTEMA</h1>
+
+<h2>2.1 Requisitos de Hardware</h2>
+
+<table>
+    <tr>
+        <th>Componente</th>
+        <th>Mínimo</th>
+        <th>Recomendado</th>
+    </tr>
+    <tr>
+        <td>Procesador</td>
+        <td>Dual Core 2.0 GHz</td>
+        <td>Quad Core 2.5 GHz o superior</td>
+    </tr>
+    <tr>
+        <td>RAM</td>
+        <td>4 GB</td>
+        <td>8 GB o superior</td>
+    </tr>
+    <tr>
+        <td>Disco Duro</td>
+        <td>5 GB disponibles</td>
+        <td>10 GB disponibles (SSD preferible)</td>
+    </tr>
+    <tr>
+        <td>Conexión a Internet</td>
+        <td>1 Mbps</td>
+        <td>10 Mbps o superior</td>
+    </tr>
+</table>
+
+<h2>2.2 Software Requerido</h2>
+
+<h3>Para el Backend:</h3>
+<table>
+    <tr>
+        <th>Software</th>
+        <th>Versión Mínima</th>
+        <th>Versión Recomendada</th>
+    </tr>
+    <tr>
+        <td>Python</td>
+        <td>3.10</td>
+        <td>3.11 o superior</td>
+    </tr>
+    <tr>
+        <td>pip</td>
+        <td>21.0</td>
+        <td>Última versión</td>
+    </tr>
+    <tr>
+        <td>virtualenv (opcional)</td>
+        <td>20.0</td>
+        <td>Última versión</td>
+    </tr>
+</table>
+
+<h3>Para el Frontend:</h3>
+<table>
+    <tr>
+        <th>Software</th>
+        <th>Versión Mínima</th>
+        <th>Versión Recomendada</th>
+    </tr>
+    <tr>
+        <td>Node.js</td>
+        <td>18.0</td>
+        <td>20.0 LTS o superior</td>
+    </tr>
+    <tr>
+        <td>npm</td>
+        <td>9.0</td>
+        <td>10.0 o superior</td>
+    </tr>
+</table>
+
+<h3>Herramientas de Desarrollo (Opcionales):</h3>
+<ul>
+    <li><strong>Git:</strong> Para clonar los repositorios</li>
+    <li><strong>VS Code / PyCharm:</strong> Editores de código recomendados</li>
+    <li><strong>Postman:</strong> Para probar endpoints de la API</li>
+</ul>
+
+<h2>2.3 Sistemas Operativos Soportados</h2>
+<ul>
+    <li>Windows 10/11</li>
+    <li>macOS 11 (Big Sur) o superior</li>
+    <li>Linux (Ubuntu 20.04+, Debian 11+, Fedora 35+)</li>
+</ul>
+
+<h1 id="instalacion-backend">3. INSTALACIÓN DEL BACKEND</h1>
+
+<h2>3.1 Clonar el Repositorio</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Abrir una terminal o línea de comandos
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Navegar al directorio donde deseas instalar el proyecto
+</div>
+
+<div class="paso">
+    <strong>Paso 3:</strong> Ejecutar el siguiente comando:
+</div>
+
+<div class="comando">
+git clone https://github.com/jrodgom/backend-ivdb.git
+cd backend-ivdb
+</div>
+
+<div class="nota">
+    <strong>Nota:</strong> Si no tienes Git instalado, puedes descargar el código como ZIP desde GitHub y extraerlo manualmente.
+</div>
+
+<h2>3.2 Crear Entorno Virtual (Recomendado)</h2>
+
+<p>Se recomienda usar un entorno virtual para aislar las dependencias del proyecto.</p>
+
+<h3>En Windows:</h3>
+<div class="comando">
+python -m venv venv
+.\venv\Scripts\activate
+</div>
+
+<h3>En macOS/Linux:</h3>
+<div class="comando">
+python3 -m venv venv
+source venv/bin/activate
+</div>
+
+<div class="exito">
+    <strong>Verificación:</strong> Si el entorno está activado, verás <code>(venv)</code> al inicio de tu línea de comandos.
+</div>
+
+<h2>3.3 Instalar Dependencias</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Asegúrate de estar en el directorio raíz del backend y con el entorno virtual activado
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Instala todas las dependencias listadas en <code>requirements.txt</code>:
+</div>
+
+<div class="comando">
+pip install -r requirements.txt
+</div>
+
+<div class="paso">
+    <strong>Paso 3:</strong> Espera a que se descarguen e instalen todos los paquetes. Esto puede tardar unos minutos.
+</div>
+
+<h3>Paquetes principales que se instalarán:</h3>
+<ul>
+    <li><strong>Django 5.2.7:</strong> Framework web principal</li>
+    <li><strong>djangorestframework 3.15.2:</strong> Para crear la API REST</li>
+    <li><strong>djangorestframework-simplejwt 5.4.1:</strong> Autenticación JWT</li>
+    <li><strong>django-cors-headers 4.6.0:</strong> Manejo de CORS</li>
+    <li><strong>django-filter 25.0:</strong> Filtrado de querys</li>
+    <li><strong>Pillow 11.0.0:</strong> Procesamiento de imágenes</li>
+    <li><strong>requests 2.32.3:</strong> Cliente HTTP para RAWG API</li>
+</ul>
+
+<h2>3.4 Verificar Instalación</h2>
+
+<div class="paso">
+    <strong>Verificar versión de Django:</strong>
+</div>
+
+<div class="comando">
+python manage.py --version
+</div>
+
+<div class="exito">
+    <strong>Salida esperada:</strong> <code>5.2.7</code> (o superior)
+</div>
+
+<h1 id="instalacion-frontend">4. INSTALACIÓN DEL FRONTEND</h1>
+
+<h2>4.1 Clonar el Repositorio</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Abrir una nueva terminal (mantén la del backend abierta)
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Navegar al directorio deseado
+</div>
+
+<div class="paso">
+    <strong>Paso 3:</strong> Clonar el repositorio:
+</div>
+
+<div class="comando">
+git clone https://github.com/jrodgom/ivdb.git
+cd ivdb
+</div>
+
+<h2>4.2 Verificar Node.js y npm</h2>
+
+<div class="paso">
+    <strong>Verificar Node.js:</strong>
+</div>
+
+<div class="comando">
+node --version
+</div>
+
+<div class="exito">
+    <strong>Salida esperada:</strong> <code>v18.x.x</code> o superior
+</div>
+
+<div class="paso">
+    <strong>Verificar npm:</strong>
+</div>
+
+<div class="comando">
+npm --version
+</div>
+
+<div class="exito">
+    <strong>Salida esperada:</strong> <code>9.x.x</code> o superior
+</div>
+
+<div class="advertencia">
+    <strong>Importante:</strong> Si no tienes Node.js instalado, descárgalo desde <code>https://nodejs.org/</code> (versión LTS recomendada).
+</div>
+
+<h2>4.3 Instalar Dependencias</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Asegúrate de estar en el directorio raíz del frontend
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Instala todas las dependencias:
+</div>
+
+<div class="comando">
+npm install
+</div>
+
+<div class="nota">
+    <strong>Nota:</strong> Este proceso puede tardar varios minutos dependiendo de tu conexión a Internet. Se descargarán aproximadamente 200-300 paquetes.
+</div>
+
+<h3>Paquetes principales que se instalarán:</h3>
+<ul>
+    <li><strong>react 18.3.1:</strong> Biblioteca principal</li>
+    <li><strong>react-dom 18.3.1:</strong> Renderizado en el DOM</li>
+    <li><strong>react-router-dom 7.1.1:</strong> Sistema de rutas</li>
+    <li><strong>axios 1.7.9:</strong> Cliente HTTP</li>
+    <li><strong>vite 6.0.5:</strong> Bundler y servidor de desarrollo</li>
+    <li><strong>tailwindcss 3.4.17:</strong> Framework CSS</li>
+    <li><strong>react-icons 5.4.0:</strong> Biblioteca de iconos</li>
+    <li><strong>dompurify 3.2.3:</strong> Sanitización HTML</li>
+</ul>
+
+<h2>4.4 Verificar Instalación</h2>
+
+<div class="paso">
+    <strong>Listar scripts disponibles:</strong>
+</div>
+
+<div class="comando">
+npm run
+</div>
+
+<div class="exito">
+    <strong>Deberías ver:</strong>
+    <ul>
+        <li><code>dev</code> - Iniciar servidor de desarrollo</li>
+        <li><code>build</code> - Construir para producción</li>
+        <li><code>preview</code> - Previsualizar build de producción</li>
+    </ul>
+</div>
+
+<h1 id="configuracion">5. CONFIGURACIÓN DEL SISTEMA</h1>
+
+<h2>5.1 Configuración del Backend</h2>
+
+<h3>5.1.1 Variables de Entorno (Opcional pero Recomendado)</h3>
+
+<div class="paso">
+    <strong>Paso 1:</strong> En el directorio raíz del backend, crea un archivo <code>.env</code>
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Añade las siguientes variables:
+</div>
+
+<div class="comando">
+SECRET_KEY=tu-clave-secreta-django-muy-segura-aqui
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+RAWG_API_KEY=3994c5d1391e4fc8b4e7eca9428d8a8b
+CORS_ALLOWED_ORIGINS=http://localhost:5173
+</div>
+
+<div class="advertencia">
+    <strong>Importante para Producción:</strong>
+    <ul>
+        <li>Cambia <code>DEBUG=False</code></li>
+        <li>Genera una nueva <code>SECRET_KEY</code> única</li>
+        <li>Configura <code>ALLOWED_HOSTS</code> con tu dominio real</li>
+        <li>Obtén tu propia API Key de RAWG en <code>https://rawg.io/apidocs</code></li>
+    </ul>
+</div>
+
+<h3>5.1.2 Configurar settings.py</h3>
+
+<p>El archivo <code>ivdb/settings.py</code> ya viene preconfigurado, pero verifica estos valores:</p>
+
+<h4>Base de Datos (SQLite por defecto):</h4>
+<div class="comando">
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+</div>
+
+<h4>CORS (Configuración para desarrollo):</h4>
+<div class="comando">
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Vite dev server
+    "http://127.0.0.1:5173",
+]
+CORS_ALLOW_CREDENTIALS = True
+</div>
+
+<h4>Archivos Estáticos y Media:</h4>
+<div class="comando">
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+</div>
+
+<h2>5.2 Configuración del Frontend</h2>
+
+<h3>5.2.1 Archivo de Configuración de Vite</h3>
+
+<p>El archivo <code>vite.config.js</code> ya está configurado, pero verifica:</p>
+
+<div class="comando">
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
+  },
+})
+</div>
+
+<h3>5.2.2 Configurar la URL del Backend</h3>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Abre el archivo <code>src/utils/apiClient.js</code>
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Verifica que la baseURL apunte a tu backend:
+</div>
+
+<div class="comando">
+const apiClient = axios.create({
+  baseURL: 'http://localhost:8000/api/',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+</div>
+
+<div class="nota">
+    <strong>Para producción:</strong> Cambia <code>localhost:8000</code> por la URL de tu servidor backend en producción.
+</div>
+
+<h3>5.2.3 Configurar TailwindCSS</h3>
+
+<p>El archivo <code>tailwind.config.js</code> ya está configurado para escanear tus componentes:</p>
+
+<div class="comando">
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+</div>
+
+<h1 id="bd">6. CONFIGURACIÓN DE BASE DE DATOS</h1>
+
+<h2>6.1 Inicializar Base de Datos SQLite</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Navega al directorio del backend donde está <code>manage.py</code>
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Ejecuta las migraciones para crear las tablas:
+</div>
+
+<div class="comando">
+python manage.py makemigrations
+python manage.py migrate
+</div>
+
+<div class="exito">
+    <strong>Salida esperada:</strong> Verás mensajes indicando que se han aplicado migraciones para:
+    <ul>
+        <li>auth (sistema de usuarios Django)</li>
+        <li>accounts (perfiles de usuario)</li>
+        <li>game (videojuegos)</li>
+        <li>review (reseñas)</li>
+        <li>favorite (favoritos)</li>
+    </ul>
+</div>
+
+<h2>6.2 Crear Usuario Administrador</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Ejecuta el comando de creación de superusuario:
+</div>
+
+<div class="comando">
+python manage.py createsuperuser
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Proporciona la información solicitada:
+    <ul>
+        <li><strong>Username:</strong> admin (o el nombre que prefieras)</li>
+        <li><strong>Email:</strong> admin@ivdb.com (o tu email)</li>
+        <li><strong>Password:</strong> Una contraseña segura</li>
+        <li><strong>Password (again):</strong> Repite la contraseña</li>
+    </ul>
+</div>
+
+<div class="exito">
+    <strong>Éxito:</strong> Verás el mensaje "Superuser created successfully."
+</div>
+
+<h2>6.3 Verificar Acceso al Admin de Django</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Inicia el servidor de desarrollo (ver sección 8.1)
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Abre un navegador y accede a:
+</div>
+
+<div class="comando">
+http://localhost:8000/admin/
+</div>
+
+<div class="paso">
+    <strong>Paso 3:</strong> Inicia sesión con las credenciales del superusuario que acabas de crear
+</div>
+
+<div class="exito">
+    <strong>Deberías ver:</strong> El panel de administración de Django con acceso a Users, Profiles, Games, Reviews y Favorites.
+</div>
+
+<h2>6.4 Migración a PostgreSQL (Opcional - Producción)</h2>
+
+<p>Para entornos de producción, se recomienda PostgreSQL en lugar de SQLite.</p>
+
+<h3>Instalar adaptador PostgreSQL:</h3>
+<div class="comando">
+pip install psycopg2-binary
+</div>
+
+<h3>Modificar settings.py:</h3>
+<div class="comando">
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ivdb_db',
+        'USER': 'ivdb_user',
+        'PASSWORD': 'tu_password_segura',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+</div>
+
+<h3>Ejecutar migraciones nuevamente:</h3>
+<div class="comando">
+python manage.py migrate
+</div>
+
+<h1 id="api-rawg">7. CONFIGURACIÓN API RAWG</h1>
+
+<h2>7.1 Obtener API Key de RAWG</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Visita <code>https://rawg.io/apidocs</code>
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Regístrate en RAWG (es gratuito)
+</div>
+
+<div class="paso">
+    <strong>Paso 3:</strong> Ve a tu perfil → API → Get API Key
+</div>
+
+<div class="paso">
+    <strong>Paso 4:</strong> Copia tu API Key
+</div>
+
+<h2>7.2 Configurar API Key en el Backend</h2>
+
+<div class="paso">
+    <strong>Opción 1 - Variables de entorno (.env):</strong>
+</div>
+
+<div class="comando">
+RAWG_API_KEY=tu_api_key_aqui
+</div>
+
+<div class="paso">
+    <strong>Opción 2 - Directamente en el código:</strong>
+</div>
+
+<p>Edita <code>game/rawg_importer.py</code> y reemplaza:</p>
+
+<div class="comando">
+API_KEY = '3994c5d1391e4fc8b4e7eca9428d8a8b'
+</div>
+
+<div class="advertencia">
+    <strong>Seguridad:</strong> NUNCA subas tu API Key a repositorios públicos. Usa siempre variables de entorno en producción.
+</div>
+
+<h2>7.3 Importar Juegos desde RAWG</h2>
+
+<p>Puedes importar juegos de dos formas:</p>
+
+<h3>Método 1: Script de Importación Básica</h3>
+<div class="comando">
+python manage.py shell
+>>> from game.rawg_importer import import_games
+>>> import_games(limit=50)
+</div>
+
+<h3>Método 2: Script de Importación Mejorada</h3>
+<div class="comando">
+python manage.py shell
+>>> from game.improved_importer import import_famous_games
+>>> import_famous_games()
+</div>
+
+<div class="nota">
+    <strong>Nota:</strong> El script mejorado importa juegos populares con información completa incluyendo requisitos del sistema. Puede tardar varios minutos.
+</div>
+
+<h2>7.4 Límites de la API RAWG</h2>
+
+<table>
+    <tr>
+        <th>Plan</th>
+        <th>Requests/día</th>
+        <th>Requests/segundo</th>
+    </tr>
+    <tr>
+        <td>Free</td>
+        <td>20,000</td>
+        <td>1-2</td>
+    </tr>
+</table>
+
+<div class="advertencia">
+    <strong>Importante:</strong> Respeta los límites de la API. El script de importación ya incluye delays para no exceder el rate limit.
+</div>
+
+<h1 id="despliegue">8. DESPLIEGUE Y PUESTA EN MARCHA</h1>
+
+<h2>8.1 Iniciar el Backend</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Abre una terminal en el directorio del backend
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Activa el entorno virtual (si lo usas):
+</div>
+
+<div class="comando">
+# Windows
+.\venv\Scripts\activate
+
+# macOS/Linux
+source venv/bin/activate
+</div>
+
+<div class="paso">
+    <strong>Paso 3:</strong> Inicia el servidor de desarrollo de Django:
+</div>
+
+<div class="comando">
+python manage.py runserver
+</div>
+
+<div class="exito">
+    <strong>Salida esperada:</strong>
+    <pre>
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+    </pre>
+</div>
+
+<div class="nota">
+    <strong>Puerto personalizado:</strong> Si necesitas usar otro puerto: <code>python manage.py runserver 8080</code>
+</div>
+
+<h2>8.2 Iniciar el Frontend</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Abre una NUEVA terminal (no cierres la del backend)
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Navega al directorio del frontend
+</div>
+
+<div class="paso">
+    <strong>Paso 3:</strong> Inicia el servidor de desarrollo de Vite:
+</div>
+
+<div class="comando">
+npm run dev
+</div>
+
+<div class="exito">
+    <strong>Salida esperada:</strong>
+    <pre>
+VITE v6.0.5  ready in 500 ms
+
+➜  Local:   http://localhost:5173/
+➜  Network: use --host to expose
+➜  press h + enter to show help
+    </pre>
+</div>
+
+<h2>8.3 Acceder a la Aplicación</h2>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Abre tu navegador web
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Accede a:
+</div>
+
+<div class="comando">
+http://localhost:5173/
+</div>
+
+<div class="exito">
+    <strong>¡Éxito!</strong> Deberías ver la página principal de IVDb con el catálogo de juegos.
+</div>
+
+<h2>8.4 Configuración para Producción</h2>
+
+<h3>8.4.1 Build del Frontend</h3>
+
+<div class="paso">
+    <strong>Paso 1:</strong> Construir los archivos estáticos optimizados:
+</div>
+
+<div class="comando">
+npm run build
+</div>
+
+<div class="paso">
+    <strong>Paso 2:</strong> Los archivos se generarán en la carpeta <code>dist/</code>
+</div>
+
+<div class="paso">
+    <strong>Paso 3:</strong> Sirve estos archivos con un servidor web (Nginx, Apache, etc.)
+</div>
+
+<h3>8.4.2 Configuración de Django para Producción</h3>
+
+<p>Modifica <code>settings.py</code>:</p>
+
+<div class="comando">
+DEBUG = False
+
+ALLOWED_HOSTS = ['tudominio.com', 'www.tudominio.com']
+
+# Configurar archivos estáticos
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Usar PostgreSQL en producción
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+    }
+}
+</div>
+
+<div class="paso">
+    <strong>Recolectar archivos estáticos:</strong>
+</div>
+
+<div class="comando">
+python manage.py collectstatic --noinput
+</div>
+
+<h3>8.4.3 Servidor WSGI (Producción)</h3>
+
+<p>Para producción, usa Gunicorn en lugar de <code>runserver</code>:</p>
+
+<div class="comando">
+pip install gunicorn
+gunicorn ivdb.wsgi:application --bind 0.0.0.0:8000
+</div>
+
+<h3>8.4.4 Ejemplo de Configuración Nginx</h3>
+
+<div class="comando">
+server {
+    listen 80;
+    server_name tudominio.com;
+
+    location / {
+        root /ruta/a/frontend/dist;
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location /static/ {
+        alias /ruta/a/backend/staticfiles/;
+    }
+
+    location /media/ {
+        alias /ruta/a/backend/media/;
+    }
+}
+</div>
+
+<h1 id="verificacion">9. VERIFICACIÓN DE INSTALACIÓN</h1>
+
+<h2>9.1 Lista de Verificación Backend</h2>
+
+<table>
+    <tr>
+        <th>Verificación</th>
+        <th>Comando/URL</th>
+        <th>Resultado Esperado</th>
+    </tr>
+    <tr>
+        <td>Servidor Django corriendo</td>
+        <td><code>http://localhost:8000/</code></td>
+        <td>Página "The install worked successfully!"</td>
+    </tr>
+    <tr>
+        <td>Admin panel accesible</td>
+        <td><code>http://localhost:8000/admin/</code></td>
+        <td>Login de Django admin</td>
+    </tr>
+    <tr>
+        <td>API de juegos funcional</td>
+        <td><code>http://localhost:8000/api/games/</code></td>
+        <td>JSON con lista de juegos</td>
+    </tr>
+    <tr>
+        <td>Endpoint de registro</td>
+        <td><code>http://localhost:8000/api/auth/register/</code></td>
+        <td>Formulario o JSON response</td>
+    </tr>
+</table>
+
+<h2>9.2 Lista de Verificación Frontend</h2>
+
+<table>
+    <tr>
+        <th>Verificación</th>
+        <th>Acción</th>
+        <th>Resultado Esperado</th>
+    </tr>
+    <tr>
+        <td>Página principal carga</td>
+        <td>Acceder a <code>http://localhost:5173/</code></td>
+        <td>Grid de juegos visible</td>
+    </tr>
+    <tr>
+        <td>Navegación funciona</td>
+        <td>Clic en logo IVDb</td>
+        <td>Recarga página principal</td>
+    </tr>
+    <tr>
+        <td>Búsqueda operativa</td>
+        <td>Escribir en barra de búsqueda + Enter</td>
+        <td>Redirige a /search con resultados</td>
+    </tr>
+    <tr>
+        <td>Registro funcional</td>
+        <td>Completar formulario de registro</td>
+        <td>Usuario creado y autenticado</td>
+    </tr>
+    <tr>
+        <td>Login funcional</td>
+        <td>Iniciar sesión con credenciales</td>
+        <td>Acceso concedido, navbar actualizado</td>
+    </tr>
+</table>
+
+<h2>9.3 Pruebas de Integración</h2>
+
+<h3>Prueba 1: Flujo Completo de Usuario</h3>
+<ol>
+    <li>Registrar nuevo usuario</li>
+    <li>Buscar un juego</li>
+    <li>Ver detalle del juego</li>
+    <li>Añadir a favoritos</li>
+    <li>Escribir una reseña</li>
+    <li>Ver perfil con favoritos y reseñas</li>
+</ol>
+
+<h3>Prueba 2: Funciones de Administrador</h3>
+<ol>
+    <li>Iniciar sesión como admin (superusuario)</li>
+    <li>Acceder al botón "Añadir Juego"</li>
+    <li>Crear un nuevo juego</li>
+    <li>Editar el juego creado</li>
+    <li>Eliminar el juego</li>
+</ol>
+
+<h3>Prueba 3: API REST</h3>
+
+<p>Usa Postman o curl para probar endpoints:</p>
+
+<div class="comando">
+# Listar juegos
+curl http://localhost:8000/api/games/
+
+# Registrar usuario
+curl -X POST http://localhost:8000/api/auth/register/ \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","email":"test@test.com","password":"test1234"}'
+
+# Obtener token
+curl -X POST http://localhost:8000/api/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"test1234"}'
+</div>
+
+<h1 id="problemas">10. SOLUCIÓN DE PROBLEMAS COMUNES</h1>
+
+<h2>10.1 Problemas del Backend</h2>
+
+<h3>Error: "ModuleNotFoundError: No module named 'django'"</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> Django no está instalado o el entorno virtual no está activado.
+    <br><strong>Solución:</strong>
+    <ol>
+        <li>Activa el entorno virtual: <code>source venv/bin/activate</code></li>
+        <li>Instala dependencias: <code>pip install -r requirements.txt</code></li>
+    </ol>
+</div>
+
+<h3>Error: "Port 8000 is already in use"</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> Otro proceso está usando el puerto 8000.
+    <br><strong>Solución:</strong>
+    <ol>
+        <li><strong>Opción 1:</strong> Mata el proceso existente</li>
+        <li><strong>Opción 2:</strong> Usa otro puerto: <code>python manage.py runserver 8080</code></li>
+    </ol>
+</div>
+
+<h3>Error: "CSRF verification failed"</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> Configuración incorrecta de CORS o CSRF.
+    <br><strong>Solución:</strong> Verifica en <code>settings.py</code>:
+    <div class="comando">
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+    </div>
+</div>
+
+<h3>Error: "Database is locked"</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> SQLite no maneja bien múltiples escrituras concurrentes.
+    <br><strong>Solución:</strong>
+    <ol>
+        <li>Cierra todas las conexiones a la DB</li>
+        <li>Reinicia el servidor Django</li>
+        <li>Para producción, migra a PostgreSQL</li>
+    </ol>
+</div>
+
+<h2>10.2 Problemas del Frontend</h2>
+
+<h3>Error: "Cannot find module 'react'"</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> Dependencias no instaladas.
+    <br><strong>Solución:</strong>
+    <ol>
+        <li>Elimina <code>node_modules</code>: <code>rm -rf node_modules</code></li>
+        <li>Elimina <code>package-lock.json</code></li>
+        <li>Reinstala: <code>npm install</code></li>
+    </ol>
+</div>
+
+<h3>Error: "Network Error" al hacer requests</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> Backend no está corriendo o URL incorrecta.
+    <br><strong>Solución:</strong>
+    <ol>
+        <li>Verifica que el backend esté corriendo en <code>http://localhost:8000</code></li>
+        <li>Verifica la configuración en <code>src/utils/apiClient.js</code></li>
+        <li>Comprueba la consola del navegador para errores CORS</li>
+    </ol>
+</div>
+
+<h3>Error: "Vite hot reload no funciona"</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> Problemas con el watch mode de Vite.
+    <br><strong>Solución:</strong>
+    <ol>
+        <li>Detén el servidor: <code>Ctrl+C</code></li>
+        <li>Limpia caché: <code>rm -rf node_modules/.vite</code></li>
+        <li>Reinicia: <code>npm run dev</code></li>
+    </ol>
+</div>
+
+<h3>Estilos de TailwindCSS no se aplican</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> TailwindCSS no está compilando las clases.
+    <br><strong>Solución:</strong>
+    <ol>
+        <li>Verifica que <code>index.css</code> importa Tailwind:
+            <div class="comando">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+            </div>
+        </li>
+        <li>Verifica <code>tailwind.config.js</code> incluye tus archivos en <code>content</code></li>
+        <li>Reinicia el servidor de desarrollo</li>
+    </ol>
+</div>
+
+<h2>10.3 Problemas de Integración</h2>
+
+<h3>Token JWT expira demasiado rápido</h3>
+<div class="advertencia">
+    <strong>Solución:</strong> Modifica en <code>settings.py</code>:
+    <div class="comando">
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Aumentar de 5 a 60
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+    </div>
+</div>
+
+<h3>Imágenes no se muestran en producción</h3>
+<div class="advertencia">
+    <strong>Causa:</strong> Configuración incorrecta de archivos media.
+    <br><strong>Solución:</strong>
+    <ol>
+        <li>Configura <code>MEDIA_ROOT</code> y <code>MEDIA_URL</code> en settings.py</li>
+        <li>Añade en <code>urls.py</code>:
+            <div class="comando">
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+            </div>
+        </li>
+        <li>En producción, sirve media files con Nginx/Apache</li>
+    </ol>
+</div>
+
+<h2>10.4 Logs y Debugging</h2>
+
+<h3>Ver logs del Backend:</h3>
+<p>Los errores se muestran directamente en la terminal donde corre <code>runserver</code>.</p>
+
+<h3>Ver logs del Frontend:</h3>
+<p>Abre las DevTools del navegador (F12) → Consola para ver errores JavaScript.</p>
+
+<h3>Habilitar Debug Detallado en Django:</h3>
+<div class="comando">
+# En settings.py
+DEBUG = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+</div>
+
+<h2>10.5 Contacto de Soporte</h2>
+
+<p>Si el problema persiste después de seguir estas instrucciones:</p>
+
+<div class="nota">
+    <strong>Opciones de soporte:</strong>
+    <ul>
+        <li><strong>GitHub Issues:</strong> Abre un issue en el repositorio correspondiente</li>
+        <li><strong>Email:</strong> soporte@ivdb.com (ejemplo)</li>
+        <li><strong>Documentación adicional:</strong> Consulta README.md en cada repositorio</li>
+    </ul>
+</div>
+
+<div class="exito">
+    <h2>¡INSTALACIÓN COMPLETADA!</h2>
+    <p>Si has seguido todos los pasos, IVDb debería estar funcionando correctamente. Disfruta explorando el mundo de los videojuegos con tu nueva plataforma.</p>
+</div>
+
+</body>
+</html>

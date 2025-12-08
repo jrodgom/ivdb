@@ -1,0 +1,3108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto IVDb - Base de Datos de Videojuegos</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        .portada {
+            text-align: center;
+            padding: 100px 0;
+        }
+        h1 {
+            color: #980000;
+            font-family: 'Arial', sans-serif;
+            font-size: 24pt;
+            margin-top: 40px;
+            page-break-before: always;
+        }
+        h2 {
+            color: #b45f06;
+            font-family: 'Arial', sans-serif;
+            font-size: 18pt;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #000;
+            font-family: 'Arial', sans-serif;
+            font-size: 14pt;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th {
+            background-color: #e6e6e6;
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+        }
+        .indice {
+            margin: 40px 0;
+        }
+        .indice-item {
+            margin: 10px 0;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 40px;
+        }
+        .destacado {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #b45f06;
+        }
+    </style>
+</head>
+<body>
+
+<div class="portada">
+    <h1 style="color: #000; margin-top: 0;">PROYECTO DE DESARROLLO DE SOFTWARE</h1>
+    <h1 style="font-size: 32pt; margin: 60px 0;">IVDb</h1>
+    <h2 style="color: #666;">Base de Datos Interactiva de Videojuegos</h2>
+    <p style="margin-top: 100px; font-size: 14pt;">
+        Versión: 1.0<br>
+        Fecha: 07/12/2025<br>
+        Autor: Jesús Rodríguez Gómez
+    </p>
+</div>
+
+<div style="page-break-before: always;"></div>
+
+<div class="indice">
+    <h2>ÍNDICE</h2>
+    <div class="indice-item"><a href="#introduccion">1. INTRODUCCIÓN</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#dominio">1.1 Introducción al Dominio del Problema</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#glosario">1.2 Glosario de Términos</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#historias">1.3 Historias de Usuario</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#reglas">1.4 Reglas de Negocio del Sistema</a></div>
+    <div class="indice-item"><a href="#entorno">2. ENTORNO TECNOLÓGICO</a></div>
+    <div class="indice-item"><a href="#arquitectura">3. ARQUITECTURA</a></div>
+    <div class="indice-item"><a href="#subsistemas">4. DESCRIPCIÓN DE LOS SUBSISTEMAS</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#casos-uso">4.1 Modelo de Casos de Uso</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#modelo-clases">4.2 Modelo de Clases</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#trazabilidad">4.3 Información Sobre Trazabilidad</a></div>
+    <div class="indice-item"><a href="#interfaz">5. DEFINICIÓN INTERFAZ DE USUARIO</a></div>
+</div>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="introduccion">INTRODUCCIÓN</h1>
+
+<h2 id="dominio">Introducción al Dominio del Problema</h2>
+
+<p>En la actualidad, la industria de los videojuegos es uno de los sectores de entretenimiento con mayor crecimiento a nivel mundial. Con miles de títulos lanzados cada año en múltiples plataformas, los jugadores enfrentan el desafío de descubrir, organizar y gestionar información sobre los videojuegos que les interesan.</p>
+
+<p>El proyecto IVDb nace como solución a esta problemática, ofreciendo una plataforma centralizada donde los usuarios pueden:</p>
+<ul>
+    <li>Consultar información detallada de videojuegos (descripción, género, fecha de lanzamiento, requisitos del sistema)</li>
+    <li>Mantener una lista personal de juegos favoritos</li>
+    <li>Escribir y leer reseñas de otros usuarios</li>
+    <li>Buscar y filtrar juegos según diversos criterios</li>
+    <li>Acceder a requisitos técnicos para PC</li>
+</ul>
+
+<p>La plataforma se integra con la API de RAWG, una de las bases de datos de videojuegos más completas, permitiendo importar información actualizada de más de 800,000 títulos. Esto garantiza que los usuarios tengan acceso a un catálogo extenso y constantemente actualizado.</p>
+
+<h2 id="glosario">Glosario de Términos</h2>
+
+<table>
+    <tr>
+        <th style="width: 25%;">Término</th>
+        <th>Definición</th>
+    </tr>
+    <tr>
+        <td><strong>Usuario Registrado</strong></td>
+        <td>Persona que ha creado una cuenta en la plataforma y puede acceder a funcionalidades completas como favoritos y reseñas.</td>
+    </tr>
+    <tr>
+        <td><strong>Usuario Anónimo</strong></td>
+        <td>Visitante que puede navegar y buscar juegos sin estar autenticado, con acceso limitado.</td>
+    </tr>
+    <tr>
+        <td><strong>Staff/Administrador</strong></td>
+        <td>Usuario con permisos especiales para gestionar el contenido de la plataforma (agregar, editar o eliminar juegos).</td>
+    </tr>
+    <tr>
+        <td><strong>Juego (Game)</strong></td>
+        <td>Videojuego catalogado en la base de datos con información completa (título, género, plataforma, descripción, etc.).</td>
+    </tr>
+    <tr>
+        <td><strong>Reseña (Review)</strong></td>
+        <td>Opinión escrita por un usuario registrado sobre un juego específico, que incluye una puntuación (rating) y comentarios.</td>
+    </tr>
+    <tr>
+        <td><strong>Favorito</strong></td>
+        <td>Juego marcado por un usuario registrado para acceso rápido en su lista personal.</td>
+    </tr>
+    <tr>
+        <td><strong>RAWG API</strong></td>
+        <td>Servicio externo que proporciona información detallada de videojuegos, incluyendo imágenes, descripciones y requisitos del sistema.</td>
+    </tr>
+    <tr>
+        <td><strong>JWT (JSON Web Token)</strong></td>
+        <td>Método de autenticación utilizado para mantener las sesiones de usuario de forma segura.</td>
+    </tr>
+    <tr>
+        <td><strong>Requisitos del Sistema</strong></td>
+        <td>Especificaciones técnicas mínimas y recomendadas que un ordenador debe cumplir para ejecutar un juego.</td>
+    </tr>
+    <tr>
+        <td><strong>Rating/Puntuación</strong></td>
+        <td>Valoración numérica de 1 a 5 que un usuario asigna a un juego en su reseña.</td>
+    </tr>
+    <tr>
+        <td><strong>Metacritic Score</strong></td>
+        <td>Puntuación agregada de críticos profesionales importada desde RAWG API.</td>
+    </tr>
+    <tr>
+        <td><strong>Género</strong></td>
+        <td>Categoría que clasifica un juego según su estilo de juego (Acción, Aventura, RPG, Estrategia, etc.).</td>
+    </tr>
+    <tr>
+        <td><strong>Plataforma</strong></td>
+        <td>Sistema o dispositivo en el que se puede jugar (PC, PlayStation, Xbox, Nintendo Switch, etc.).</td>
+    </tr>
+</table>
+
+<h2 id="historias">Historias de Usuario</h2>
+
+<h3>HU-01: Registro de Usuario</h3>
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">ID</th>
+        <td><strong>HU-01</strong></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Registro de usuario en la plataforma</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>
+            <p>Como visitante de la web</p>
+            <p>quiero registrarme en la plataforma</p>
+            <p>para poder guardar mis juegos favoritos y escribir reseñas</p>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito Funcional</th>
+        <td>RF-01: Sistema de registro de usuarios</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito de Información</th>
+        <td>
+            <p>El sistema debe almacenar:</p>
+            <ul>
+                <li>Nombre de usuario (único)</li>
+                <li>Correo electrónico (único)</li>
+                <li>Contraseña (encriptada)</li>
+                <li>Fecha de registro</li>
+                <li>Biografía (opcional)</li>
+                <li>Avatar/imagen de perfil (opcional)</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>HU-02: Inicio de Sesión</h3>
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">ID</th>
+        <td><strong>HU-02</strong></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Autenticación de usuario</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>
+            <p>Como usuario registrado</p>
+            <p>quiero iniciar sesión en mi cuenta</p>
+            <p>para acceder a mis favoritos y reseñas</p>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito Funcional</th>
+        <td>RF-02: Sistema de autenticación con JWT</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito de Información</th>
+        <td>
+            <p>El sistema debe validar:</p>
+            <ul>
+                <li>Nombre de usuario o email</li>
+                <li>Contraseña</li>
+                <li>Generar token de acceso JWT</li>
+                <li>Generar token de refresco para renovación automática</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>HU-03: Búsqueda de Videojuegos</h3>
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">ID</th>
+        <td><strong>HU-03</strong></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Búsqueda y filtrado de videojuegos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>
+            <p>Como usuario (registrado o anónimo)</p>
+            <p>quiero buscar videojuegos por título, género o plataforma</p>
+            <p>para encontrar información sobre juegos de mi interés</p>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito Funcional</th>
+        <td>RF-03: Sistema de búsqueda y filtrado</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito de Información</th>
+        <td>
+            <p>El sistema debe permitir buscar por:</p>
+            <ul>
+                <li>Título del juego (búsqueda parcial)</li>
+                <li>Género (filtro múltiple)</li>
+                <li>Plataforma (filtro múltiple)</li>
+                <li>Puntuación Metacritic</li>
+                <li>Fecha de lanzamiento</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>HU-04: Gestión de Favoritos</h3>
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">ID</th>
+        <td><strong>HU-04</strong></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Añadir y gestionar juegos favoritos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>
+            <p>Como usuario registrado</p>
+            <p>quiero marcar juegos como favoritos</p>
+            <p>para tener acceso rápido a los juegos que me interesan</p>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito Funcional</th>
+        <td>RF-04: Sistema de favoritos personalizado</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito de Información</th>
+        <td>
+            <p>El sistema debe almacenar:</p>
+            <ul>
+                <li>Usuario propietario</li>
+                <li>Juego marcado como favorito</li>
+                <li>Fecha en que se añadió a favoritos</li>
+                <li>Restricción: un usuario no puede marcar el mismo juego dos veces</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>HU-05: Escribir Reseñas</h3>
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">ID</th>
+        <td><strong>HU-05</strong></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Crear reseñas de videojuegos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>
+            <p>Como usuario registrado</p>
+            <p>quiero escribir reseñas sobre videojuegos</p>
+            <p>para compartir mi opinión con otros usuarios</p>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito Funcional</th>
+        <td>RF-05: Sistema de reseñas y puntuaciones</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito de Información</th>
+        <td>
+            <p>El sistema debe almacenar:</p>
+            <ul>
+                <li>Usuario autor de la reseña</li>
+                <li>Juego reseñado</li>
+                <li>Puntuación (1-5 estrellas)</li>
+                <li>Comentario/texto de la reseña</li>
+                <li>Fecha de creación</li>
+                <li>Fecha de última actualización</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>HU-06: Ver Detalles de Videojuegos</h3>
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">ID</th>
+        <td><strong>HU-06</strong></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Consultar información detallada de un juego</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>
+            <p>Como usuario (registrado o anónimo)</p>
+            <p>quiero ver información completa de un videojuego</p>
+            <p>para conocer sus características, requisitos y reseñas antes de jugarlo</p>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito Funcional</th>
+        <td>RF-06: Página de detalle del juego</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito de Información</th>
+        <td>
+            <p>El sistema debe mostrar:</p>
+            <ul>
+                <li>Título, descripción y género</li>
+                <li>Desarrollador y fecha de lanzamiento</li>
+                <li>Plataformas disponibles</li>
+                <li>Imagen de portada</li>
+                <li>Puntuación Metacritic</li>
+                <li>Requisitos mínimos y recomendados del sistema (PC)</li>
+                <li>Reseñas de usuarios</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>HU-07: Gestión de Juegos (Admin)</h3>
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">ID</th>
+        <td><strong>HU-07</strong></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Administración del catálogo de juegos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>
+            <p>Como administrador</p>
+            <p>quiero crear, editar y eliminar videojuegos</p>
+            <p>para mantener actualizado el catálogo de la plataforma</p>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito Funcional</th>
+        <td>RF-07: CRUD completo de videojuegos para staff</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito de Información</th>
+        <td>
+            <p>El sistema debe permitir gestionar:</p>
+            <ul>
+                <li>Crear nuevos juegos manualmente</li>
+                <li>Importar juegos desde RAWG API</li>
+                <li>Editar información existente</li>
+                <li>Eliminar juegos del catálogo</li>
+                <li>Solo accesible para usuarios con permisos de staff</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>HU-08: Gestión de Perfil</h3>
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">ID</th>
+        <td><strong>HU-08</strong></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Editar perfil personal</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>
+            <p>Como usuario registrado</p>
+            <p>quiero editar mi perfil</p>
+            <p>para personalizar mi información y avatar</p>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito Funcional</th>
+        <td>RF-08: Gestión de perfil de usuario</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Requisito de Información</th>
+        <td>
+            <p>El sistema debe permitir modificar:</p>
+            <ul>
+                <li>Biografía personal</li>
+                <li>Imagen de avatar</li>
+                <li>Visualizar estadísticas (número de favoritos, reseñas escritas)</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h2 id="reglas">Reglas de Negocio del Sistema</h2>
+
+<h3>RN-001: Unicidad de Favoritos</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>RN-001</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Unicidad de favoritos por usuario</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá respetar la siguiente regla de negocio: Un usuario no puede marcar el mismo juego como favorito más de una vez. El sistema debe validar esta restricción a nivel de base de datos mediante una constraint de unicidad en la combinación (usuario, juego).</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>RF-04 (Sistema de favoritos)</td>
+    </tr>
+</table>
+
+<h3>RN-002: Autenticación Requerida</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>RN-002</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Autenticación para funciones personales</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá respetar la siguiente regla de negocio: Solo los usuarios autenticados pueden crear favoritos, escribir reseñas y editar su perfil. Los usuarios anónimos tienen acceso de solo lectura (buscar y ver juegos).</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>RF-02 (Autenticación), RF-04 (Favoritos), RF-05 (Reseñas)</td>
+    </tr>
+</table>
+
+<h3>RN-003: Permisos de Administrador</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>RN-003</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Restricción de operaciones CRUD de juegos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá respetar la siguiente regla de negocio: Solo los usuarios con permisos de staff/administrador pueden crear, editar o eliminar videojuegos del catálogo. Los usuarios regulares solo pueden visualizar la información.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>RF-07 (Gestión de juegos)</td>
+    </tr>
+</table>
+
+<h3>RN-004: Validación de Rating</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>RN-004</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Rango válido de puntuaciones</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá respetar la siguiente regla de negocio: Las puntuaciones (rating) de las reseñas deben estar en un rango válido de 1 a 5 estrellas. El sistema debe validar y rechazar valores fuera de este rango.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>RF-05 (Sistema de reseñas)</td>
+    </tr>
+</table>
+
+<h3>RN-005: Propiedad de Reseñas</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>RN-005</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Edición y eliminación de reseñas propias</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá respetar la siguiente regla de negocio: Un usuario solo puede editar o eliminar sus propias reseñas. El sistema debe verificar que el usuario autenticado sea el autor de la reseña antes de permitir modificaciones.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>RF-05 (Sistema de reseñas), RF-02 (Autenticación)</td>
+    </tr>
+</table>
+
+<h3>RN-006: Unicidad de Credenciales</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>RN-006</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Unicidad de nombre de usuario y email</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá respetar la siguiente regla de negocio: No pueden existir dos usuarios con el mismo nombre de usuario o dirección de correo electrónico. El sistema debe validar la unicidad durante el proceso de registro.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>RF-01 (Registro de usuarios)</td>
+    </tr>
+</table>
+
+<h3>RN-007: Seguridad de Contraseñas</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>RN-007</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Almacenamiento seguro de contraseñas</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá respetar la siguiente regla de negocio: Las contraseñas nunca deben almacenarse en texto plano. El sistema debe utilizar algoritmos de hashing (bcrypt, PBKDF2) para encriptar todas las contraseñas antes de guardarlas en la base de datos.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>RF-01 (Registro), RF-02 (Autenticación)</td>
+    </tr>
+</table>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="entorno">ENTORNO TECNOLÓGICO</h1>
+
+<p>El proyecto IVDb se ha desarrollado utilizando tecnologías modernas y ampliamente adoptadas en la industria del desarrollo web. La arquitectura se basa en la separación entre el frontend y el backend, permitiendo escalabilidad y mantenimiento independiente de cada capa.</p>
+
+<h2>Backend - API REST con Django</h2>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">Tecnología</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Python 3.10+</strong></td>
+        <td>Lenguaje de programación principal del backend, conocido por su legibilidad y extensa biblioteca estándar.</td>
+    </tr>
+    <tr>
+        <td><strong>Django 5.2.7</strong></td>
+        <td>Framework web de alto nivel que fomenta el desarrollo rápido y el diseño limpio. Incluye ORM, sistema de autenticación y panel de administración integrado.</td>
+    </tr>
+    <tr>
+        <td><strong>Django REST Framework</strong></td>
+        <td>Kit de herramientas potente y flexible para construir APIs Web RESTful. Proporciona serialización, vistas basadas en clases, autenticación y permisos.</td>
+    </tr>
+    <tr>
+        <td><strong>Simple JWT</strong></td>
+        <td>Plugin de Django REST Framework que proporciona autenticación basada en JSON Web Tokens, incluyendo tokens de acceso y refresh.</td>
+    </tr>
+    <tr>
+        <td><strong>Django CORS Headers</strong></td>
+        <td>Aplicación Django que añade headers CORS (Cross-Origin Resource Sharing) permitiendo que el frontend acceda a la API desde un dominio diferente.</td>
+    </tr>
+    <tr>
+        <td><strong>Django Filters</strong></td>
+        <td>Biblioteca que simplifica el filtrado de querysets basado en parámetros de URL, utilizada en la búsqueda y filtrado de juegos.</td>
+    </tr>
+    <tr>
+        <td><strong>Requests</strong></td>
+        <td>Biblioteca HTTP para Python utilizada para consumir la API externa de RAWG.</td>
+    </tr>
+    <tr>
+        <td><strong>Pillow</strong></td>
+        <td>Biblioteca de procesamiento de imágenes utilizada para manejar avatares de usuario y portadas de juegos.</td>
+    </tr>
+</table>
+
+<h2>Frontend - Aplicación React</h2>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">Tecnología</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>React 18.3</strong></td>
+        <td>Biblioteca JavaScript para construir interfaces de usuario mediante componentes reutilizables. Utiliza un DOM virtual para optimizar las actualizaciones.</td>
+    </tr>
+    <tr>
+        <td><strong>Vite 6.0</strong></td>
+        <td>Herramienta de construcción moderna que proporciona un entorno de desarrollo extremadamente rápido con Hot Module Replacement (HMR).</td>
+    </tr>
+    <tr>
+        <td><strong>React Router DOM 7.1</strong></td>
+        <td>Biblioteca de enrutamiento para React que permite navegación entre páginas sin recargar la aplicación completa (SPA - Single Page Application).</td>
+    </tr>
+    <tr>
+        <td><strong>Axios 1.7</strong></td>
+        <td>Cliente HTTP basado en promesas para realizar peticiones a la API del backend. Incluye interceptores para añadir automáticamente tokens de autenticación.</td>
+    </tr>
+    <tr>
+        <td><strong>TailwindCSS 3.4</strong></td>
+        <td>Framework CSS utility-first que permite crear interfaces personalizadas rápidamente mediante clases de utilidad predefinidas.</td>
+    </tr>
+    <tr>
+        <td><strong>React Icons 5.4</strong></td>
+        <td>Colección de iconos populares como Font Awesome, Material Icons, etc., utilizados en la interfaz de usuario.</td>
+    </tr>
+    <tr>
+        <td><strong>DOMPurify 3.2</strong></td>
+        <td>Biblioteca de sanitización HTML para prevenir ataques XSS al renderizar contenido HTML desde la API de RAWG.</td>
+    </tr>
+</table>
+
+<h2>Base de Datos</h2>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">Tecnología</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>SQLite 3</strong></td>
+        <td>Sistema de gestión de bases de datos relacional embebido. Ideal para desarrollo y aplicaciones pequeñas-medianas. Almacena toda la base de datos en un único archivo.</td>
+    </tr>
+    <tr>
+        <td><strong>Django ORM</strong></td>
+        <td>Object-Relational Mapping integrado en Django que abstrae las operaciones de base de datos mediante modelos Python, eliminando la necesidad de escribir SQL directamente.</td>
+    </tr>
+</table>
+
+<h2>APIs Externas</h2>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">API</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>RAWG API</strong></td>
+        <td>API REST que proporciona acceso a una base de datos de más de 800,000 videojuegos. Incluye información detallada, imágenes, requisitos del sistema, puntuaciones y metadatos. Utilizada para importar y actualizar el catálogo de juegos.</td>
+    </tr>
+</table>
+
+<h2>Control de Versiones y Despliegue</h2>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">Herramienta</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Git</strong></td>
+        <td>Sistema de control de versiones distribuido utilizado para el seguimiento de cambios en el código fuente.</td>
+    </tr>
+    <tr>
+        <td><strong>GitHub</strong></td>
+        <td>Plataforma de alojamiento de repositorios Git. El proyecto está dividido en dos repositorios: backend-ivdb e ivdb (frontend).</td>
+    </tr>
+</table>
+
+<h2>Entorno de Desarrollo</h2>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">Herramienta</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Visual Studio Code</strong></td>
+        <td>Editor de código fuente principal utilizado para el desarrollo del proyecto.</td>
+    </tr>
+    <tr>
+        <td><strong>Python Virtual Environment</strong></td>
+        <td>Entorno virtual Python para aislar las dependencias del proyecto backend.</td>
+    </tr>
+    <tr>
+        <td><strong>npm/Node.js</strong></td>
+        <td>Gestor de paquetes y entorno de ejecución JavaScript utilizado para gestionar las dependencias del frontend.</td>
+    </tr>
+</table>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="arquitectura">ARQUITECTURA</h1>
+
+<p>IVDb implementa una arquitectura de aplicación web moderna basada en el patrón <strong>Cliente-Servidor con API REST</strong>. Esta arquitectura separa claramente la lógica de presentación (frontend) de la lógica de negocio y acceso a datos (backend), permitiendo:</p>
+
+<ul>
+    <li>Desarrollo independiente y paralelo de frontend y backend</li>
+    <li>Escalabilidad horizontal de cada capa según necesidades</li>
+    <li>Posibilidad de crear múltiples clientes (web, móvil, desktop) consumiendo la misma API</li>
+    <li>Mantenimiento y actualización simplificados</li>
+</ul>
+
+<h2>Diagrama de Arquitectura General</h2>
+
+<div class="destacado">
+    <pre style="font-family: monospace; line-height: 1.8;">
+    ┌─────────────────────────────────────────────────────────────┐
+    │                   NAVEGADOR WEB (Cliente)                    │
+    │                                                              │
+    │  ┌──────────────────────────────────────────────────────┐  │
+    │  │            FRONTEND - React Application              │  │
+    │  │  ┌────────────┐  ┌────────────┐  ┌────────────┐    │  │
+    │  │  │   Pages    │  │ Components │  │  Services  │    │  │
+    │  │  │  (Views)   │  │   (UI)     │  │  (API)     │    │  │
+    │  │  └────────────┘  └────────────┘  └────────────┘    │  │
+    │  │                                                      │  │
+    │  │              React Router + Context API             │  │
+    │  └──────────────────────────────────────────────────────┘  │
+    └────────────────────┬────────────────────────────────────────┘
+                         │ HTTP/HTTPS (JSON)
+                         │ JWT Authentication
+                         │
+    ┌────────────────────▼────────────────────────────────────────┐
+    │              BACKEND - Django REST API                      │
+    │                                                              │
+    │  ┌──────────────────────────────────────────────────────┐  │
+    │  │                    API Layer                         │  │
+    │  │  ┌────────────┐  ┌────────────┐  ┌────────────┐    │  │
+    │  │  │   Views    │  │Serializers │  │    URLs    │    │  │
+    │  │  │(Endpoints) │  │ (DTO/JSON) │  │  (Routes)  │    │  │
+    │  │  └────────────┘  └────────────┘  └────────────┘    │  │
+    │  └──────────────────────────────────────────────────────┘  │
+    │                                                              │
+    │  ┌──────────────────────────────────────────────────────┐  │
+    │  │               Business Logic Layer                   │  │
+    │  │  ┌────────────┐  ┌────────────┐  ┌────────────┐    │  │
+    │  │  │   Models   │  │ Permissions│  │  Filters   │    │  │
+    │  │  │  (Domain)  │  │   (Auth)   │  │  (Search)  │    │  │
+    │  │  └────────────┘  └────────────┘  └────────────┘    │  │
+    │  └──────────────────────────────────────────────────────┘  │
+    │                                                              │
+    │  ┌──────────────────────────────────────────────────────┐  │
+    │  │                  Django ORM                          │  │
+    │  └────────────────────┬─────────────────────────────────┘  │
+    └─────────────────────┬─┴─────────────────────────────────────┘
+                          │
+    ┌─────────────────────▼─────────────────────────────────────┐
+    │                   SQLite Database                         │
+    │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐ │
+    │  │   Game   │  │  Review  │  │ Favorite │  │  Profile │ │
+    │  │  (Table) │  │ (Table)  │  │ (Table)  │  │ (Table)  │ │
+    │  └──────────┘  └──────────┘  └──────────┘  └──────────┘ │
+    └───────────────────────────────────────────────────────────┘
+
+                          ┌─────────────────┐
+                          │   RAWG API      │
+                          │  (External)     │◄──── Import Games
+                          └─────────────────┘
+    </pre>
+</div>
+
+<h2>Capa de Presentación (Frontend)</h2>
+
+<h3>Responsabilidades:</h3>
+<ul>
+    <li><strong>Interfaz de Usuario:</strong> Renderizado de componentes React interactivos y responsivos</li>
+    <li><strong>Gestión de Estado:</strong> Manejo del estado global mediante Context API (autenticación)</li>
+    <li><strong>Navegación:</strong> Enrutamiento entre páginas mediante React Router</li>
+    <li><strong>Consumo de API:</strong> Peticiones HTTP al backend mediante Axios con interceptores para JWT</li>
+    <li><strong>Validación Cliente:</strong> Validación básica de formularios antes de enviar al servidor</li>
+</ul>
+
+<h3>Estructura de Carpetas:</h3>
+<pre style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+src/
+├── pages/           # Páginas principales (Home, GameDetail, Login, etc.)
+├── components/      # Componentes reutilizables (Navbar, GameCard, etc.)
+├── services/        # Lógica de comunicación con APIs
+├── context/         # Context API para estado global
+├── hooks/           # Custom hooks (useAuth)
+├── utils/           # Utilidades (apiClient, helpers)
+└── assets/          # Recursos estáticos (imágenes, iconos)
+</pre>
+
+<h2>Capa de Lógica de Negocio y API (Backend)</h2>
+
+<h3>Responsabilidades:</h3>
+<ul>
+    <li><strong>API REST:</strong> Endpoints RESTful para todas las operaciones CRUD</li>
+    <li><strong>Autenticación y Autorización:</strong> JWT tokens, validación de permisos</li>
+    <li><strong>Lógica de Negocio:</strong> Validación de reglas de negocio, cálculos, procesamiento</li>
+    <li><strong>Serialización:</strong> Conversión de modelos Django a JSON y viceversa</li>
+    <li><strong>Integración Externa:</strong> Comunicación con RAWG API para importar juegos</li>
+    <li><strong>Filtrado y Búsqueda:</strong> Procesamiento de queries complejas</li>
+</ul>
+
+<h3>Estructura de Apps Django:</h3>
+<pre style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+ivdb/                # Proyecto Django principal
+├── accounts/        # Gestión de usuarios y autenticación
+│   ├── models.py    # Profile model
+│   └── api/         # Endpoints de autenticación
+├── game/            # Gestión del catálogo de juegos
+│   ├── models.py    # Game model
+│   ├── filters.py   # Filtros de búsqueda
+│   ├── api/         # CRUD de juegos
+│   └── rawg_importer.py  # Importación desde RAWG
+├── review/          # Sistema de reseñas
+│   ├── models.py    # Review model
+│   └── api/         # CRUD de reseñas
+└── favorite/        # Sistema de favoritos
+    ├── models.py    # Favorite model
+    └── api/         # Gestión de favoritos
+</pre>
+
+<h2>Capa de Persistencia (Base de Datos)</h2>
+
+<h3>Responsabilidades:</h3>
+<ul>
+    <li><strong>Almacenamiento:</strong> Persistencia de datos en SQLite</li>
+    <li><strong>Integridad:</strong> Constraints, claves foráneas, validaciones a nivel de BD</li>
+    <li><strong>Relaciones:</strong> Gestión de relaciones entre entidades (1:N, N:M)</li>
+</ul>
+
+<h3>Modelos Principales:</h3>
+<ul>
+    <li><strong>User (Django Auth):</strong> Usuarios del sistema (autenticación)</li>
+    <li><strong>Profile:</strong> Extensión del modelo User con biografía y avatar</li>
+    <li><strong>Game:</strong> Catálogo de videojuegos</li>
+    <li><strong>Review:</strong> Reseñas de usuarios sobre juegos</li>
+    <li><strong>Favorite:</strong> Relación M2M entre usuarios y juegos favoritos</li>
+</ul>
+
+<h2>Flujo de Comunicación</h2>
+
+<h3>Ejemplo: Usuario añade un juego a favoritos</h3>
+
+<ol>
+    <li><strong>Frontend:</strong> Usuario hace clic en botón "Añadir a Favoritos"</li>
+    <li><strong>Service (Frontend):</strong> <code>favoriteService.addFavorite(gameId)</code> realiza POST a la API</li>
+    <li><strong>Interceptor Axios:</strong> Añade automáticamente el JWT token en el header Authorization</li>
+    <li><strong>Backend API:</strong> Endpoint <code>POST /api/favorites/</code> recibe la petición</li>
+    <li><strong>Autenticación:</strong> Django verifica el JWT token, identifica al usuario</li>
+    <li><strong>Permisos:</strong> Valida que el usuario esté autenticado</li>
+    <li><strong>Validación:</strong> Verifica que no exista ya el favorito (RN-001)</li>
+    <li><strong>ORM:</strong> Django crea registro en tabla <code>favorite_favorite</code></li>
+    <li><strong>Respuesta:</strong> Backend devuelve JSON con el favorito creado (201 Created)</li>
+    <li><strong>Frontend:</strong> Actualiza UI mostrando el juego como favorito</li>
+</ol>
+
+<h2>Seguridad</h2>
+
+<h3>Medidas Implementadas:</h3>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">Aspecto</th>
+        <th style="background-color: #e6e6e6;">Implementación</th>
+    </tr>
+    <tr>
+        <td><strong>Autenticación</strong></td>
+        <td>JWT (JSON Web Tokens) con tokens de acceso (5min) y refresh (1 día). El token se almacena en localStorage del navegador.</td>
+    </tr>
+    <tr>
+        <td><strong>Contraseñas</strong></td>
+        <td>Hashing mediante PBKDF2 con SHA256 (algoritmo por defecto de Django). Las contraseñas nunca se almacenan en texto plano.</td>
+    </tr>
+    <tr>
+        <td><strong>CORS</strong></td>
+        <td>Configuración de django-cors-headers permitiendo solo orígenes específicos (localhost:5173 en desarrollo).</td>
+    </tr>
+    <tr>
+        <td><strong>XSS Prevention</strong></td>
+        <td>Sanitización de HTML con DOMPurify en el frontend. Django escapa automáticamente el output en templates.</td>
+    </tr>
+    <tr>
+        <td><strong>CSRF</strong></td>
+        <td>Protección CSRF deshabilitada para API REST (se utiliza JWT). Habilitada para Django Admin.</td>
+    </tr>
+    <tr>
+        <td><strong>Validación</strong></td>
+        <td>Validación en frontend (React) y backend (Django Serializers) para evitar datos maliciosos.</td>
+    </tr>
+    <tr>
+        <td><strong>Permisos</strong></td>
+        <td>Sistema de permisos de Django REST Framework: IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser.</td>
+    </tr>
+</table>
+
+<h2>Escalabilidad</h2>
+
+<p>La arquitectura actual permite escalar el sistema de las siguientes formas:</p>
+
+<ul>
+    <li><strong>Migración a PostgreSQL:</strong> Cambio trivial gracias al ORM de Django</li>
+    <li><strong>Separación de Servidores:</strong> Frontend y backend pueden desplegarse en servidores diferentes</li>
+    <li><strong>Load Balancing:</strong> Múltiples instancias del backend detrás de un balanceador</li>
+    <li><strong>CDN para Estáticos:</strong> Imágenes y assets del frontend pueden servirse desde CDN</li>
+    <li><strong>Caché:</strong> Implementación de Redis para cachear queries frecuentes</li>
+    <li><strong>Microservicios:</strong> Cada app Django podría convertirse en un microservicio independiente</li>
+</ul>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="subsistemas">DESCRIPCIÓN DE LOS SUBSISTEMAS DEL SISTEMA A DESARROLLAR</h1>
+
+<p>El sistema IVDb se divide en cuatro subsistemas principales que agrupan las funcionalidades relacionadas:</p>
+
+<h3>Subsistema 1: Gestión de Usuarios y Autenticación</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>SS-001</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Gestión de Usuarios y Autenticación</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema agrupa los requisitos relacionados con el registro, autenticación y gestión de perfiles de usuario. Incluye el sistema de login/logout con JWT, creación de cuentas nuevas y edición de información personal.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>
+            <ul>
+                <li>HU-01 (Registro de usuario)</li>
+                <li>HU-02 (Inicio de sesión)</li>
+                <li>HU-08 (Gestión de perfil)</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>Subsistema 2: Catálogo de Videojuegos</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>SS-002</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Catálogo de Videojuegos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema agrupa los requisitos relacionados con la gestión del catálogo de videojuegos. Incluye búsqueda, filtrado, visualización de detalles, y operaciones CRUD para administradores. También maneja la importación automática desde RAWG API.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>
+            <ul>
+                <li>HU-03 (Búsqueda de videojuegos)</li>
+                <li>HU-06 (Ver detalles de videojuegos)</li>
+                <li>HU-07 (Gestión de juegos - Admin)</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>Subsistema 3: Sistema de Reseñas</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>SS-003</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Sistema de Reseñas</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema agrupa los requisitos relacionados con la creación, edición, eliminación y visualización de reseñas de usuarios sobre videojuegos. Cada reseña incluye una puntuación y comentarios.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>
+            <ul>
+                <li>HU-05 (Escribir reseñas)</li>
+                <li>SS-001 (Requiere autenticación)</li>
+                <li>SS-002 (Reseñas asociadas a juegos)</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>Subsistema 4: Sistema de Favoritos</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>SS-004</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Sistema de Favoritos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema agrupa los requisitos relacionados con la gestión de listas personales de juegos favoritos. Permite a los usuarios marcar y desmarcar juegos para acceso rápido.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Dependencias</th>
+        <td>
+            <ul>
+                <li>HU-04 (Gestión de favoritos)</li>
+                <li>SS-001 (Requiere autenticación)</li>
+                <li>SS-002 (Favoritos asociados a juegos)</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<div style="page-break-before: always;"></div>
+
+<h2 id="casos-uso">Modelo de Casos de Uso del Sistema</h2>
+
+<h3>Diagrama de Casos de Uso General</h3>
+
+<div class="destacado">
+    <pre style="font-family: monospace; line-height: 1.6;">
+                        SISTEMA IVDb
+    ┌──────────────────────────────────────────────────────────┐
+    │                                                          │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Registrarse │         │ Iniciar      │            │
+    │   │              │         │ Sesión       │            │
+    │   └──────────────┘         └──────────────┘            │
+    │                                                          │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Buscar      │         │  Ver Detalle │            │
+    │   │  Juegos      │◄────────┤  de Juego    │            │
+    │   └──────────────┘         └──────────────┘            │
+    │         ▲                           ▲                   │
+    │         │                           │                   │
+    │         │                           │                   │
+    Usuario   │                           │   Usuario         │
+    Anónimo───┘                           └───Registrado      │
+    │                                         │                │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Añadir a    │         │  Escribir    │            │
+    │   │  Favoritos   │         │  Reseña      │            │
+    │   └──────────────┘         └──────────────┘            │
+    │         │                           │                   │
+    │         │                           │                   │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Ver Mi      │         │  Editar      │            │
+    │   │  Perfil      │         │  Perfil      │            │
+    │   └──────────────┘         └──────────────┘            │
+    │                                         │                │
+    │                                         │                │
+    │                                   Administrador         │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Crear       │         │  Editar      │            │
+    │   │  Juego       │         │  Juego       │            │
+    │   └──────────────┘         └──────────────┘            │
+    │                                                          │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Eliminar    │         │  Importar    │            │
+    │   │  Juego       │         │  desde RAWG  │            │
+    │   └──────────────┘         └──────────────┘            │
+    │                                                          │
+    └──────────────────────────────────────────────────────────┘
+    </pre>
+</div>
+
+<h3>Especificación de Actores del Sistema</h3>
+
+<table>
+    <tr>
+        <th style="width: 15%; background-color: #d9d9d9;">ID</th>
+        <th style="width: 25%; background-color: #d9d9d9;">Nombre</th>
+        <th style="background-color: #d9d9d9;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>ACT-01</strong></td>
+        <td>Usuario Anónimo</td>
+        <td>Este actor representa a los visitantes de la plataforma que no han iniciado sesión. Pueden buscar y visualizar información de videojuegos pero no pueden interactuar con funcionalidades personales (favoritos, reseñas).</td>
+    </tr>
+    <tr>
+        <td><strong>ACT-02</strong></td>
+        <td>Usuario Registrado</td>
+        <td>Este actor representa a los usuarios que han creado una cuenta y han iniciado sesión. Tienen acceso completo a todas las funcionalidades: búsqueda, favoritos, reseñas y gestión de perfil.</td>
+    </tr>
+    <tr>
+        <td><strong>ACT-03</strong></td>
+        <td>Administrador/Staff</td>
+        <td>Este actor representa a los usuarios con permisos especiales de staff. Además de todas las funcionalidades de usuario registrado, pueden gestionar el catálogo de juegos (crear, editar, eliminar, importar desde RAWG).</td>
+    </tr>
+    <tr>
+        <td><strong>ACT-04</strong></td>
+        <td>Sistema RAWG API</td>
+        <td>Este actor representa al sistema externo RAWG API que proporciona información de videojuegos. Interactúa con el sistema mediante peticiones HTTP para importar datos.</td>
+    </tr>
+</table>
+
+<h3>Especificación de Casos de Uso del Sistema</h3>
+
+<h4>CU-01: Registrarse en el Sistema</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-01</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Registrarse en el sistema</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actores</th>
+        <td>Usuario Anónimo (ACT-01)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para permitir a un visitante crear una nueva cuenta de usuario.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario no debe estar autenticado</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal</th>
+        <td>
+            <ol>
+                <li>El usuario anónimo accede a la página de registro</li>
+                <li>El sistema muestra el formulario de registro solicitando: nombre de usuario, email, contraseña y confirmación de contraseña</li>
+                <li>El usuario introduce sus datos en el formulario</li>
+                <li>El usuario hace clic en "Registrarse"</li>
+                <li>El sistema valida que todos los campos estén completos</li>
+                <li>El sistema verifica que el nombre de usuario y email no existan ya en la base de datos</li>
+                <li>El sistema verifica que las contraseñas coincidan</li>
+                <li>El sistema encripta la contraseña usando PBKDF2</li>
+                <li>El sistema crea el usuario en la base de datos</li>
+                <li>El sistema crea automáticamente un perfil asociado al usuario</li>
+                <li>El sistema autentica automáticamente al usuario y genera tokens JWT</li>
+                <li>El sistema redirige al usuario a la página principal como usuario autenticado</li>
+                <li>El sistema muestra un mensaje de éxito: "Registro completado exitosamente"</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Excepciones</th>
+        <td>
+            <p><strong>5a.</strong> Si algún campo está vacío:</p>
+            <ul>
+                <li>El sistema muestra un mensaje de error indicando los campos requeridos</li>
+                <li>El caso de uso continúa en el paso 3</li>
+            </ul>
+            <p><strong>6a.</strong> Si el nombre de usuario ya existe:</p>
+            <ul>
+                <li>El sistema muestra error: "Este nombre de usuario ya está en uso"</li>
+                <li>El caso de uso continúa en el paso 3</li>
+            </ul>
+            <p><strong>6b.</strong> Si el email ya existe:</p>
+            <ul>
+                <li>El sistema muestra error: "Este email ya está registrado"</li>
+                <li>El caso de uso continúa en el paso 3</li>
+            </ul>
+            <p><strong>7a.</strong> Si las contraseñas no coinciden:</p>
+            <ul>
+                <li>El sistema muestra error: "Las contraseñas no coinciden"</li>
+                <li>El caso de uso continúa en el paso 3</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se ha creado un nuevo usuario en el sistema y está autenticado con tokens JWT válidos</td>
+    </tr>
+</table>
+
+<h4>CU-02: Iniciar Sesión</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-02</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Iniciar sesión en el sistema</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actores</th>
+        <td>Usuario Registrado (ACT-02)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para autenticar a un usuario existente.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario debe estar registrado previamente y no estar autenticado</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal</th>
+        <td>
+            <ol>
+                <li>El usuario accede a la página de login</li>
+                <li>El sistema muestra el formulario de login solicitando: nombre de usuario y contraseña</li>
+                <li>El usuario introduce sus credenciales</li>
+                <li>El usuario hace clic en "Iniciar Sesión"</li>
+                <li>El sistema valida que ambos campos estén completos</li>
+                <li>El sistema verifica las credenciales contra la base de datos</li>
+                <li>El sistema genera un access token JWT (válido 5 minutos)</li>
+                <li>El sistema genera un refresh token JWT (válido 1 día)</li>
+                <li>El sistema devuelve los tokens al frontend</li>
+                <li>El frontend almacena los tokens en localStorage</li>
+                <li>El sistema redirige al usuario a la página principal</li>
+                <li>El sistema muestra un mensaje de bienvenida con el nombre del usuario</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Excepciones</th>
+        <td>
+            <p><strong>5a.</strong> Si algún campo está vacío:</p>
+            <ul>
+                <li>El sistema muestra error: "Por favor, completa todos los campos"</li>
+                <li>El caso de uso continúa en el paso 3</li>
+            </ul>
+            <p><strong>6a.</strong> Si las credenciales son incorrectas:</p>
+            <ul>
+                <li>El sistema muestra error: "Usuario o contraseña incorrectos"</li>
+                <li>El caso de uso continúa en el paso 3</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>El usuario está autenticado y tiene tokens JWT válidos almacenados</td>
+    </tr>
+</table>
+
+<h4>CU-03: Buscar Videojuegos</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-03</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Buscar y filtrar videojuegos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actores</th>
+        <td>Usuario Anónimo (ACT-01), Usuario Registrado (ACT-02), Administrador (ACT-03)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para permitir buscar videojuegos según diversos criterios.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>Ninguna (accesible para todos los usuarios)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal</th>
+        <td>
+            <ol>
+                <li>El usuario accede a la página principal o a la página de búsqueda</li>
+                <li>El sistema muestra una barra de búsqueda y filtros disponibles (género, plataforma)</li>
+                <li>El sistema carga y muestra los videojuegos más recientes por defecto</li>
+                <li>El usuario introduce un término de búsqueda en la barra (opcional)</li>
+                <li>El usuario selecciona filtros (género, plataforma) - opcional</li>
+                <li>El sistema realiza una petición a la API con los parámetros de búsqueda</li>
+                <li>El sistema busca en la base de datos juegos que coincidan con los criterios</li>
+                <li>El sistema devuelve los resultados ordenados por relevancia</li>
+                <li>El sistema muestra los juegos en formato de tarjetas con: imagen, título, género y rating</li>
+                <li>El usuario puede hacer clic en cualquier juego para ver más detalles</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Excepciones</th>
+        <td>
+            <p><strong>7a.</strong> Si no hay resultados que coincidan:</p>
+            <ul>
+                <li>El sistema muestra mensaje: "No se encontraron juegos con esos criterios"</li>
+                <li>El sistema sugiere revisar los filtros aplicados</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se muestran los videojuegos que coinciden con los criterios de búsqueda</td>
+    </tr>
+</table>
+
+<h4>CU-04: Ver Detalle de Videojuego</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-04</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Ver información detallada de un videojuego</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actores</th>
+        <td>Usuario Anónimo (ACT-01), Usuario Registrado (ACT-02), Administrador (ACT-03)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para mostrar toda la información disponible de un videojuego.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El juego debe existir en la base de datos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal</th>
+        <td>
+            <ol>
+                <li>El usuario hace clic en un juego desde la lista de resultados o búsqueda</li>
+                <li>El sistema obtiene el ID del juego seleccionado</li>
+                <li>El sistema realiza petición GET a <code>/api/games/{id}/</code></li>
+                <li>El sistema recupera de la base de datos toda la información del juego</li>
+                <li>El sistema muestra en pantalla:
+                    <ul>
+                        <li>Imagen de portada grande</li>
+                        <li>Título y desarrollador</li>
+                        <li>Género y plataformas</li>
+                        <li>Fecha de lanzamiento</li>
+                        <li>Descripción completa (HTML sanitizado)</li>
+                        <li>Puntuación Metacritic (si disponible)</li>
+                        <li>Requisitos mínimos del sistema (PC)</li>
+                        <li>Requisitos recomendados del sistema (PC)</li>
+                    </ul>
+                </li>
+                <li>Si el usuario está autenticado, el sistema muestra botón "Añadir a Favoritos"</li>
+                <li>El sistema carga y muestra las reseñas de otros usuarios para ese juego</li>
+                <li>Si el usuario está autenticado, el sistema muestra formulario para escribir reseña</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Excepciones</th>
+        <td>
+            <p><strong>4a.</strong> Si el juego no existe (ID inválido):</p>
+            <ul>
+                <li>El sistema muestra página 404 "Juego no encontrado"</li>
+                <li>El sistema ofrece volver a la búsqueda</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se muestra toda la información del videojuego al usuario</td>
+    </tr>
+</table>
+
+<h4>CU-05: Añadir Juego a Favoritos</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-05</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Marcar un juego como favorito</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actores</th>
+        <td>Usuario Registrado (ACT-02), Administrador (ACT-03)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para añadir un videojuego a la lista de favoritos del usuario.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario debe estar autenticado. El juego no debe estar ya en favoritos del usuario.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal</th>
+        <td>
+            <ol>
+                <li>El usuario autenticado está visualizando los detalles de un juego</li>
+                <li>El sistema muestra el botón "Añadir a Favoritos" (icono de corazón vacío)</li>
+                <li>El usuario hace clic en el botón</li>
+                <li>El sistema envía petición POST a <code>/api/favorites/</code> con el ID del juego</li>
+                <li>El sistema valida que el usuario esté autenticado mediante JWT</li>
+                <li>El sistema verifica que no exista ya el favorito (usuario + juego)</li>
+                <li>El sistema crea un nuevo registro en la tabla Favorite</li>
+                <li>El sistema guarda la fecha actual en created_at</li>
+                <li>El sistema devuelve respuesta 201 Created con los datos del favorito</li>
+                <li>El frontend actualiza el icono a corazón relleno</li>
+                <li>El sistema muestra mensaje: "Juego añadido a favoritos"</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Excepciones</th>
+        <td>
+            <p><strong>5a.</strong> Si el usuario no está autenticado:</p>
+            <ul>
+                <li>El sistema devuelve error 401 Unauthorized</li>
+                <li>El frontend redirige al usuario a la página de login</li>
+            </ul>
+            <p><strong>6a.</strong> Si el juego ya está en favoritos:</p>
+            <ul>
+                <li>El sistema devuelve error 400 Bad Request</li>
+                <li>El sistema muestra mensaje: "Este juego ya está en tus favoritos"</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>El juego se ha añadido a la lista de favoritos del usuario</td>
+    </tr>
+</table>
+
+<h4>CU-06: Escribir Reseña</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-06</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Crear una reseña de videojuego</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actores</th>
+        <td>Usuario Registrado (ACT-02), Administrador (ACT-03)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para permitir a un usuario escribir una reseña sobre un videojuego.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario debe estar autenticado. El juego debe existir en la base de datos.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal</th>
+        <td>
+            <ol>
+                <li>El usuario autenticado está visualizando los detalles de un juego</li>
+                <li>El sistema muestra el formulario de reseña con campos: puntuación (1-5 estrellas) y comentario (texto)</li>
+                <li>El usuario selecciona una puntuación de 1 a 5 estrellas</li>
+                <li>El usuario escribe su comentario en el área de texto</li>
+                <li>El usuario hace clic en "Publicar Reseña"</li>
+                <li>El sistema valida que la puntuación esté entre 1 y 5</li>
+                <li>El sistema valida que el comentario no esté vacío</li>
+                <li>El sistema envía POST a <code>/api/reviews/</code> con los datos</li>
+                <li>El backend valida la autenticación JWT</li>
+                <li>El sistema crea un nuevo registro Review asociando: usuario, juego, rating, comentario</li>
+                <li>El sistema guarda la fecha de creación</li>
+                <li>El sistema devuelve respuesta 201 Created</li>
+                <li>El frontend añade la nueva reseña a la lista visible</li>
+                <li>El sistema muestra mensaje: "Reseña publicada con éxito"</li>
+                <li>El sistema limpia el formulario</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Excepciones</th>
+        <td>
+            <p><strong>6a.</strong> Si la puntuación es inválida (fuera del rango 1-5):</p>
+            <ul>
+                <li>El sistema muestra error: "Selecciona una puntuación válida"</li>
+                <li>El caso de uso continúa en el paso 3</li>
+            </ul>
+            <p><strong>7a.</strong> Si el comentario está vacío:</p>
+            <ul>
+                <li>El sistema muestra error: "El comentario no puede estar vacío"</li>
+                <li>El caso de uso continúa en el paso 4</li>
+            </ul>
+            <p><strong>9a.</strong> Si el usuario no está autenticado:</p>
+            <ul>
+                <li>El sistema devuelve error 401</li>
+                <li>El frontend redirige al login</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se ha creado una nueva reseña asociada al usuario y al videojuego</td>
+    </tr>
+</table>
+
+<h4>CU-07: Gestionar Juegos (Admin)</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-07</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Crear, editar o eliminar videojuegos del catálogo</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actores</th>
+        <td>Administrador (ACT-03)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para permitir a administradores gestionar el catálogo de juegos.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario debe estar autenticado y tener permisos de staff/administrador</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal - Crear Juego</th>
+        <td>
+            <ol>
+                <li>El administrador accede a la página "Añadir Juego"</li>
+                <li>El sistema verifica los permisos de staff</li>
+                <li>El sistema muestra formulario con campos: título, descripción, género, plataforma, desarrollador, fecha de lanzamiento, imagen</li>
+                <li>El administrador completa todos los campos requeridos</li>
+                <li>El administrador hace clic en "Crear Juego"</li>
+                <li>El sistema valida que todos los campos obligatorios estén completos</li>
+                <li>El sistema envía POST a <code>/api/games/</code></li>
+                <li>El backend verifica permisos de staff mediante JWT</li>
+                <li>El sistema crea el nuevo juego en la base de datos</li>
+                <li>El sistema devuelve respuesta 201 Created</li>
+                <li>El sistema redirige a la página de detalle del nuevo juego</li>
+                <li>El sistema muestra mensaje: "Juego creado exitosamente"</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal - Editar Juego</th>
+        <td>
+            <ol>
+                <li>El administrador visualiza un juego y hace clic en "Editar"</li>
+                <li>El sistema carga el formulario con los datos actuales del juego</li>
+                <li>El administrador modifica los campos deseados</li>
+                <li>El administrador hace clic en "Guardar Cambios"</li>
+                <li>El sistema envía PUT a <code>/api/games/{id}/</code></li>
+                <li>El sistema actualiza los datos en la base de datos</li>
+                <li>El sistema muestra mensaje: "Juego actualizado correctamente"</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal - Eliminar Juego</th>
+        <td>
+            <ol>
+                <li>El administrador visualiza un juego y hace clic en "Eliminar"</li>
+                <li>El sistema muestra confirmación: "¿Estás seguro de eliminar este juego?"</li>
+                <li>El administrador confirma la eliminación</li>
+                <li>El sistema envía DELETE a <code>/api/games/{id}/</code></li>
+                <li>El sistema elimina el juego y sus relaciones (reseñas, favoritos)</li>
+                <li>El sistema redirige a la página principal</li>
+                <li>El sistema muestra mensaje: "Juego eliminado correctamente"</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Excepciones</th>
+        <td>
+            <p><strong>2a.</strong> Si el usuario no tiene permisos de staff:</p>
+            <ul>
+                <li>El sistema devuelve error 403 Forbidden</li>
+                <li>El sistema muestra mensaje: "No tienes permisos para esta acción"</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>El catálogo de juegos ha sido modificado según la acción realizada</td>
+    </tr>
+</table>
+
+<h4>CU-08: Importar Juegos desde RAWG</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-08</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Importar videojuegos desde RAWG API</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actores</th>
+        <td>Administrador (ACT-03), Sistema RAWG API (ACT-04)</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para importar automáticamente juegos desde la API externa de RAWG.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario debe ser administrador. La API de RAWG debe estar disponible. Se debe tener una API key válida.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Secuencia Normal</th>
+        <td>
+            <ol>
+                <li>El administrador accede a la funcionalidad de importación</li>
+                <li>El sistema verifica permisos de staff</li>
+                <li>El administrador hace clic en "Importar desde RAWG"</li>
+                <li>El sistema realiza petición GET a la API de RAWG con parámetros (page_size=100)</li>
+                <li>RAWG API devuelve un JSON con lista de juegos</li>
+                <li>Para cada juego recibido, el sistema:
+                    <ul>
+                        <li>Verifica si ya existe en la BD (por nombre)</li>
+                        <li>Si no existe, realiza petición adicional para obtener requisitos del sistema</li>
+                        <li>Crea un nuevo registro Game con toda la información</li>
+                        <li>Guarda la imagen de portada</li>
+                    </ul>
+                </li>
+                <li>El sistema registra cuántos juegos se importaron exitosamente</li>
+                <li>El sistema muestra mensaje: "Se importaron X juegos correctamente"</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Excepciones</th>
+        <td>
+            <p><strong>4a.</strong> Si la API de RAWG no responde:</p>
+            <ul>
+                <li>El sistema muestra error: "No se pudo conectar con RAWG API"</li>
+                <li>El proceso se cancela</li>
+            </ul>
+            <p><strong>4b.</strong> Si la API key es inválida:</p>
+            <ul>
+                <li>El sistema muestra error: "API key no válida"</li>
+                <li>El proceso se cancela</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se han importado nuevos videojuegos al catálogo desde RAWG API</td>
+    </tr>
+</table>
+
+<!-- CONTINUACIÓN DEL DOCUMENTO PRINCIPAL - PARTE 4 -->
+<!-- Modelo de Clases y Trazabilidad -->
+
+<div style="page-break-before: always;"></div>
+
+<h2 id="modelo-clases">Modelo de Clases</h2>
+
+<p>El modelo de clases de IVDb representa las entidades principales del dominio y sus relaciones. Se utiliza el ORM de Django para mapear estas clases a tablas de la base de datos relacional.</p>
+
+<h3>Diagrama Entidad-Relación</h3>
+
+<div class="destacado">
+    <pre style="font-family: monospace; line-height: 1.6; font-size: 11px;">
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                            User (Django Auth)                       │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + username: String(150) [UNIQUE]                                    │
+    │ + email: String(254) [UNIQUE]                                       │
+    │ + password: String(128)  # Encriptado con PBKDF2                   │
+    │ + first_name: String(150)                                           │
+    │ + last_name: String(150)                                            │
+    │ + is_staff: Boolean                                                 │
+    │ + is_active: Boolean                                                │
+    │ + date_joined: DateTime                                             │
+    └──────────────────────┬──────────────────────────────────────────────┘
+                           │ 1:1
+                           │
+    ┌──────────────────────▼──────────────────────────────────────────────┐
+    │                          Profile                                    │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + user: OneToOneField → User [FK]                                   │
+    │ + bio: Text [NULL]                                                  │
+    │ + avatar: ImageField [NULL]  # Ruta: media/avatars/               │
+    └──────────────────────┬──────────────────────────────────────────────┘
+                           │
+                           │ 1:N
+                           │
+    ┌──────────────────────▼──────────────────────────────────────────────┐
+    │                          Review                                     │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + user: ForeignKey → User [FK]  # Autor de la reseña              │
+    │ + game: ForeignKey → Game [FK]  # Juego reseñado                   │
+    │ + rating: Integer  # Rango: 1-5                                    │
+    │ + comment: Text                                                     │
+    │ + created_at: DateTime [AUTO]                                       │
+    │ + updated_at: DateTime [AUTO]                                       │
+    │─────────────────────────────────────────────────────────────────────│
+    │ # Métodos                                                           │
+    │ + __str__(): String  # "Review by {user} for {game}"               │
+    └─────────────────────────────────────────────────────────────────────┘
+
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                             Game                                    │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + title: String(200)  # Título del juego                           │
+    │ + description: Text [NULL]  # Descripción HTML desde RAWG          │
+    │ + release_date: Date [NULL]                                         │
+    │ + genre: String(100) [NULL]  # Ej: "Action, RPG"                   │
+    │ + platform: String(200) [NULL]  # Ej: "PC, PS5, Xbox"              │
+    │ + developer: String(200) [NULL]                                     │
+    │ + cover_image: URLField [NULL]  # URL imagen de RAWG               │
+    │ + metacritic: Integer [NULL]  # Puntuación Metacritic 0-100        │
+    │ + rating: Float [NULL]  # Rating general del juego                 │
+    │ + minimum_requirements: JSONField [NULL]  # Requisitos mínimos PC  │
+    │ + recommended_requirements: JSONField [NULL]  # Requisitos rec. PC │
+    │─────────────────────────────────────────────────────────────────────│
+    │ # Métodos                                                           │
+    │ + __str__(): String  # Devuelve el título                          │
+    │ + get_requirements_display(): Dict  # Formatea requisitos          │
+    └──────────────────────┬──────────────────────────────────────────────┘
+                           │
+                           │ N:M (a través de Favorite)
+                           │
+    ┌──────────────────────▼──────────────────────────────────────────────┐
+    │                          Favorite                                   │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + user: ForeignKey → User [FK]                                      │
+    │ + game: ForeignKey → Game [FK]                                      │
+    │ + created_at: DateTime [AUTO]  # Fecha de marcado como favorito    │
+    │─────────────────────────────────────────────────────────────────────│
+    │ # Constraints                                                       │
+    │ + unique_together: (user, game)  # Un usuario no puede marcar     │
+    │                                    el mismo juego dos veces         │
+    │─────────────────────────────────────────────────────────────────────│
+    │ # Métodos                                                           │
+    │ + __str__(): String  # "{user} - {game}"                           │
+    └─────────────────────────────────────────────────────────────────────┘
+
+
+    RELACIONES:
+    
+    User ──(1:1)──> Profile
+         Un usuario tiene exactamente un perfil
+    
+    User ──(1:N)──> Review
+         Un usuario puede escribir múltiples reseñas
+    
+    User ──(N:M)──> Game  (a través de Favorite)
+         Un usuario puede tener múltiples juegos favoritos
+         Un juego puede ser favorito de múltiples usuarios
+    
+    Game ──(1:N)──> Review
+         Un juego puede tener múltiples reseñas
+    </pre>
+</div>
+
+<h3>Descripción Detallada de Modelos</h3>
+
+<h4>Modelo: User (Django Auth)</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Atributo</th>
+        <th style="width: 20%; background-color: #e6e6e6;">Tipo</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>id</strong></td>
+        <td>Integer (PK)</td>
+        <td>Identificador único del usuario generado automáticamente</td>
+    </tr>
+    <tr>
+        <td><strong>username</strong></td>
+        <td>String(150)</td>
+        <td>Nombre de usuario único. Requerido para login. Validación: solo letras, números, @/./+/-/_</td>
+    </tr>
+    <tr>
+        <td><strong>email</strong></td>
+        <td>String(254)</td>
+        <td>Dirección de correo electrónico única. Validación de formato email</td>
+    </tr>
+    <tr>
+        <td><strong>password</strong></td>
+        <td>String(128)</td>
+        <td>Contraseña hasheada con PBKDF2_SHA256. Nunca se almacena en texto plano</td>
+    </tr>
+    <tr>
+        <td><strong>is_staff</strong></td>
+        <td>Boolean</td>
+        <td>Indica si el usuario tiene permisos de administrador para gestionar juegos</td>
+    </tr>
+    <tr>
+        <td><strong>is_active</strong></td>
+        <td>Boolean</td>
+        <td>Indica si la cuenta está activa. Por defecto True</td>
+    </tr>
+    <tr>
+        <td><strong>date_joined</strong></td>
+        <td>DateTime</td>
+        <td>Fecha y hora de registro del usuario</td>
+    </tr>
+</table>
+
+<h4>Modelo: Profile</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Atributo</th>
+        <th style="width: 20%; background-color: #e6e6e6;">Tipo</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>id</strong></td>
+        <td>Integer (PK)</td>
+        <td>Identificador único del perfil</td>
+    </tr>
+    <tr>
+        <td><strong>user</strong></td>
+        <td>OneToOneField</td>
+        <td>Relación 1:1 con User. Se crea automáticamente al registrar un usuario mediante signals</td>
+    </tr>
+    <tr>
+        <td><strong>bio</strong></td>
+        <td>Text (nullable)</td>
+        <td>Biografía personal del usuario. Campo opcional que puede dejarse vacío</td>
+    </tr>
+    <tr>
+        <td><strong>avatar</strong></td>
+        <td>ImageField (nullable)</td>
+        <td>Imagen de perfil del usuario. Se almacena en media/avatars/. Por defecto None</td>
+    </tr>
+</table>
+
+<h4>Modelo: Game</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Atributo</th>
+        <th style="width: 20%; background-color: #e6e6e6;">Tipo</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>id</strong></td>
+        <td>Integer (PK)</td>
+        <td>Identificador único del juego</td>
+    </tr>
+    <tr>
+        <td><strong>title</strong></td>
+        <td>String(200)</td>
+        <td>Título del videojuego. Campo requerido. Indexado para búsquedas</td>
+    </tr>
+    <tr>
+        <td><strong>description</strong></td>
+        <td>Text (nullable)</td>
+        <td>Descripción completa del juego en HTML. Importada desde RAWG y sanitizada con DOMPurify en frontend</td>
+    </tr>
+    <tr>
+        <td><strong>release_date</strong></td>
+        <td>Date (nullable)</td>
+        <td>Fecha de lanzamiento del juego</td>
+    </tr>
+    <tr>
+        <td><strong>genre</strong></td>
+        <td>String(100)</td>
+        <td>Géneros del juego separados por comas. Ej: "Action, RPG, Adventure"</td>
+    </tr>
+    <tr>
+        <td><strong>platform</strong></td>
+        <td>String(200)</td>
+        <td>Plataformas disponibles separadas por comas. Ej: "PC, PlayStation 5, Xbox Series X"</td>
+    </tr>
+    <tr>
+        <td><strong>developer</strong></td>
+        <td>String(200)</td>
+        <td>Nombre del estudio desarrollador del juego</td>
+    </tr>
+    <tr>
+        <td><strong>cover_image</strong></td>
+        <td>URLField</td>
+        <td>URL de la imagen de portada. Generalmente apunta a servidores de RAWG</td>
+    </tr>
+    <tr>
+        <td><strong>metacritic</strong></td>
+        <td>Integer (nullable)</td>
+        <td>Puntuación Metacritic (0-100). Importada desde RAWG</td>
+    </tr>
+    <tr>
+        <td><strong>rating</strong></td>
+        <td>Float (nullable)</td>
+        <td>Rating promedio general del juego</td>
+    </tr>
+    <tr>
+        <td><strong>minimum_requirements</strong></td>
+        <td>JSONField</td>
+        <td>Requisitos mínimos del sistema para PC en formato JSON. Estructura: {"OS": "...", "Processor": "...", "Memory": "...", "Graphics": "...", "Storage": "..."}</td>
+    </tr>
+    <tr>
+        <td><strong>recommended_requirements</strong></td>
+        <td>JSONField</td>
+        <td>Requisitos recomendados del sistema para PC en formato JSON. Misma estructura que minimum_requirements</td>
+    </tr>
+</table>
+
+<h4>Modelo: Review</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Atributo</th>
+        <th style="width: 20%; background-color: #e6e6e6;">Tipo</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>id</strong></td>
+        <td>Integer (PK)</td>
+        <td>Identificador único de la reseña</td>
+    </tr>
+    <tr>
+        <td><strong>user</strong></td>
+        <td>ForeignKey → User</td>
+        <td>Usuario autor de la reseña. Relación N:1 (un usuario puede escribir muchas reseñas)</td>
+    </tr>
+    <tr>
+        <td><strong>game</strong></td>
+        <td>ForeignKey → Game</td>
+        <td>Juego reseñado. Relación N:1 (un juego puede tener muchas reseñas)</td>
+    </tr>
+    <tr>
+        <td><strong>rating</strong></td>
+        <td>Integer</td>
+        <td>Puntuación del juego de 1 a 5 estrellas. Validación: rango [1, 5]</td>
+    </tr>
+    <tr>
+        <td><strong>comment</strong></td>
+        <td>Text</td>
+        <td>Comentario/opinión del usuario sobre el juego. Campo requerido</td>
+    </tr>
+    <tr>
+        <td><strong>created_at</strong></td>
+        <td>DateTime</td>
+        <td>Fecha y hora de creación de la reseña. Auto-generado</td>
+    </tr>
+    <tr>
+        <td><strong>updated_at</strong></td>
+        <td>DateTime</td>
+        <td>Fecha y hora de última actualización. Se actualiza automáticamente al editar</td>
+    </tr>
+</table>
+
+<h4>Modelo: Favorite</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Atributo</th>
+        <th style="width: 20%; background-color: #e6e6e6;">Tipo</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>id</strong></td>
+        <td>Integer (PK)</td>
+        <td>Identificador único del favorito</td>
+    </tr>
+    <tr>
+        <td><strong>user</strong></td>
+        <td>ForeignKey → User</td>
+        <td>Usuario propietario del favorito. Relación N:1</td>
+    </tr>
+    <tr>
+        <td><strong>game</strong></td>
+        <td>ForeignKey → Game</td>
+        <td>Juego marcado como favorito. Relación N:1</td>
+    </tr>
+    <tr>
+        <td><strong>created_at</strong></td>
+        <td>DateTime</td>
+        <td>Fecha y hora en que se añadió a favoritos. Auto-generado</td>
+    </tr>
+    <tr>
+        <td colspan="3" style="background-color: #fff3cd;"><strong>Constraint:</strong> unique_together = (user, game) - Garantiza que un usuario no pueda marcar el mismo juego como favorito dos veces</td>
+    </tr>
+</table>
+
+<h3>Ejemplo de Estructura JSON para Requisitos del Sistema</h3>
+
+<pre style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+{
+    "minimum_requirements": {
+        "OS": "Windows 10 64-bit",
+        "Processor": "Intel Core i5-2400 / AMD FX-8320",
+        "Memory": "8 GB RAM",
+        "Graphics": "NVIDIA GTX 660 2GB / AMD Radeon HD 7850 2GB",
+        "DirectX": "Version 11",
+        "Storage": "50 GB available space"
+    },
+    "recommended_requirements": {
+        "OS": "Windows 10/11 64-bit",
+        "Processor": "Intel Core i7-4770 / AMD Ryzen 5 1500X",
+        "Memory": "16 GB RAM",
+        "Graphics": "NVIDIA GTX 1060 6GB / AMD Radeon RX 580 8GB",
+        "DirectX": "Version 12",
+        "Storage": "50 GB available space (SSD recommended)"
+    }
+}
+</pre>
+
+<div style="page-break-before: always;"></div>
+
+<h2 id="trazabilidad">Información Sobre Trazabilidad</h2>
+
+<p>La siguiente matriz de trazabilidad relaciona las historias de usuario con los requisitos funcionales e informacionales, así como con los casos de uso implementados.</p>
+
+<h3>Matriz de Trazabilidad: Historias de Usuario → Requisitos</h3>
+
+<table style="font-size: 10px;">
+    <tr>
+        <th style="background-color: #d9d9d9;">ID</th>
+        <th style="background-color: #d9d9d9;">HU-01</th>
+        <th style="background-color: #d9d9d9;">HU-02</th>
+        <th style="background-color: #d9d9d9;">HU-03</th>
+        <th style="background-color: #d9d9d9;">HU-04</th>
+        <th style="background-color: #d9d9d9;">HU-05</th>
+        <th style="background-color: #d9d9d9;">HU-06</th>
+        <th style="background-color: #d9d9d9;">HU-07</th>
+        <th style="background-color: #d9d9d9;">HU-08</th>
+    </tr>
+    <tr>
+        <td><strong>RF-01</strong></td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-02</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-03</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-04</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-05</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-06</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-07</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-08</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+    </tr>
+</table>
+
+<h3>Matriz de Trazabilidad: Requisitos → Casos de Uso</h3>
+
+<table style="font-size: 10px;">
+    <tr>
+        <th style="background-color: #d9d9d9;">ID</th>
+        <th style="background-color: #d9d9d9;">CU-01</th>
+        <th style="background-color: #d9d9d9;">CU-02</th>
+        <th style="background-color: #d9d9d9;">CU-03</th>
+        <th style="background-color: #d9d9d9;">CU-04</th>
+        <th style="background-color: #d9d9d9;">CU-05</th>
+        <th style="background-color: #d9d9d9;">CU-06</th>
+        <th style="background-color: #d9d9d9;">CU-07</th>
+        <th style="background-color: #d9d9d9;">CU-08</th>
+    </tr>
+    <tr>
+        <td><strong>RF-01</strong></td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-02</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-03</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-04</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-05</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-06</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+        <td><strong>RF-07</strong></td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="text-align: center;">-</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+        <td style="background-color: #90EE90; text-align: center;">✓</td>
+    </tr>
+</table>
+
+<h3>Matriz de Trazabilidad: Modelos → Requisitos</h3>
+
+<table style="font-size: 10px;">
+    <tr>
+        <th style="background-color: #d9d9d9; width: 20%;">Modelo</th>
+        <th style="background-color: #d9d9d9;">Requisitos Relacionados</th>
+        <th style="background-color: #d9d9d9;">Descripción de la Relación</th>
+    </tr>
+    <tr>
+        <td><strong>User</strong></td>
+        <td>RF-01, RF-02, RN-006, RN-007</td>
+        <td>Modelo base para autenticación y autorización. Soporta registro e inicio de sesión</td>
+    </tr>
+    <tr>
+        <td><strong>Profile</strong></td>
+        <td>RF-01, RF-08</td>
+        <td>Extensión del modelo User con información personal adicional (biografía, avatar)</td>
+    </tr>
+    <tr>
+        <td><strong>Game</strong></td>
+        <td>RF-03, RF-06, RF-07</td>
+        <td>Entidad central del catálogo. Almacena toda la información de videojuegos</td>
+    </tr>
+    <tr>
+        <td><strong>Review</strong></td>
+        <td>RF-05, RF-06, RN-004, RN-005</td>
+        <td>Almacena reseñas de usuarios. Relaciona User con Game mediante puntuación y comentarios</td>
+    </tr>
+    <tr>
+        <td><strong>Favorite</strong></td>
+        <td>RF-04, RN-001, RN-002</td>
+        <td>Tabla de relación N:M entre User y Game para sistema de favoritos</td>
+    </tr>
+</table>
+
+<!-- CONTINUACIÓN DEL DOCUMENTO PRINCIPAL - PARTE 5 -->
+<!-- Interfaz de Usuario -->
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="interfaz">DEFINICIÓN INTERFAZ DE USUARIO DEL SISTEMA</h1>
+
+<p>La interfaz de usuario de IVDb ha sido diseñada siguiendo principios de usabilidad y diseño moderno, utilizando TailwindCSS para garantizar una experiencia responsiva y consistente en todos los dispositivos.</p>
+
+<h2>Principios de Diseño</h2>
+
+<ul>
+    <li><strong>Diseño Responsivo:</strong> La interfaz se adapta automáticamente a diferentes tamaños de pantalla (móvil, tablet, desktop)</li>
+    <li><strong>Navegación Intuitiva:</strong> Estructura clara con navegación mediante barra superior y breadcrumbs</li>
+    <li><strong>Feedback Visual:</strong> Mensajes claros de éxito, error y carga para todas las operaciones</li>
+    <li><strong>Accesibilidad:</strong> Contraste adecuado, textos legibles y navegación por teclado</li>
+    <li><strong>Consistencia:</strong> Paleta de colores y componentes uniformes en toda la aplicación</li>
+</ul>
+
+<h2>Paleta de Colores</h2>
+
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Color</th>
+        <th style="width: 20%; background-color: #e6e6e6;">Código Hex</th>
+        <th style="background-color: #e6e6e6;">Uso</th>
+    </tr>
+    <tr>
+        <td style="background-color: #1f2937; color: white;"><strong>Gris Oscuro</strong></td>
+        <td>#1f2937</td>
+        <td>Fondo principal, navbar, footer</td>
+    </tr>
+    <tr>
+        <td style="background-color: #3b82f6; color: white;"><strong>Azul Principal</strong></td>
+        <td>#3b82f6</td>
+        <td>Botones primarios, enlaces, elementos interactivos</td>
+    </tr>
+    <tr>
+        <td style="background-color: #10b981; color: white;"><strong>Verde Éxito</strong></td>
+        <td>#10b981</td>
+        <td>Mensajes de éxito, confirmaciones</td>
+    </tr>
+    <tr>
+        <td style="background-color: #ef4444; color: white;"><strong>Rojo Error</strong></td>
+        <td>#ef4444</td>
+        <td>Mensajes de error, botones de eliminar</td>
+    </tr>
+    <tr>
+        <td style="background-color: #f59e0b; color: white;"><strong>Amarillo Aviso</strong></td>
+        <td>#f59e0b</td>
+        <td>Advertencias, estrellas de rating</td>
+    </tr>
+    <tr>
+        <td style="background-color: #ffffff;"><strong>Blanco</strong></td>
+        <td>#ffffff</td>
+        <td>Tarjetas, fondos de contenido, texto en fondos oscuros</td>
+    </tr>
+</table>
+
+<h2>Especificación de la Interfaz de Pantalla y de Navegación</h2>
+
+<h3>Mapa de Navegación</h3>
+
+<div class="destacado">
+    <pre style="font-family: monospace; line-height: 1.6;">
+    ┌─────────────────────────────────────────────────────────────────┐
+    │                        PÁGINA PRINCIPAL                         │
+    │                         (Home - /)                              │
+    │                                                                 │
+    │  [Navbar: Logo | Buscar | Favoritos | Perfil | Login/Logout]  │
+    │                                                                 │
+    │  • Lista de juegos con paginación                              │
+    │  • Barra de búsqueda                                           │
+    │  • Filtros por género y plataforma                             │
+    └───────────────────────┬─────────────────────────────────────────┘
+                            │
+            ┌───────────────┼───────────────┬─────────────────────┐
+            │               │               │                     │
+            ▼               ▼               ▼                     ▼
+    ┌─────────────┐ ┌─────────────┐ ┌─────────────┐     ┌─────────────┐
+    │   LOGIN     │ │  REGISTER   │ │   PERFIL    │     │  FAVORITOS  │
+    │ (/login)    │ │ (/register) │ │ (/perfil)   │     │(/favoritos) │
+    └─────────────┘ └─────────────┘ └──────┬──────┘     └──────┬──────┘
+                                            │                    │
+                                            ▼                    │
+                                    ┌─────────────┐             │
+                                    │   EDITAR    │             │
+                                    │   PERFIL    │             │
+                                    └─────────────┘             │
+                                                                │
+            ┌───────────────────────────────────────────────────┘
+            │
+            ▼
+    ┌─────────────────────────────────────────────────────────────────┐
+    │                     DETALLE DEL JUEGO                           │
+    │                   (/game/:id)                                   │
+    │                                                                 │
+    │  • Imagen grande de portada                                    │
+    │  • Información completa del juego                              │
+    │  • Requisitos del sistema                                      │
+    │  • Botón Añadir a Favoritos                                    │
+    │  • Lista de reseñas                                            │
+    │  • Formulario para escribir reseña (si autenticado)            │
+    └───────────────────────┬─────────────────────────────────────────┘
+                            │
+            ┌───────────────┴───────────────┐
+            │ (Solo Admin)                  │
+            ▼                               ▼
+    ┌─────────────┐               ┌─────────────┐
+    │  ADD GAME   │               │  EDIT GAME  │
+    │ (/add-game) │               │(/edit/:id)  │
+    └─────────────┘               └─────────────┘
+
+
+    BÚSQUEDA:
+    ┌─────────────────────────────────────────────────────────────────┐
+    │                    RESULTADOS DE BÚSQUEDA                       │
+    │                  (/search?q=...)                                │
+    │                                                                 │
+    │  • Lista filtrada de juegos según término de búsqueda          │
+    │  • Filtros aplicables                                          │
+    └─────────────────────────────────────────────────────────────────┘
+
+
+    ERROR:
+    ┌─────────────────────────────────────────────────────────────────┐
+    │                        404 NOT FOUND                            │
+    │                                                                 │
+    │  • Mensaje de error                                            │
+    │  • Botón para volver al home                                   │
+    └─────────────────────────────────────────────────────────────────┘
+    </pre>
+</div>
+
+<h3>Descripción de Pantallas Principales</h3>
+
+<h4>1. Página Principal (Home)</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Navbar</strong></td>
+        <td>Barra de navegación fija en la parte superior con logo, barra de búsqueda, enlaces a Favoritos y Perfil (si autenticado), botón Login/Logout</td>
+    </tr>
+    <tr>
+        <td><strong>Hero Section</strong></td>
+        <td>Sección destacada con título "IVDb - Base de Datos de Videojuegos" y subtítulo descriptivo</td>
+    </tr>
+    <tr>
+        <td><strong>Filtros</strong></td>
+        <td>Panel lateral o desplegable con filtros por género y plataforma (checkboxes múltiples)</td>
+    </tr>
+    <tr>
+        <td><strong>Grid de Juegos</strong></td>
+        <td>Grid responsivo (1 columna móvil, 2-3 tablet, 4+ desktop) mostrando tarjetas de juegos</td>
+    </tr>
+    <tr>
+        <td><strong>Paginación</strong></td>
+        <td>Controles de paginación en la parte inferior para navegar entre páginas de resultados</td>
+    </tr>
+    <tr>
+        <td><strong>Footer</strong></td>
+        <td>Información de copyright y enlaces adicionales</td>
+    </tr>
+</table>
+
+<h4>2. Tarjeta de Juego (GameCard)</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Imagen</strong></td>
+        <td>Imagen de portada del juego (aspect ratio 16:9), con efecto hover de zoom suave</td>
+    </tr>
+    <tr>
+        <td><strong>Título</strong></td>
+        <td>Nombre del juego en negrita, truncado si es muy largo con "..."</td>
+    </tr>
+    <tr>
+        <td><strong>Género</strong></td>
+        <td>Badge con el género principal del juego (color azul)</td>
+    </tr>
+    <tr>
+        <td><strong>Rating</strong></td>
+        <td>Estrellas amarillas mostrando la puntuación Metacritic (si disponible)</td>
+    </tr>
+    <tr>
+        <td><strong>Botón Ver Más</strong></td>
+        <td>Botón que redirige a la página de detalle del juego</td>
+    </tr>
+</table>
+
+<h4>3. Página de Detalle del Juego</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Breadcrumbs</strong></td>
+        <td>Navegación: Home > Juegos > [Nombre del juego]</td>
+    </tr>
+    <tr>
+        <td><strong>Hero Image</strong></td>
+        <td>Imagen de portada grande (full width o contenida según diseño)</td>
+    </tr>
+    <tr>
+        <td><strong>Información Principal</strong></td>
+        <td>Sección con: título, desarrollador, fecha de lanzamiento, género, plataformas</td>
+    </tr>
+    <tr>
+        <td><strong>Botón Favorito</strong></td>
+        <td>Icono de corazón (vacío/relleno) para añadir/quitar de favoritos. Solo visible si autenticado</td>
+    </tr>
+    <tr>
+        <td><strong>Botones Admin</strong></td>
+        <td>Botones "Editar" y "Eliminar" solo visibles para usuarios staff</td>
+    </tr>
+    <tr>
+        <td><strong>Descripción</strong></td>
+        <td>Texto HTML completo de la descripción del juego (sanitizado con DOMPurify)</td>
+    </tr>
+    <tr>
+        <td><strong>Puntuación</strong></td>
+        <td>Metacritic score destacado si está disponible</td>
+    </tr>
+    <tr>
+        <td><strong>Requisitos del Sistema</strong></td>
+        <td>Tabla comparativa con requisitos mínimos y recomendados (PC): OS, Procesador, Memoria, Gráficos, Almacenamiento</td>
+    </tr>
+    <tr>
+        <td><strong>Sección Reseñas</strong></td>
+        <td>Lista de reseñas de usuarios con avatar, nombre, fecha, puntuación (estrellas) y comentario</td>
+    </tr>
+    <tr>
+        <td><strong>Formulario Reseña</strong></td>
+        <td>Si autenticado: selector de estrellas (1-5) y textarea para comentario. Botón "Publicar Reseña"</td>
+    </tr>
+</table>
+
+<h4>4. Página de Login</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Formulario</strong></td>
+        <td>Card centrada con campos: username, password. Botón "Iniciar Sesión"</td>
+    </tr>
+    <tr>
+        <td><strong>Validación</strong></td>
+        <td>Mensajes de error en rojo debajo de campos inválidos</td>
+    </tr>
+    <tr>
+        <td><strong>Enlace Registro</strong></td>
+        <td>"¿No tienes cuenta? Regístrate aquí" - enlace a página de registro</td>
+    </tr>
+</table>
+
+<h4>5. Página de Registro</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Formulario</strong></td>
+        <td>Card centrada con campos: username, email, password, confirm password. Botón "Registrarse"</td>
+    </tr>
+    <tr>
+        <td><strong>Validación</strong></td>
+        <td>Validación en tiempo real: coincidencia de contraseñas, formato de email, username único</td>
+    </tr>
+    <tr>
+        <td><strong>Enlace Login</strong></td>
+        <td>"¿Ya tienes cuenta? Inicia sesión aquí" - enlace a página de login</td>
+    </tr>
+</table>
+
+<h4>6. Página de Perfil</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Avatar</strong></td>
+        <td>Imagen de perfil grande (150x150px), placeholder si no hay avatar</td>
+    </tr>
+    <tr>
+        <td><strong>Información Usuario</strong></td>
+        <td>Nombre de usuario, email, biografía</td>
+    </tr>
+    <tr>
+        <td><strong>Estadísticas</strong></td>
+        <td>Número de juegos favoritos y número de reseñas escritas</td>
+    </tr>
+    <tr>
+        <td><strong>Botón Editar</strong></td>
+        <td>Botón para acceder al formulario de edición de perfil</td>
+    </tr>
+    <tr>
+        <td><strong>Mis Reseñas</strong></td>
+        <td>Lista de reseñas escritas por el usuario con opciones de editar/eliminar</td>
+    </tr>
+</table>
+
+<h4>7. Página de Favoritos</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Título</strong></td>
+        <td>"Mis Juegos Favoritos" con contador</td>
+    </tr>
+    <tr>
+        <td><strong>Grid de Juegos</strong></td>
+        <td>Grid responsivo similar a la página principal, mostrando solo los juegos marcados como favoritos</td>
+    </tr>
+    <tr>
+        <td><strong>Botón Eliminar</strong></td>
+        <td>Icono de corazón relleno en cada tarjeta para quitar de favoritos</td>
+    </tr>
+    <tr>
+        <td><strong>Estado Vacío</strong></td>
+        <td>Si no hay favoritos: mensaje "No tienes juegos favoritos aún" con botón para explorar catálogo</td>
+    </tr>
+</table>
+
+<h2>Catálogo de Controles y Elementos de Diseño</h2>
+
+<h3>Componentes Reutilizables</h3>
+
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Componente</th>
+        <th style="background-color: #e6e6e6;">Descripción Técnica</th>
+    </tr>
+    <tr>
+        <td><strong>Navbar</strong></td>
+        <td>Componente React fijo en top con flex layout. Incluye logo (Link a home), SearchBar, iconos de navegación. Responsivo: menú hamburguesa en móvil</td>
+    </tr>
+    <tr>
+        <td><strong>SearchBar</strong></td>
+        <td>Input con icono de lupa. Búsqueda en tiempo real (debounced 300ms). Al presionar Enter redirige a /search con query params</td>
+    </tr>
+    <tr>
+        <td><strong>GameCard</strong></td>
+        <td>Card con hover effects (shadow, scale). Props: game object. onClick navega a detalle. Lazy loading de imágenes</td>
+    </tr>
+    <tr>
+        <td><strong>GameFilters</strong></td>
+        <td>Sidebar o dropdown con checkboxes para géneros y plataformas. Estado controlado por parent component. Botón "Aplicar Filtros"</td>
+    </tr>
+    <tr>
+        <td><strong>SystemRequirements</strong></td>
+        <td>Tabla comparativa dos columnas (Mínimo/Recomendado). Renderiza JSONField de Django. Grid responsivo en móvil (stacked)</td>
+    </tr>
+    <tr>
+        <td><strong>SkeletonLoader</strong></td>
+        <td>Placeholder animado (shimmer effect) mientras cargan los datos. Tamaño y forma configurables via props</td>
+    </tr>
+    <tr>
+        <td><strong>Breadcrumbs</strong></td>
+        <td>Navegación jerárquica con separadores "/". Genera automáticamente ruta basada en react-router location</td>
+    </tr>
+    <tr>
+        <td><strong>Footer</strong></td>
+        <td>Footer fijo al final con bg oscuro. Incluye copyright, enlaces a redes sociales (si aplica), información del proyecto</td>
+    </tr>
+    <tr>
+        <td><strong>Tooltip</strong></td>
+        <td>Componente de ayuda contextual. Aparece en hover. Position: top/bottom/left/right configurable</td>
+    </tr>
+    <tr>
+        <td><strong>Modal</strong></td>
+        <td>Overlay modal con backdrop oscuro. Uso: confirmaciones de eliminación. Props: isOpen, onClose, children</td>
+    </tr>
+</table>
+
+<h3>Botones</h3>
+
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Tipo</th>
+        <th style="width: 30%; background-color: #e6e6e6;">Estilo</th>
+        <th style="background-color: #e6e6e6;">Uso</th>
+    </tr>
+    <tr>
+        <td><strong>Primary</strong></td>
+        <td>bg-blue-600 hover:bg-blue-700, texto blanco, bordes redondeados</td>
+        <td>Acciones principales: Login, Registrar, Guardar</td>
+    </tr>
+    <tr>
+        <td><strong>Secondary</strong></td>
+        <td>bg-gray-600 hover:bg-gray-700, texto blanco</td>
+        <td>Acciones secundarias: Cancelar, Volver</td>
+    </tr>
+    <tr>
+        <td><strong>Success</strong></td>
+        <td>bg-green-600 hover:bg-green-700, texto blanco</td>
+        <td>Confirmaciones: Publicar Reseña, Confirmar</td>
+    </tr>
+    <tr>
+        <td><strong>Danger</strong></td>
+        <td>bg-red-600 hover:bg-red-700, texto blanco</td>
+        <td>Acciones destructivas: Eliminar, Quitar de Favoritos</td>
+    </tr>
+    <tr>
+        <td><strong>Icon Button</strong></td>
+        <td>Solo icono, circular o cuadrado, hover cambia color/background</td>
+        <td>Favoritos (corazón), Editar (lápiz), Eliminar (papelera)</td>
+    </tr>
+</table>
+
+<h3>Formularios</h3>
+
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Especificación</th>
+    </tr>
+    <tr>
+        <td><strong>Input Text</strong></td>
+        <td>border-gray-300 focus:border-blue-500 focus:ring-blue-500. Padding: py-2 px-4. Placeholder visible</td>
+    </tr>
+    <tr>
+        <td><strong>Textarea</strong></td>
+        <td>Similar a input text, altura mínima 100px, resize vertical habilitado</td>
+    </tr>
+    <tr>
+        <td><strong>Select/Dropdown</strong></td>
+        <td>Estilo nativo del navegador con flechita. Opciones claramente visibles</td>
+    </tr>
+    <tr>
+        <td><strong>Checkbox</strong></td>
+        <td>Cuadrado con checkmark azul cuando seleccionado. Label clickable</td>
+    </tr>
+    <tr>
+        <td><strong>File Input</strong></td>
+        <td>Botón estilizado "Elegir archivo" + nombre de archivo seleccionado. Para avatares e imágenes</td>
+    </tr>
+    <tr>
+        <td><strong>Star Rating</strong></td>
+        <td>5 estrellas interactivas (iconos react-icons). Click para seleccionar rating. Hover preview</td>
+    </tr>
+    <tr>
+        <td><strong>Error Message</strong></td>
+        <td>Texto rojo (text-red-600) debajo del campo con icono de alerta. Tamaño pequeño (text-sm)</td>
+    </tr>
+    <tr>
+        <td><strong>Success Message</strong></td>
+        <td>Toast notification verde en esquina superior derecha. Auto-dismiss después de 3 segundos</td>
+    </tr>
+</table>
+
+<h3>Estados de Carga</h3>
+
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Estado</th>
+        <th style="background-color: #e6e6e6;">Representación Visual</th>
+    </tr>
+    <tr>
+        <td><strong>Loading</strong></td>
+        <td>Skeleton loaders con animación shimmer. Mantienen el layout sin saltos</td>
+    </tr>
+    <tr>
+        <td><strong>Empty State</strong></td>
+        <td>Mensaje centrado con icono descriptivo y botón de acción sugerida</td>
+    </tr>
+    <tr>
+        <td><strong>Error State</strong></td>
+        <td>Card con icono de error, mensaje descriptivo y botón "Reintentar"</td>
+    </tr>
+    <tr>
+        <td><strong>Spinner</strong></td>
+        <td>Spinner circular azul para operaciones rápidas (submit de formularios)</td>
+    </tr>
+</table>
+
+<h2>Flujo de Navegación Típico</h2>
+
+<h3>Escenario 1: Usuario Anónimo busca un juego</h3>
+<ol>
+    <li>Usuario accede a la página principal (/)</li>
+    <li>Ve el grid de juegos con paginación</li>
+    <li>Introduce "Witcher" en la barra de búsqueda</li>
+    <li>Sistema redirige a /search?q=Witcher</li>
+    <li>Se muestran resultados filtrados</li>
+    <li>Usuario hace clic en "The Witcher 3"</li>
+    <li>Navega a /game/123</li>
+    <li>Ve toda la información, reseñas, pero NO puede añadir a favoritos ni escribir reseña</li>
+</ol>
+
+<h3>Escenario 2: Usuario Registrado añade un juego a favoritos</h3>
+<ol>
+    <li>Usuario inicia sesión (/login)</li>
+    <li>Es redirigido a la página principal</li>
+    <li>Navbar ahora muestra "Favoritos" y "Perfil"</li>
+    <li>Usuario navega a /game/456</li>
+    <li>Ve botón de corazón vacío "Añadir a Favoritos"</li>
+    <li>Hace clic en el corazón</li>
+    <li>Corazón se rellena y aparece mensaje "Añadido a favoritos"</li>
+    <li>Usuario puede ir a /favoritos para ver su lista</li>
+</ol>
+
+<h3>Escenario 3: Usuario escribe una reseña</h3>
+<ol>
+    <li>Usuario autenticado en página de detalle de juego</li>
+    <li>Scrollea hasta sección de reseñas</li>
+    <li>Ve formulario con selector de estrellas y textarea</li>
+    <li>Selecciona 5 estrellas</li>
+    <li>Escribe su opinión en el textarea</li>
+    <li>Hace clic en "Publicar Reseña"</li>
+    <li>Aparece spinner en botón</li>
+    <li>Sistema valida y guarda la reseña</li>
+    <li>Aparece mensaje verde "Reseña publicada exitosamente"</li>
+    <li>La nueva reseña aparece en la lista</li>
+</ol>
+
+<h3>Escenario 4: Administrador añade un juego</h3>
+<ol>
+    <li>Admin inicia sesión con cuenta staff</li>
+    <li>En navbar ve opción "Añadir Juego"</li>
+    <li>Navega a /add-game</li>
+    <li>Ve formulario con todos los campos del juego</li>
+    <li>Completa: título, descripción, género, plataforma, desarrollador, fecha, imagen URL</li>
+    <li>Hace clic en "Crear Juego"</li>
+    <li>Sistema valida y crea el juego</li>
+    <li>Redirige a /game/[nuevo-id]</li>
+    <li>Ve el juego recién creado con botones "Editar" y "Eliminar" visibles</li>
+</ol>
+
+<h2>Responsive Design - Breakpoints</h2>
+
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">Dispositivo</th>
+        <th style="width: 25%; background-color: #e6e6e6;">Breakpoint</th>
+        <th style="background-color: #e6e6e6;">Adaptaciones</th>
+    </tr>
+    <tr>
+        <td><strong>Móvil</strong></td>
+        <td>&lt; 640px</td>
+        <td>
+            <ul>
+                <li>Grid de juegos: 1 columna</li>
+                <li>Navbar: menú hamburguesa</li>
+                <li>Filtros: desplegable modal</li>
+                <li>Requisitos del sistema: tabla stacked</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Tablet</strong></td>
+        <td>640px - 1024px</td>
+        <td>
+            <ul>
+                <li>Grid de juegos: 2-3 columnas</li>
+                <li>Navbar: completa con búsqueda visible</li>
+                <li>Filtros: sidebar colapsable</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Desktop</strong></td>
+        <td>&gt; 1024px</td>
+        <td>
+            <ul>
+                <li>Grid de juegos: 4+ columnas</li>
+                <li>Filtros: sidebar fijo visible</li>
+                <li>Máximo ancho del contenedor: 1280px centrado</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="conclusiones">CONCLUSIONES</h1>
+
+<p>El desarrollo del proyecto <strong>IVDb - Base de Datos de Videojuegos</strong> ha permitido la implementación exitosa de una aplicación web completa que aborda la problemática inicial identificada: la falta de una plataforma centralizada para gestionar información de videojuegos, reseñas de usuarios y colecciones personales.</p>
+
+<h2>Objetivos Alcanzados</h2>
+
+<p>Se han cumplido satisfactoriamente todos los objetivos planteados al inicio del proyecto:</p>
+
+<ul>
+    <li><strong>Sistema de autenticación completo:</strong> Implementación de registro, login y gestión de perfiles de usuario utilizando Django Rest Framework con autenticación JWT, garantizando seguridad y escalabilidad.</li>
+    
+    <li><strong>Catálogo de videojuegos:</strong> Desarrollo de un sistema de gestión de juegos con información detallada (descripción, requisitos del sistema, puntuaciones, géneros, plataformas) integrado con la API de RAWG para importación automatizada de datos.</li>
+    
+    <li><strong>Sistema de favoritos:</strong> Implementación de funcionalidad para que usuarios registrados puedan marcar juegos como favoritos y gestionar su colección personal.</li>
+    
+    <li><strong>Sistema de reseñas:</strong> Desarrollo de un sistema completo de valoraciones con puntuación de 1 a 5 estrellas y comentarios, permitiendo a la comunidad compartir opiniones sobre los videojuegos.</li>
+    
+    <li><strong>Panel de administración:</strong> Creación de funcionalidades exclusivas para usuarios administradores que permiten la gestión completa del catálogo (crear, editar, eliminar juegos).</li>
+    
+    <li><strong>Interfaz responsiva y moderna:</strong> Diseño de una interfaz de usuario intuitiva utilizando React 18 y TailwindCSS, adaptable a dispositivos móviles, tablets y escritorio.</li>
+</ul>
+
+<h2>Aprendizajes Técnicos</h2>
+
+<p>Durante el desarrollo del proyecto se han adquirido y consolidado conocimientos técnicos significativos:</p>
+
+<ul>
+    <li><strong>Arquitectura Backend con Django:</strong> Profundización en el framework Django 5.2, incluyendo Django Rest Framework para APIs RESTful, sistema de autenticación con JWT, ORM para gestión de base de datos, y organización modular del código mediante apps Django.</li>
+    
+    <li><strong>Desarrollo Frontend con React:</strong> Uso avanzado de React 18 con hooks (useState, useEffect, useContext), React Router DOM para navegación SPA, gestión de estado con Context API, y manejo de peticiones asíncronas con Axios.</li>
+    
+    <li><strong>Integración de APIs externas:</strong> Implementación de scripts de importación desde RAWG API, manejo de respuestas JSON complejas, y procesamiento de datos para almacenamiento en base de datos.</li>
+    
+    <li><strong>Diseño responsivo:</strong> Aplicación de TailwindCSS para crear una interfaz moderna y adaptable, utilizando sistema de grid responsivo y componentes reutilizables.</li>
+    
+    <li><strong>Seguridad en aplicaciones web:</strong> Implementación de buenas prácticas de seguridad como autenticación JWT, encriptación de contraseñas con PBKDF2_SHA256, sanitización de HTML con DOMPurify, y configuración de CORS.</li>
+    
+    <li><strong>Trabajo con Git y GitHub:</strong> Gestión de versiones del proyecto, uso de ramas para desarrollo de funcionalidades, y documentación mediante README.md.</li>
+</ul>
+
+<h2>Desafíos Superados</h2>
+
+<p>A lo largo del desarrollo se presentaron diversos retos técnicos que fueron resueltos satisfactoriamente:</p>
+
+<ul>
+    <li><strong>Integración Frontend-Backend:</strong> Configuración correcta de CORS, gestión de tokens JWT en localStorage, y manejo de estados de autenticación compartidos entre componentes mediante Context API.</li>
+    
+    <li><strong>Importación masiva de datos:</strong> Desarrollo de scripts de importación robustos capaces de manejar grandes volúmenes de datos desde RAWG API, con gestión de errores y rate limiting.</li>
+    
+    <li><strong>Renderizado de HTML dinámico:</strong> Implementación segura de renderizado de descripciones HTML provenientes de RAWG, utilizando DOMPurify para prevenir ataques XSS.</li>
+    
+    <li><strong>Gestión de requisitos del sistema:</strong> Diseño de estructura JSONField en Django para almacenar requisitos mínimos y recomendados de forma flexible, y componente React para renderizarlos en formato tabla comparativa.</li>
+    
+    <li><strong>Diseño responsivo complejo:</strong> Adaptación de componentes como GameFilters, SystemRequirements y navegación para funcionar correctamente en dispositivos móviles sin perder funcionalidad.</li>
+</ul>
+
+<h2>Trabajo Futuro y Mejoras Potenciales</h2>
+
+<p>Aunque el proyecto cumple con los objetivos establecidos, se identifican áreas de mejora y funcionalidades adicionales que podrían implementarse en futuras versiones:</p>
+
+<ul>
+    <li><strong>Sistema de notificaciones:</strong> Implementar notificaciones push cuando se añaden nuevos juegos o cuando otros usuarios comentan en reseñas.</li>
+    
+    <li><strong>Sistema de recomendaciones:</strong> Desarrollar un algoritmo de recomendación basado en los juegos favoritos y reseñas del usuario, utilizando técnicas de machine learning.</li>
+    
+    <li><strong>Perfiles de usuario avanzados:</strong> Permitir que los usuarios suban screenshots, creen listas personalizadas de juegos, y sigan a otros usuarios.</li>
+    
+    <li><strong>Integración con más APIs:</strong> Conectar con otras fuentes de datos como Steam API, Twitch API para mostrar streams en vivo, o YouTube API para trailers oficiales.</li>
+    
+    <li><strong>Sistema de logros/achievements:</strong> Gamificación de la plataforma con logros por número de reseñas, juegos marcados como favoritos, etc.</li>
+    
+    <li><strong>Búsqueda avanzada:</strong> Implementar filtros adicionales como rango de fechas, puntuación mínima, desarrollador específico, y ordenamiento por múltiples criterios.</li>
+    
+    <li><strong>Migración a base de datos PostgreSQL:</strong> Para entornos de producción con mayor carga, migrar desde SQLite a PostgreSQL para mejor rendimiento.</li>
+    
+    <li><strong>Testing automatizado:</strong> Ampliar la cobertura de tests unitarios e integración tanto en backend (pytest) como en frontend (Jest/React Testing Library).</li>
+    
+    <li><strong>Deployment profesional:</strong> Despliegue en servicios cloud como AWS, Heroku o Vercel con configuración de CI/CD.</li>
+    
+    <li><strong>Modo oscuro:</strong> Implementación de un switch para alternar entre tema claro y oscuro, almacenando preferencia del usuario.</li>
+</ul>
+
+<h2>Reflexión Final</h2>
+
+<p>El proyecto IVDb representa una solución funcional y completa para la gestión de información de videojuegos y construcción de comunidad. La arquitectura implementada demuestra escalabilidad y mantenibilidad, permitiendo futuras ampliaciones sin necesidad de refactorización mayor.</p>
+
+<p>El uso de tecnologías modernas y ampliamente adoptadas en la industria (Django, React, TailwindCSS) garantiza que el código sea fácilmente comprensible para otros desarrolladores y que exista una gran comunidad de soporte.</p>
+
+<p>Más allá de los aspectos técnicos, este proyecto ha permitido desarrollar habilidades de análisis de requisitos, diseño de sistemas, documentación técnica y gestión de tiempo, competencias fundamentales para cualquier profesional del desarrollo de software.</p>
+
+<p>IVDb demuestra que es posible crear una aplicación web robusta y funcional que resuelve una necesidad real, integrando múltiples tecnologías y siguiendo buenas prácticas de desarrollo.</p>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="bibliografia">BIBLIOGRAFÍA</h1>
+
+<h2>Documentación Oficial de Frameworks y Librerías</h2>
+
+<ul>
+    <li><strong>Django Project.</strong> (2024). <em>Django Documentation (versión 5.2).</em> Recuperado de: <a href="https://docs.djangoproject.com/en/5.2/" target="_blank">https://docs.djangoproject.com/en/5.2/</a></li>
+    
+    <li><strong>Django REST Framework.</strong> (2024). <em>Django REST Framework Documentation.</em> Recuperado de: <a href="https://www.django-rest-framework.org/" target="_blank">https://www.django-rest-framework.org/</a></li>
+    
+    <li><strong>React.</strong> (2024). <em>React Documentation (versión 18).</em> Recuperado de: <a href="https://react.dev/" target="_blank">https://react.dev/</a></li>
+    
+    <li><strong>Vite.</strong> (2024). <em>Vite Documentation (versión 6.0).</em> Recuperado de: <a href="https://vitejs.dev/" target="_blank">https://vitejs.dev/</a></li>
+    
+    <li><strong>TailwindCSS.</strong> (2024). <em>Tailwind CSS Documentation (versión 3.4).</em> Recuperado de: <a href="https://tailwindcss.com/docs" target="_blank">https://tailwindcss.com/docs</a></li>
+    
+    <li><strong>React Router.</strong> (2024). <em>React Router Documentation.</em> Recuperado de: <a href="https://reactrouter.com/" target="_blank">https://reactrouter.com/</a></li>
+    
+    <li><strong>Axios.</strong> (2024). <em>Axios HTTP Client Documentation.</em> Recuperado de: <a href="https://axios-http.com/" target="_blank">https://axios-http.com/</a></li>
+</ul>
+
+<h2>APIs y Servicios Externos</h2>
+
+<ul>
+    <li><strong>RAWG Video Games Database.</strong> (2024). <em>RAWG API Documentation.</em> Recuperado de: <a href="https://rawg.io/apidocs" target="_blank">https://rawg.io/apidocs</a></li>
+</ul>
+
+<h2>Autenticación y Seguridad</h2>
+
+<ul>
+    <li><strong>Simple JWT for Django.</strong> (2024). <em>Simple JWT Documentation.</em> Recuperado de: <a href="https://django-rest-framework-simplejwt.readthedocs.io/" target="_blank">https://django-rest-framework-simplejwt.readthedocs.io/</a></li>
+    
+    <li><strong>DOMPurify.</strong> (2024). <em>DOMPurify - DOM-only XSS sanitizer.</em> Recuperado de: <a href="https://github.com/cure53/DOMPurify" target="_blank">https://github.com/cure53/DOMPurify</a></li>
+    
+    <li><strong>OWASP Foundation.</strong> (2024). <em>OWASP Top Ten Web Application Security Risks.</em> Recuperado de: <a href="https://owasp.org/www-project-top-ten/" target="_blank">https://owasp.org/www-project-top-ten/</a></li>
+</ul>
+
+<h2>Patrones de Diseño y Arquitectura</h2>
+
+<ul>
+    <li><strong>Gamma, E., Helm, R., Johnson, R., & Vlissides, J.</strong> (1994). <em>Design Patterns: Elements of Reusable Object-Oriented Software.</em> Addison-Wesley.</li>
+    
+    <li><strong>Fowler, M.</strong> (2002). <em>Patterns of Enterprise Application Architecture.</em> Addison-Wesley Professional.</li>
+    
+    <li><strong>Mozilla Developer Network (MDN).</strong> (2024). <em>RESTful API Design Best Practices.</em> Recuperado de: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP</a></li>
+</ul>
+
+<h2>Librerías JavaScript y React</h2>
+
+<ul>
+    <li><strong>React Icons.</strong> (2024). <em>React Icons Library.</em> Recuperado de: <a href="https://react-icons.github.io/react-icons/" target="_blank">https://react-icons.github.io/react-icons/</a></li>
+    
+    <li><strong>React Hook Form.</strong> (2024). <em>Performant, flexible and extensible forms with easy-to-use validation.</em> Recuperado de: <a href="https://react-hook-form.com/" target="_blank">https://react-hook-form.com/</a></li>
+</ul>
+
+<h2>Control de Versiones y Herramientas de Desarrollo</h2>
+
+<ul>
+    <li><strong>GitHub.</strong> (2024). <em>GitHub Documentation.</em> Recuperado de: <a href="https://docs.github.com/" target="_blank">https://docs.github.com/</a></li>
+    
+    <li><strong>Git.</strong> (2024). <em>Git Official Documentation.</em> Recuperado de: <a href="https://git-scm.com/doc" target="_blank">https://git-scm.com/doc</a></li>
+    
+    <li><strong>Visual Studio Code.</strong> (2024). <em>VS Code Documentation.</em> Recuperado de: <a href="https://code.visualstudio.com/docs" target="_blank">https://code.visualstudio.com/docs</a></li>
+</ul>
+
+<h2>Python y Gestión de Dependencias</h2>
+
+<ul>
+    <li><strong>Python Software Foundation.</strong> (2024). <em>Python 3.12 Documentation.</em> Recuperado de: <a href="https://docs.python.org/3/" target="_blank">https://docs.python.org/3/</a></li>
+    
+    <li><strong>PyPI.</strong> (2024). <em>Python Package Index.</em> Recuperado de: <a href="https://pypi.org/" target="_blank">https://pypi.org/</a></li>
+</ul>
+
+<h2>Base de Datos</h2>
+
+<ul>
+    <li><strong>SQLite.</strong> (2024). <em>SQLite Documentation.</em> Recuperado de: <a href="https://www.sqlite.org/docs.html" target="_blank">https://www.sqlite.org/docs.html</a></li>
+    
+    <li><strong>Django ORM.</strong> (2024). <em>Models and Databases - Django Documentation.</em> Recuperado de: <a href="https://docs.djangoproject.com/en/5.2/topics/db/" target="_blank">https://docs.djangoproject.com/en/5.2/topics/db/</a></li>
+</ul>
+
+<h2>Metodologías y Buenas Prácticas</h2>
+
+<ul>
+    <li><strong>Martin, R. C.</strong> (2008). <em>Clean Code: A Handbook of Agile Software Craftsmanship.</em> Prentice Hall.</li>
+    
+    <li><strong>Beck, K.</strong> (1999). <em>Extreme Programming Explained: Embrace Change.</em> Addison-Wesley.</li>
+    
+    <li><strong>Pressman, R. S.</strong> (2014). <em>Software Engineering: A Practitioner's Approach (8th Edition).</em> McGraw-Hill Education.</li>
+</ul>
+
+<h2>Recursos Adicionales</h2>
+
+<ul>
+    <li><strong>Stack Overflow.</strong> (2024). <em>Q&A for professional and enthusiast programmers.</em> Recuperado de: <a href="https://stackoverflow.com/" target="_blank">https://stackoverflow.com/</a></li>
+    
+    <li><strong>W3C.</strong> (2024). <em>Web Content Accessibility Guidelines (WCAG) 2.1.</em> Recuperado de: <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank">https://www.w3.org/WAI/WCAG21/quickref/</a></li>
+    
+    <li><strong>Can I Use.</strong> (2024). <em>Browser support tables for modern web technologies.</em> Recuperado de: <a href="https://caniuse.com/" target="_blank">https://caniuse.com/</a></li>
+</ul>
+
+<h2>Apuntes y Material Docente</h2>
+
+<ul>
+    <li><strong>Universidad.</strong> Apuntes de la asignatura <em>Desarrollo de Aplicaciones Web</em>. Curso 2024-2025.</li>
+    
+    <li><strong>Universidad.</strong> Apuntes de la asignatura <em>Ingeniería del Software</em>. Curso 2024-2025.</li>
+    
+    <li><strong>Universidad.</strong> Apuntes de la asignatura <em>Bases de Datos</em>. Curso 2023-2024.</li>
+</ul>
+
+<div style="text-align: center; margin-top: 50px; padding: 20px; border-top: 2px solid #333;">
+    <p style="font-size: 14px; color: #666;"><strong>FIN DEL DOCUMENTO</strong></p>
+    <p style="font-size: 12px; color: #999;">IVDb - Base de Datos de Videojuegos | Versión 1.0 | 07/12/2025</p>
+</div>
+
+</body>
+</html>
