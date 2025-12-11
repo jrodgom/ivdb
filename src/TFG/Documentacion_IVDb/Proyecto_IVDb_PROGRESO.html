@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto IVDb - LO QUE ME QUEDA POR HACER</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        .portada {
+            text-align: center;
+            padding: 100px 0;
+        }
+        h1 {
+            color: #980000;
+            font-family: 'Arial', sans-serif;
+            font-size: 24pt;
+            margin-top: 40px;
+            page-break-before: always;
+        }
+        h2 {
+            color: #b45f06;
+            font-family: 'Arial', sans-serif;
+            font-size: 18pt;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #000;
+            font-family: 'Arial', sans-serif;
+            font-size: 14pt;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th {
+            background-color: #e6e6e6;
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+        }
+        .indice {
+            margin: 40px 0;
+        }
+        .indice-item {
+            margin: 10px 0;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 40px;
+        }
+        .destacado {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #b45f06;
+        }
+    </style>
+</head>
+<body>
+
+<div class="portada">
+    <h1 style="color: #c00; margin-top: 0;">📋 GUÍA DE PROGRESO - LO QUE ME QUEDA</h1>
+    <h2 style="color: #000; margin: 60px 0;">IVDb - Base de Datos de Videojuegos</h2>
+    <p style="margin-top: 100px; font-size: 14pt; color: #666;">
+        ✅ INTRODUCCIÓN - COMPLETADA<br>
+        ✅ ENTORNO TECNOLÓGICO - COMPLETADO<br>
+        ✅ ARQUITECTURA - COMPLETADA<br>
+        <br>
+        <strong style="color: #c00; font-size: 16pt;">⬇️ DESDE AQUÍ EMPIEZO ⬇️</strong>
+    </p>
+</div>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="subsistemas">DESCRIPCIÓN DE LOS SUBSISTEMAS DEL SISTEMA A DESARROLLAR</h1>
+
+<p>El sistema IVDb se divide en cuatro subsistemas principales que agrupan las funcionalidades relacionadas:</p>
+
+<h3>Subsistema 1: Gestión de Usuarios y Autenticación</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>SS-001</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Gestión de Usuarios y Autenticación</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema gestiona todo lo relacionado con los usuarios de la plataforma, incluyendo el registro de nuevas cuentas, inicio de sesión, cierre de sesión y gestión de perfiles personales.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Funcionalidades</th>
+        <td>
+            <ul>
+                <li>Registro de nuevos usuarios</li>
+                <li>Inicio y cierre de sesión</li>
+                <li>Edición de perfil (biografía, avatar)</li>
+                <li>Gestión de tokens de autenticación</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>Subsistema 2: Catálogo de Videojuegos</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>SS-002</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Catálogo de Videojuegos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema gestiona toda la información relacionada con los videojuegos: visualización, búsqueda, filtrado y administración del catálogo.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Funcionalidades</th>
+        <td>
+            <ul>
+                <li>Listado paginado de juegos</li>
+                <li>Búsqueda por nombre</li>
+                <li>Filtrado por género y plataforma</li>
+                <li>Visualización de detalles completos de cada juego</li>
+                <li>Creación, edición y eliminación de juegos (administradores)</li>
+                <li>Importación automática desde API externa</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>Subsistema 3: Sistema de Favoritos</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>SS-003</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Sistema de Favoritos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema permite a los usuarios marcar videojuegos como favoritos para crear colecciones personales.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Funcionalidades</th>
+        <td>
+            <ul>
+                <li>Añadir juegos a favoritos</li>
+                <li>Eliminar juegos de favoritos</li>
+                <li>Visualizar lista personal de favoritos</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h3>Subsistema 4: Sistema de Reseñas</h3>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>SS-004</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Sistema de Reseñas</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema permite a los usuarios escribir reseñas y valoraciones sobre los videojuegos.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Funcionalidades</th>
+        <td>
+            <ul>
+                <li>Crear reseña con puntuación (1-5 estrellas) y comentario</li>
+                <li>Editar reseñas propias</li>
+                <li>Eliminar reseñas propias</li>
+                <li>Visualizar reseñas de otros usuarios</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<div style="page-break-before: always;"></div>
+
+<h2 id="casos-uso">Modelo de Casos de Uso del Sistema</h2>
+
+<h3>Diagrama de Casos de Uso</h3>
+
+<div class="destacado">
+    <pre style="font-family: monospace; line-height: 1.6;">
+                        SISTEMA IVDb
+    ┌──────────────────────────────────────────────────────────┐
+    │                                                          │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Registrarse │         │ Iniciar      │            │
+    │   │              │         │ Sesión       │            │
+    │   └──────────────┘         └──────────────┘            │
+    │                                                          │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Buscar      │         │  Ver Detalle │            │
+    │   │  Juegos      │◄────────┤  de Juego    │            │
+    │   └──────────────┘         └──────────────┘            │
+    │         ▲                           ▲                   │
+    │         │                           │                   │
+    │         │                           │                   │
+    Usuario   │                           │   Usuario         │
+    Anónimo───┘                           └───Registrado      │
+    │                                         │                │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Añadir a    │         │  Escribir    │            │
+    │   │  Favoritos   │         │  Reseña      │            │
+    │   └──────────────┘         └──────────────┘            │
+    │         │                           │                   │
+    │         │                           │                   │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Ver Mi      │         │  Editar      │            │
+    │   │  Perfil      │         │  Perfil      │            │
+    │   └──────────────┘         └──────────────┘            │
+    │                                         │                │
+    │                                         │                │
+    │                                   Administrador         │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Crear       │         │  Editar      │            │
+    │   │  Juego       │         │  Juego       │            │
+    │   └──────────────┘         └──────────────┘            │
+    │                                                          │
+    │   ┌──────────────┐         ┌──────────────┐            │
+    │   │  Eliminar    │         │  Importar    │            │
+    │   │  Juego       │         │  desde RAWG  │            │
+    │   └──────────────┘         └──────────────┘            │
+    │                                                          │
+    └──────────────────────────────────────────────────────────┘
+    </pre>
+</div>
+
+<div class="destacado" style="background-color: #fff3cd; border-left-color: #ffc107; margin-top: 20px;">
+    <strong>📐 GUÍA PARA RECREAR ESTE DIAGRAMA EN DRAW.IO:</strong>
+    
+    <p><strong>Actores (3 figuras de personas a la izquierda):</strong></p>
+    <ul>
+        <li>👤 Usuario Anónimo (arriba)</li>
+        <li>👤 Usuario Registrado (centro) - debe tener flecha de herencia hacia Usuario Anónimo</li>
+        <li>👤 Administrador (abajo) - debe tener flecha de herencia hacia Usuario Registrado</li>
+    </ul>
+    
+    <p><strong>Casos de Uso (7 óvalos dentro de un rectángulo grande que represente el sistema):</strong></p>
+    <ul>
+        <li>CU-01: Registrar Usuario</li>
+        <li>CU-02: Iniciar Sesión</li>
+        <li>CU-03: Buscar Videojuegos</li>
+        <li>CU-04: Ver Detalle de Videojuego</li>
+        <li>CU-05: Añadir a Favoritos</li>
+        <li>CU-06: Escribir Reseña</li>
+        <li>CU-07: Crear Videojuego</li>
+    </ul>
+    
+    <p><strong>Relaciones (líneas que conectan actores con casos de uso):</strong></p>
+    <ul>
+        <li>Usuario Anónimo → CU-01 (Registrar), CU-02 (Login), CU-03 (Buscar), CU-04 (Ver Detalle)</li>
+        <li>Usuario Registrado → CU-05 (Favoritos), CU-06 (Reseñas) [además hereda los del anónimo]</li>
+        <li>Administrador → CU-07 (Crear Juego) [además hereda todos los anteriores]</li>
+    </ul>
+    
+    <p><strong>Relaciones entre casos de uso:</strong></p>
+    <ul>
+        <li>CU-03 (Buscar) y CU-04 (Ver Detalle) conectados con línea punteada «include» (buscar incluye ver detalle)</li>
+    </ul>
+    
+    <p style="margin-top: 10px;"><em>Recuerda: El rectángulo grande representa los límites del sistema IVDb. Los actores están fuera del rectángulo, los casos de uso dentro.</em></p>
+</div>
+
+<h3>Especificación de Actores del Sistema</h3>
+
+<table>
+    <tr>
+        <th style="width: 20%; background-color: #e6e6e6;">ID Actor</th>
+        <th style="width: 30%; background-color: #e6e6e6;">Nombre</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td>ACT-01</td>
+        <td>Usuario Anónimo</td>
+        <td>Visitante que accede a la plataforma sin estar autenticado. Puede visualizar el catálogo de juegos, buscar y filtrar, pero no puede interactuar (favoritos, reseñas).</td>
+    </tr>
+    <tr>
+        <td>ACT-02</td>
+        <td>Usuario Registrado</td>
+        <td>Usuario con cuenta activa en la plataforma. Puede realizar todas las acciones de usuario anónimo más escribir reseñas, gestionar favoritos y editar su perfil.</td>
+    </tr>
+    <tr>
+        <td>ACT-03</td>
+        <td>Administrador</td>
+        <td>Usuario con permisos especiales que puede gestionar el catálogo de juegos (crear, editar, eliminar) además de todas las funcionalidades de usuario registrado.</td>
+    </tr>
+</table>
+
+<h3>Especificación de Casos de Uso del Sistema</h3>
+
+<h4>CU-01: Registrar Usuario</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-01</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Registrar Usuario</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actor Principal</th>
+        <td>Usuario Anónimo</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema permite a un visitante crear una cuenta nueva proporcionando un nombre de usuario, email y contraseña.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario no está autenticado en el sistema.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujo Normal</th>
+        <td>
+            <ol>
+                <li>El usuario accede a la página de registro</li>
+                <li>El sistema muestra el formulario de registro</li>
+                <li>El usuario introduce nombre de usuario, email y contraseña</li>
+                <li>El usuario confirma la contraseña</li>
+                <li>El usuario pulsa el botón "Crear Cuenta"</li>
+                <li>El sistema valida que los datos son correctos</li>
+                <li>El sistema crea la cuenta</li>
+                <li>El sistema autentica automáticamente al usuario</li>
+                <li>El sistema redirige a la página principal</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujos Alternativos</th>
+        <td>
+            <strong>6a. El nombre de usuario ya existe:</strong>
+            <ul>
+                <li>El sistema muestra un mensaje de error</li>
+                <li>Vuelve al paso 3</li>
+            </ul>
+            <strong>6b. Las contraseñas no coinciden:</strong>
+            <ul>
+                <li>El sistema muestra un mensaje de error</li>
+                <li>Vuelve al paso 3</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se crea una nueva cuenta de usuario en el sistema y el usuario queda autenticado.</td>
+    </tr>
+</table>
+
+<h4>CU-02: Iniciar Sesión</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-02</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Iniciar Sesión</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actor Principal</th>
+        <td>Usuario Anónimo</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema permite a un usuario con cuenta existente autenticarse proporcionando sus credenciales.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario tiene una cuenta registrada en el sistema y no está autenticado.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujo Normal</th>
+        <td>
+            <ol>
+                <li>El usuario accede a la página de login</li>
+                <li>El sistema muestra el formulario de inicio de sesión</li>
+                <li>El usuario introduce nombre de usuario y contraseña</li>
+                <li>El usuario pulsa el botón "Entrar"</li>
+                <li>El sistema valida las credenciales</li>
+                <li>El sistema genera un token de autenticación</li>
+                <li>El sistema redirige a la página principal</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujos Alternativos</th>
+        <td>
+            <strong>5a. Las credenciales son incorrectas:</strong>
+            <ul>
+                <li>El sistema muestra un mensaje de error</li>
+                <li>Vuelve al paso 3</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>El usuario queda autenticado en el sistema y puede acceder a funcionalidades de usuario registrado.</td>
+    </tr>
+</table>
+
+<h4>CU-03: Buscar Videojuegos</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-03</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Buscar Videojuegos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actor Principal</th>
+        <td>Usuario Anónimo, Usuario Registrado</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema permite buscar juegos por nombre y/o aplicar filtros por género y plataforma.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>Ninguna.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujo Normal</th>
+        <td>
+            <ol>
+                <li>El usuario accede a la página principal</li>
+                <li>El sistema muestra la barra de búsqueda y filtros</li>
+                <li>El usuario introduce un término de búsqueda y/o selecciona filtros</li>
+                <li>El sistema busca los juegos que coinciden</li>
+                <li>El sistema muestra los resultados en formato de tarjetas</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujos Alternativos</th>
+        <td>
+            <strong>4a. No hay resultados:</strong>
+            <ul>
+                <li>El sistema muestra un mensaje indicando que no se encontraron juegos</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se muestran los juegos que cumplen los criterios de búsqueda.</td>
+    </tr>
+</table>
+
+<h4>CU-04: Ver Detalle de Videojuego</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-04</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Ver Detalle de Videojuego</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actor Principal</th>
+        <td>Usuario Anónimo, Usuario Registrado</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema muestra toda la información detallada de un videojuego seleccionado.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El juego existe en el sistema.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujo Normal</th>
+        <td>
+            <ol>
+                <li>El usuario hace clic en un juego del listado</li>
+                <li>El sistema carga los detalles del juego</li>
+                <li>El sistema muestra: imagen, título, descripción, género, plataformas, desarrollador, fecha de lanzamiento, requisitos del sistema, puntuación Metacritic y reseñas de usuarios</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se visualiza toda la información del videojuego.</td>
+    </tr>
+</table>
+
+<h4>CU-05: Añadir a Favoritos</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-05</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Añadir a Favoritos</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actor Principal</th>
+        <td>Usuario Registrado</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema permite marcar un videojuego como favorito para guardarlo en la colección personal.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario está autenticado y el juego no está ya en favoritos.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujo Normal</th>
+        <td>
+            <ol>
+                <li>El usuario visualiza el detalle de un juego</li>
+                <li>El usuario hace clic en el icono de corazón</li>
+                <li>El sistema añade el juego a favoritos</li>
+                <li>El sistema muestra una confirmación</li>
+                <li>El icono de corazón se rellena</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>El juego queda guardado en la lista de favoritos del usuario.</td>
+    </tr>
+</table>
+
+<h4>CU-06: Escribir Reseña</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-06</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Escribir Reseña</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actor Principal</th>
+        <td>Usuario Registrado</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema permite escribir una reseña con puntuación y comentario sobre un videojuego.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario está autenticado.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujo Normal</th>
+        <td>
+            <ol>
+                <li>El usuario accede al detalle de un juego</li>
+                <li>El usuario se desplaza a la sección de reseñas</li>
+                <li>El usuario selecciona una puntuación (1-5 estrellas)</li>
+                <li>El usuario escribe un comentario</li>
+                <li>El usuario pulsa "Publicar Reseña"</li>
+                <li>El sistema guarda la reseña</li>
+                <li>El sistema muestra la reseña en la lista</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujos Alternativos</th>
+        <td>
+            <strong>6a. El usuario ya tiene una reseña para ese juego:</strong>
+            <ul>
+                <li>El sistema muestra un mensaje de error</li>
+                <li>Sugiere editar la reseña existente</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se crea una nueva reseña asociada al usuario y al juego.</td>
+    </tr>
+</table>
+
+<h4>CU-07: Crear Videojuego (Administrador)</h4>
+<table>
+    <tr>
+        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
+        <td>CU-07</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Nombre</th>
+        <td>Crear Videojuego</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Actor Principal</th>
+        <td>Administrador</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>El sistema permite a los administradores añadir nuevos videojuegos al catálogo.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Precondiciones</th>
+        <td>El usuario está autenticado y tiene permisos de administrador.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujo Normal</th>
+        <td>
+            <ol>
+                <li>El administrador accede a "Añadir Juego"</li>
+                <li>El sistema muestra el formulario de creación</li>
+                <li>El administrador rellena todos los campos (título, descripción, género, plataformas, etc.)</li>
+                <li>El administrador pulsa "Crear Juego"</li>
+                <li>El sistema valida los datos</li>
+                <li>El sistema guarda el nuevo juego</li>
+                <li>El sistema redirige al detalle del juego creado</li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Flujos Alternativos</th>
+        <td>
+            <strong>5a. Faltan campos obligatorios:</strong>
+            <ul>
+                <li>El sistema muestra los errores de validación</li>
+                <li>Vuelve al paso 3</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Postcondiciones</th>
+        <td>Se añade un nuevo videojuego al catálogo.</td>
+    </tr>
+</table>
+
+<div style="page-break-before: always;"></div>
+
+<h2 id="modelo-clases">Modelo de Clases</h2>
+
+<h3>Diagrama de Clases</h3>
+
+<div class="destacado">
+    <pre style="font-family: monospace; line-height: 1.6; font-size: 11px;">
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                            User (Django Auth)                       │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + username: String(150) [UNIQUE]                                    │
+    │ + email: String(254) [UNIQUE]                                       │
+    │ + password: String(128)  # Encriptado con PBKDF2                   │
+    │ + first_name: String(150)                                           │
+    │ + last_name: String(150)                                            │
+    │ + is_staff: Boolean                                                 │
+    │ + is_active: Boolean                                                │
+    │ + date_joined: DateTime                                             │
+    └──────────────────────┬──────────────────────────────────────────────┘
+                           │ 1:1
+                           │
+    ┌──────────────────────▼──────────────────────────────────────────────┐
+    │                          Profile                                    │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + user: OneToOneField → User [FK]                                   │
+    │ + bio: Text [NULL]                                                  │
+    │ + avatar: ImageField [NULL]  # Ruta: media/avatars/               │
+    └──────────────────────┬──────────────────────────────────────────────┘
+                           │
+                           │ 1:N
+                           │
+    ┌──────────────────────▼──────────────────────────────────────────────┐
+    │                          Review                                     │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + user: ForeignKey → User [FK]  # Autor de la reseña              │
+    │ + game: ForeignKey → Game [FK]  # Juego reseñado                   │
+    │ + rating: Integer  # Rango: 1-5                                    │
+    │ + comment: Text                                                     │
+    │ + created_at: DateTime [AUTO]                                       │
+    │ + updated_at: DateTime [AUTO]                                       │
+    │─────────────────────────────────────────────────────────────────────│
+    │ # Métodos                                                           │
+    │ + __str__(): String  # "Review by {user} for {game}"               │
+    └─────────────────────────────────────────────────────────────────────┘
+
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                             Game                                    │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + title: String(200)  # Título del juego                           │
+    │ + description: Text [NULL]  # Descripción HTML desde RAWG          │
+    │ + release_date: Date [NULL]                                         │
+    │ + genre: String(100) [NULL]  # Ej: "Action, RPG"                   │
+    │ + platform: String(200) [NULL]  # Ej: "PC, PS5, Xbox"              │
+    │ + developer: String(200) [NULL]                                     │
+    │ + cover_image: URLField [NULL]  # URL imagen de RAWG               │
+    │ + metacritic: Integer [NULL]  # Puntuación Metacritic 0-100        │
+    │ + rating: Float [NULL]  # Rating general del juego                 │
+    │ + minimum_requirements: JSONField [NULL]  # Requisitos mínimos PC  │
+    │ + recommended_requirements: JSONField [NULL]  # Requisitos rec. PC │
+    │─────────────────────────────────────────────────────────────────────│
+    │ # Métodos                                                           │
+    │ + __str__(): String  # Devuelve el título                          │
+    │ + get_requirements_display(): Dict  # Formatea requisitos          │
+    └──────────────────────┬──────────────────────────────────────────────┘
+                           │
+                           │ N:M (a través de Favorite)
+                           │
+    ┌──────────────────────▼──────────────────────────────────────────────┐
+    │                          Favorite                                   │
+    │─────────────────────────────────────────────────────────────────────│
+    │ + id: Integer [PK]                                                  │
+    │ + user: ForeignKey → User [FK]                                      │
+    │ + game: ForeignKey → Game [FK]                                      │
+    │ + created_at: DateTime [AUTO]  # Fecha de marcado como favorito    │
+    │─────────────────────────────────────────────────────────────────────│
+    │ # Constraints                                                       │
+    │ + unique_together: (user, game)  # Un usuario no puede marcar     │
+    │                                    el mismo juego dos veces         │
+    │─────────────────────────────────────────────────────────────────────│
+    │ # Métodos                                                           │
+    │ + __str__(): String  # "{user} - {game}"                           │
+    └─────────────────────────────────────────────────────────────────────┘
+
+
+    RELACIONES:
+    
+    User ──(1:1)──> Profile
+         Un usuario tiene exactamente un perfil
+    
+    User ──(1:N)──> Review
+         Un usuario puede escribir múltiples reseñas
+    
+    User ──(N:M)──> Game  (a través de Favorite)
+         Un usuario puede tener múltiples juegos favoritos
+         Un juego puede ser favorito de múltiples usuarios
+    
+    Game ──(1:N)──> Review
+         Un juego puede tener múltiples reseñas
+    </pre>
+</div>
+
+<div class="destacado" style="background-color: #fff3cd; border-left-color: #ffc107; margin-top: 20px;">
+    <strong>📐 GUÍA PARA RECREAR ESTE DIAGRAMA EN DRAW.IO:</strong>
+    
+    <p><strong>Clase 1: User</strong></p>
+    <ul>
+        <li><strong>Atributos:</strong> id: int, username: string, email: string, password: string, is_staff: boolean, date_joined: datetime</li>
+        <li><strong>Métodos:</strong> login(), logout(), register()</li>
+    </ul>
+    
+    <p><strong>Clase 2: Profile</strong></p>
+    <ul>
+        <li><strong>Atributos:</strong> id: int, user_id: int, bio: text, avatar: string</li>
+        <li><strong>Métodos:</strong> updateProfile()</li>
+    </ul>
+    
+    <p><strong>Clase 3: Game</strong></p>
+    <ul>
+        <li><strong>Atributos:</strong> id: int, title: string, description: text, genre: string, platforms: string, developer: string, release_date: date, image: string, metacritic: int</li>
+        <li><strong>Métodos:</strong> getDetails(), search(), filter()</li>
+    </ul>
+    
+    <p><strong>Clase 4: Review</strong></p>
+    <ul>
+        <li><strong>Atributos:</strong> id: int, user_id: int, game_id: int, rating: int, comment: text, created_at: datetime</li>
+        <li><strong>Métodos:</strong> create(), update(), delete()</li>
+    </ul>
+    
+    <p><strong>Clase 5: Favorite</strong></p>
+    <ul>
+        <li><strong>Atributos:</strong> id: int, user_id: int, game_id: int, created_at: datetime</li>
+        <li><strong>Métodos:</strong> add(), remove()</li>
+    </ul>
+    
+    <p><strong>Relaciones entre clases:</strong></p>
+    <ul>
+        <li><strong>User ←→ Profile:</strong> Relación 1:1 (Un usuario tiene un perfil)</li>
+        <li><strong>User ←→ Review:</strong> Relación 1:N (Un usuario puede escribir muchas reseñas)</li>
+        <li><strong>Game ←→ Review:</strong> Relación 1:N (Un juego puede tener muchas reseñas)</li>
+        <li><strong>User ←→ Favorite:</strong> Relación 1:N (Un usuario puede tener muchos favoritos)</li>
+        <li><strong>Game ←→ Favorite:</strong> Relación 1:N (Un juego puede ser favorito de muchos usuarios)</li>
+    </ul>
+    
+    <p style="margin-top: 10px;"><em>Tip: En draw.io usa rectángulos divididos en 3 secciones (nombre de clase, atributos, métodos). Conecta con líneas: línea simple con "1" y "1" para 1:1, línea simple con "1" y "*" para 1:N</em></p>
+</div>
+
+<h3>Descripción de Clases Principales</h3>
+
+<h4>Clase User</h4>
+<p>Representa a un usuario registrado en el sistema. Almacena las credenciales de acceso y datos básicos de identificación. Cada usuario tiene asociado un perfil con información adicional y puede crear múltiples reseñas y favoritos.</p>
+
+<h4>Clase Profile</h4>
+<p>Contiene información extendida del perfil de usuario. Se crea automáticamente al registrarse un usuario y tiene una relación uno a uno con User. Permite al usuario personalizar su presencia en la plataforma con una biografía y una imagen de avatar.</p>
+
+<h4>Clase Game</h4>
+<p>Representa un videojuego en el catálogo. Almacena toda la información relevante del juego incluyendo detalles técnicos, descripción, género, plataformas soportadas y requisitos del sistema. Puede tener múltiples reseñas de diferentes usuarios y ser marcado como favorito por varios usuarios.</p>
+
+<h4>Clase Review</h4>
+<p>Representa una reseña escrita por un usuario sobre un videojuego. Incluye una puntuación numérica y un comentario opcional. Cada reseña está vinculada a un único usuario y a un único juego, garantizando que un usuario solo puede escribir una reseña por juego.</p>
+
+<h4>Clase Favorite</h4>
+<p>Representa la relación entre un usuario y un juego que ha marcado como favorito. Esta clase implementa una relación muchos a muchos entre usuarios y juegos, permitiendo que un usuario tenga múltiples favoritos y un juego sea favorito de múltiples usuarios.</p>
+
+<div style="page-break-before: always;"></div>
+
+<h2 id="trazabilidad">Información Sobre Trazabilidad</h2>
+
+<p>La siguiente matriz muestra la trazabilidad entre Historias de Usuario, Casos de Uso y Clases del sistema:</p>
+
+<table style="font-size: 10pt;">
+    <tr>
+        <th style="background-color: #e6e6e6;"></th>
+        <th style="background-color: #e6e6e6;">CU-01</th>
+        <th style="background-color: #e6e6e6;">CU-02</th>
+        <th style="background-color: #e6e6e6;">CU-03</th>
+        <th style="background-color: #e6e6e6;">CU-04</th>
+        <th style="background-color: #e6e6e6;">CU-05</th>
+        <th style="background-color: #e6e6e6;">CU-06</th>
+        <th style="background-color: #e6e6e6;">CU-07</th>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">HU-01: Registro</th>
+        <td style="text-align: center; background-color: #c9daf8;">✓</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">HU-02: Login</th>
+        <td></td>
+        <td style="text-align: center; background-color: #c9daf8;">✓</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">HU-03: Buscar juegos</th>
+        <td></td>
+        <td></td>
+        <td style="text-align: center; background-color: #c9daf8;">✓</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">HU-04: Ver detalles</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="text-align: center; background-color: #c9daf8;">✓</td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">HU-05: Favoritos</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="text-align: center; background-color: #c9daf8;">✓</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">HU-06: Reseñas</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="text-align: center; background-color: #c9daf8;">✓</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">HU-07: Admin juegos</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="text-align: center; background-color: #c9daf8;">✓</td>
+    </tr>
+</table>
+
+<br>
+
+<table style="font-size: 10pt;">
+    <tr>
+        <th style="background-color: #e6e6e6;"></th>
+        <th style="background-color: #e6e6e6;">User</th>
+        <th style="background-color: #e6e6e6;">Profile</th>
+        <th style="background-color: #e6e6e6;">Game</th>
+        <th style="background-color: #e6e6e6;">Review</th>
+        <th style="background-color: #e6e6e6;">Favorite</th>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">CU-01: Registrar</th>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">CU-02: Login</th>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">CU-03: Buscar</th>
+        <td></td>
+        <td></td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">CU-04: Ver detalle</th>
+        <td></td>
+        <td></td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">CU-05: Favoritos</th>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">CU-06: Reseñas</th>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">CU-07: Crear juego</th>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+        <td style="text-align: center; background-color: #d9ead3;">✓</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="interfaz">DEFINICIÓN INTERFAZ DE USUARIO DEL SISTEMA</h1>
+
+<h2>Descripción de Pantallas Principales</h2>
+
+<p>La interfaz de usuario de IVDb está diseñada para ser intuitiva y moderna, con navegación clara entre las diferentes secciones. A continuación se describen las pantallas principales:</p>
+
+<h3>Página Principal (Home)</h3>
+<p>Muestra el catálogo completo de videojuegos en formato de tarjetas con imagen, título y género. Incluye barra de búsqueda en la parte superior y panel lateral con filtros por género y plataforma. La navegación se encuentra en la parte superior con enlaces a inicio, favoritos, perfil y opciones de autenticación.</p>
+
+<h3>Detalle de Juego</h3>
+<p>Presenta toda la información del videojuego seleccionado: imagen destacada, título, descripción completa, género, plataformas, desarrollador, fecha de lanzamiento y puntuación Metacritic. También muestra los requisitos del sistema y las reseñas de usuarios. Para usuarios autenticados, incluye botón para añadir a favoritos y formulario para escribir reseñas.</p>
+
+<h3>Página de Favoritos</h3>
+<p>Muestra la colección personal de juegos favoritos del usuario en el mismo formato de tarjetas que la página principal. Solo accesible para usuarios autenticados.</p>
+
+<h3>Perfil de Usuario</h3>
+<p>Visualiza la información del usuario: avatar, nombre de usuario, biografía y estadísticas (número de reseñas escritas, juegos favoritos). Incluye botón de editar perfil y lista de reseñas escritas por el usuario.</p>
+
+<h3>Formularios de Autenticación</h3>
+<p>Páginas dedicadas para registro (nombre usuario, email, contraseña) e inicio de sesión (nombre usuario, contraseña). Diseño centrado con campos de entrada claros y mensajes de error cuando corresponde.</p>
+
+<h3>Administración de Juegos (Admin)</h3>
+<p>Formulario completo para crear y editar juegos, disponible solo para administradores. Incluye campos para título, descripción, imagen URL, género, plataformas, desarrollador, fecha de lanzamiento, puntuación Metacritic y requisitos del sistema.</p>
+
+<p><em>(Aquí se incluirán capturas de pantalla de la aplicación)</em></p>
+
+<h2>Catálogo de Componentes de Interfaz</h2>
+
+<p>Los principales componentes reutilizables de la interfaz son:</p>
+
+<ul>
+    <li><strong>Navbar:</strong> Barra de navegación principal con logo, enlaces y opciones de usuario</li>
+    <li><strong>GameCard:</strong> Tarjeta visual que muestra un juego con su imagen, título y género</li>
+    <li><strong>GameList:</strong> Listado paginado de tarjetas de juegos</li>
+    <li><strong>GameFilters:</strong> Panel lateral con filtros por género y plataforma</li>
+    <li><strong>SearchBar:</strong> Barra de búsqueda con icono</li>
+    <li><strong>SystemRequirements:</strong> Tabla que muestra requisitos mínimos y recomendados</li>
+    <li><strong>Footer:</strong> Pie de página con información del proyecto</li>
+</ul>
+
+<h2>Paleta de Colores</h2>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">Elemento</th>
+        <th style="background-color: #e6e6e6;">Color</th>
+    </tr>
+    <tr>
+        <td>Fondo principal</td>
+        <td>#1a1a1a (gris oscuro)</td>
+    </tr>
+    <tr>
+        <td>Texto principal</td>
+        <td>#ffffff (blanco)</td>
+    </tr>
+    <tr>
+        <td>Acento principal</td>
+        <td>#3b82f6 (azul)</td>
+    </tr>
+    <tr>
+        <td>Acento secundario</td>
+        <td>#10b981 (verde)</td>
+    </tr>
+    <tr>
+        <td>Fondo tarjetas</td>
+        <td>#2d2d2d (gris medio oscuro)</td>
+    </tr>
+</table>
+
+<h2>Diseño Responsivo</h2>
+
+<p>La aplicación se adapta a diferentes tamaños de pantalla:</p>
+<ul>
+    <li><strong>Escritorio (>1024px):</strong> Diseño con panel lateral de filtros visible, grid de 4 columnas para juegos</li>
+    <li><strong>Tablet (768px-1024px):</strong> Panel de filtros colapsable, grid de 2-3 columnas</li>
+    <li><strong>Móvil (<768px):</strong> Navegación hamburguesa, filtros en menú desplegable, grid de 1 columna</li>
+</ul>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="manual-instalacion">MANUAL DE INSTALACIÓN</h1>
+
+<h2>Requisitos Previos</h2>
+
+<p>Para instalar y ejecutar IVDb en un entorno local, se necesitan los siguientes requisitos:</p>
+
+<ul>
+    <li><strong>Python 3.10 o superior:</strong> Para ejecutar el backend con Django</li>
+    <li><strong>Node.js 18 o superior:</strong> Para ejecutar el frontend con React</li>
+    <li><strong>Git:</strong> Para clonar el repositorio del proyecto</li>
+    <li><strong>Editor de código:</strong> Se recomienda Visual Studio Code</li>
+    <li><strong>Navegador web moderno:</strong> Chrome, Firefox, Edge o Safari</li>
+</ul>
+
+<h2>Instalación del Backend</h2>
+
+<h3>Paso 1: Clonar el Repositorio</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+git clone https://github.com/jrodgom/ivdb-backend.git
+cd ivdb-backend
+</pre>
+
+<h3>Paso 2: Crear Entorno Virtual</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+python -m venv venv
+venv\Scripts\activate  # En Windows
+source venv/bin/activate  # En Linux/Mac
+</pre>
+
+<h3>Paso 3: Instalar Dependencias</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+pip install -r requirements.txt
+</pre>
+
+<h3>Paso 4: Configurar Base de Datos</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+cd ivdb
+python manage.py makemigrations
+python manage.py migrate
+</pre>
+
+<h3>Paso 5: Crear Usuario Administrador</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+python manage.py createsuperuser
+</pre>
+<p>Introducir nombre de usuario, email y contraseña cuando se solicite.</p>
+
+<h3>Paso 6: Iniciar Servidor Backend</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+python manage.py runserver
+</pre>
+<p>El backend estará disponible en <code>http://localhost:8000</code></p>
+
+<h2>Instalación del Frontend</h2>
+
+<h3>Paso 1: Clonar el Repositorio Frontend</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+git clone https://github.com/jrodgom/ivdb-frontend.git
+cd ivdb-frontend
+</pre>
+
+<h3>Paso 2: Instalar Dependencias</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+npm install
+</pre>
+
+<h3>Paso 3: Configurar Variables de Entorno</h3>
+<p>Crear un archivo <code>.env</code> en la raíz del proyecto con:</p>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+VITE_API_URL=http://localhost:8000
+</pre>
+
+<h3>Paso 4: Iniciar Servidor de Desarrollo</h3>
+<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+npm run dev
+</pre>
+<p>El frontend estará disponible en <code>http://localhost:5173</code></p>
+
+<h2>Importar Datos Iniciales (Opcional)</h2>
+
+<p>Para poblar la base de datos con juegos desde RAWG API:</p>
+
+<ol>
+    <li>Obtener una API Key gratuita en <a href="https://rawg.io/apidocs" target="_blank">https://rawg.io/apidocs</a></li>
+    <li>En el backend, ejecutar el script de importación con la API key obtenida</li>
+    <li>Los juegos se importarán automáticamente a la base de datos</li>
+</ol>
+
+<h2>Verificación de Instalación</h2>
+
+<ul>
+    <li>Acceder a <code>http://localhost:5173</code> en el navegador</li>
+    <li>Verificar que la página principal carga correctamente</li>
+    <li>Registrar una cuenta de usuario nueva</li>
+    <li>Iniciar sesión con las credenciales creadas</li>
+    <li>Verificar que todas las funcionalidades son accesibles</li>
+</ul>
+
+<h2>Solución de Problemas Comunes</h2>
+
+<table>
+    <tr>
+        <th style="width: 35%; background-color: #e6e6e6;">Problema</th>
+        <th style="background-color: #e6e6e6;">Solución</th>
+    </tr>
+    <tr>
+        <td>Error "Module not found"</td>
+        <td>Verificar que todas las dependencias están instaladas ejecutando <code>pip install -r requirements.txt</code> o <code>npm install</code></td>
+    </tr>
+    <tr>
+        <td>Error de conexión entre frontend y backend</td>
+        <td>Verificar que el archivo <code>.env</code> tiene la URL correcta del backend y que ambos servidores están ejecutándose</td>
+    </tr>
+    <tr>
+        <td>Error en migraciones de base de datos</td>
+        <td>Eliminar el archivo <code>db.sqlite3</code> y volver a ejecutar <code>python manage.py migrate</code></td>
+    </tr>
+    <tr>
+        <td>Puerto ya en uso</td>
+        <td>Cambiar el puerto con <code>python manage.py runserver 8001</code> o <code>npm run dev -- --port 5174</code></td>
+    </tr>
+</table>
+
+<div style="page-break-before: always;"></div>
+
+<h1 id="manual-usuario">MANUAL DE USUARIO</h1>
+
+<h2>Introducción</h2>
+
+<p>IVDb es una plataforma web para gestionar información de videojuegos, escribir reseñas y crear listas personales de favoritos. Este manual explica cómo utilizar las funcionalidades principales del sistema.</p>
+
+<h2>Acceso al Sistema</h2>
+
+<h3>Registro de Nueva Cuenta</h3>
+<ol>
+    <li>Acceder a la página principal de IVDb</li>
+    <li>Hacer clic en el botón "Registrarse" en la esquina superior derecha</li>
+    <li>Completar el formulario con:
+        <ul>
+            <li>Nombre de usuario (único)</li>
+            <li>Dirección de correo electrónico</li>
+            <li>Contraseña (mínimo 8 caracteres)</li>
+            <li>Confirmación de contraseña</li>
+        </ul>
+    </li>
+    <li>Hacer clic en "Crear Cuenta"</li>
+    <li>El sistema redirigirá automáticamente a la página principal con la sesión iniciada</li>
+</ol>
+
+<h3>Inicio de Sesión</h3>
+<ol>
+    <li>Hacer clic en "Iniciar Sesión" en la barra de navegación</li>
+    <li>Introducir nombre de usuario y contraseña</li>
+    <li>Hacer clic en "Entrar"</li>
+</ol>
+
+<h2>Búsqueda y Exploración de Juegos</h2>
+
+<h3>Búsqueda por Nombre</h3>
+<ul>
+    <li>Utilizar la barra de búsqueda en la parte superior de cualquier página</li>
+    <li>Introducir el nombre del juego que se desea buscar</li>
+    <li>Presionar Enter o hacer clic en el icono de búsqueda</li>
+    <li>Se mostrarán los resultados coincidentes</li>
+</ul>
+
+<h3>Filtrado de Juegos</h3>
+<ul>
+    <li>En la página principal, utilizar el panel de filtros lateral</li>
+    <li>Seleccionar uno o varios géneros (Acción, RPG, Aventura, etc.)</li>
+    <li>Seleccionar una o varias plataformas (PC, PlayStation, Xbox, etc.)</li>
+    <li>Los resultados se actualizarán automáticamente</li>
+</ul>
+
+<h3>Navegación por Páginas</h3>
+<ul>
+    <li>Utilizar los botones de paginación en la parte inferior del listado</li>
+    <li>Hacer clic en "Siguiente" para ver más juegos</li>
+    <li>Hacer clic en "Anterior" para volver a páginas previas</li>
+</ul>
+
+<h2>Visualización de Información de Juegos</h2>
+
+<p>Al hacer clic en cualquier juego, se accede a su página de detalle que muestra:</p>
+
+<ul>
+    <li><strong>Imagen de portada:</strong> Imagen principal del videojuego</li>
+    <li><strong>Información básica:</strong> Título, desarrollador, fecha de lanzamiento, género y plataformas</li>
+    <li><strong>Descripción completa:</strong> Información detallada sobre el juego</li>
+    <li><strong>Puntuación Metacritic:</strong> Si está disponible</li>
+    <li><strong>Requisitos del sistema:</strong> Especificaciones mínimas y recomendadas para PC</li>
+    <li><strong>Reseñas de usuarios:</strong> Opiniones y valoraciones de otros jugadores</li>
+</ul>
+
+<h2>Gestión de Favoritos</h2>
+
+<h3>Añadir a Favoritos</h3>
+<ol>
+    <li>Navegar a la página de detalle de un juego</li>
+    <li>Hacer clic en el icono de corazón vacío</li>
+    <li>El icono se rellenará indicando que el juego está en favoritos</li>
+    <li>Aparecerá un mensaje de confirmación</li>
+</ol>
+
+<h3>Ver Lista de Favoritos</h3>
+<ol>
+    <li>Hacer clic en "Mis Favoritos" en la barra de navegación</li>
+    <li>Se mostrará la lista completa de juegos marcados como favoritos</li>
+</ol>
+
+<h3>Eliminar de Favoritos</h3>
+<ol>
+    <li>En la página de favoritos o en el detalle del juego</li>
+    <li>Hacer clic en el icono de corazón relleno</li>
+    <li>El juego se eliminará de la lista de favoritos</li>
+</ol>
+
+<h2>Escribir y Gestionar Reseñas</h2>
+
+<h3>Crear una Reseña</h3>
+<ol>
+    <li>Navegar a la página de detalle del juego a reseñar</li>
+    <li>Desplazarse hasta la sección "Escribe tu reseña"</li>
+    <li>Seleccionar una puntuación de 1 a 5 estrellas haciendo clic en las estrellas</li>
+    <li>Escribir el comentario en el campo de texto</li>
+    <li>Hacer clic en "Publicar Reseña"</li>
+    <li>La reseña aparecerá inmediatamente en la lista</li>
+</ol>
+
+<h3>Editar una Reseña</h3>
+<ol>
+    <li>Acceder al perfil personal</li>
+    <li>Localizar la reseña a editar en "Mis Reseñas"</li>
+    <li>Hacer clic en el botón "Editar"</li>
+    <li>Modificar la puntuación o el comentario</li>
+    <li>Guardar los cambios</li>
+</ol>
+
+<h3>Eliminar una Reseña</h3>
+<ol>
+    <li>Acceder al perfil personal</li>
+    <li>Localizar la reseña a eliminar</li>
+    <li>Hacer clic en el botón "Eliminar"</li>
+    <li>Confirmar la eliminación</li>
+</ol>
+
+<h2>Gestión de Perfil Personal</h2>
+
+<h3>Ver Perfil</h3>
+<ul>
+    <li>Hacer clic en "Perfil" en la barra de navegación</li>
+    <li>Se mostrará la imagen de perfil, biografía y estadísticas</li>
+    <li>También se visualizarán las reseñas escritas</li>
+</ul>
+
+<h3>Editar Perfil</h3>
+<ol>
+    <li>En la página de perfil, hacer clic en "Editar Perfil"</li>
+    <li>Modificar los siguientes campos:
+        <ul>
+            <li>Biografía personal</li>
+            <li>Imagen de avatar (subir archivo)</li>
+        </ul>
+    </li>
+    <li>Hacer clic en "Guardar Cambios"</li>
+</ol>
+
+<h2>Funciones de Administrador</h2>
+
+<p><em>Disponibles solo para usuarios con permisos de administrador:</em></p>
+
+<h3>Crear Nuevo Juego</h3>
+<ol>
+    <li>Hacer clic en "Añadir Juego" en la barra de navegación</li>
+    <li>Completar el formulario con toda la información del juego</li>
+    <li>Hacer clic en "Crear Juego"</li>
+</ol>
+
+<h3>Editar Juego Existente</h3>
+<ol>
+    <li>Navegar a la página de detalle del juego</li>
+    <li>Hacer clic en el botón "Editar"</li>
+    <li>Modificar la información necesaria</li>
+    <li>Guardar los cambios</li>
+</ol>
+
+<h3>Eliminar Juego</h3>
+<ol>
+    <li>Navegar a la página de detalle del juego</li>
+    <li>Hacer clic en el botón "Eliminar"</li>
+    <li>Confirmar la eliminación</li>
+</ol>
+
+<h2>Cerrar Sesión</h2>
+
+<ul>
+    <li>Hacer clic en "Cerrar Sesión" en la barra de navegación</li>
+    <li>La sesión se cerrará y se redirigirá a la página principal</li>
+</ul>
+
+<h2>Consejos de Uso</h2>
+
+<ul>
+    <li>Las reseñas ayudan a la comunidad a descubrir buenos juegos, escribir reseñas detalladas y honestas</li>
+    <li>Utilizar la lista de favoritos para organizar los juegos que se desean recordar</li>
+    <li>Los filtros por género y plataforma facilitan encontrar juegos específicos</li>
+    <li>La búsqueda funciona con palabras parciales, no es necesario escribir el nombre completo</li>
+</ul>
+
+<div style="text-align: center; margin-top: 50px; padding: 20px; border-top: 2px solid #333;">
+    <p style="font-size: 14px; color: #666;"><strong>FIN DEL DOCUMENTO</strong></p>
+    <p style="font-size: 12px; color: #999;">IVDb - Base de Datos de Videojuegos | Versión 1.0 | 11/12/2025</p>
+</div>
+
+</body>
+</html>
