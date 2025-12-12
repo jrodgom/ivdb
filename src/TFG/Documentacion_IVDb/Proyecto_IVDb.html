@@ -996,34 +996,136 @@
 </div>
 
 <div class="destacado" style="background-color: #fff3cd; border-left-color: #ffc107; margin-top: 20px;">
-    <strong>📐 GUÍA PARA RECREAR ESTE DIAGRAMA EN DRAW.IO:</strong>
+    <strong>📐 CÓMO CREAR ESTE DIAGRAMA EN DRAW.IO (Paso a Paso):</strong>
     
-    <p><strong>Actores (3 figuras de personas a la izquierda):</strong></p>
+    <p><strong>PASO 1 - Crear el Sistema (Rectángulo contenedor):</strong></p>
     <ul>
-        <li>👤 Usuario Anónimo (arriba)</li>
-        <li>👤 Usuario Registrado (centro) - debe tener flecha de herencia hacia Usuario Anónimo</li>
-        <li>👤 Administrador (abajo) - debe tener flecha de herencia hacia Usuario Registrado</li>
+        <li>Dibuja un rectángulo GRANDE que ocupe casi toda la página</li>
+        <li>Añade el texto arriba: <strong>"Sistema IVDb"</strong></li>
+        <li>Este rectángulo representa los límites del sistema</li>
     </ul>
     
-    <p><strong>Casos de Uso (7 óvalos dentro de un rectángulo grande que represente el sistema):</strong></p>
+    <p><strong>PASO 2 - Colocar Actores (FUERA a la IZQUIERDA del rectángulo):</strong></p>
+    <ol>
+        <li><strong>👤 Usuario Anónimo</strong> (arriba a la izquierda, FUERA del rectángulo)
+            <ul><li>Usar figura de "Actor" (muñequito stick figure) de la librería UML</li></ul>
+        </li>
+        <li><strong>👤 Usuario Registrado</strong> (centro izquierda, FUERA del rectángulo)
+            <ul>
+                <li>Usar figura de "Actor" (muñequito stick figure)</li>
+                <li>Dibujar flecha de HERENCIA (triángulo hueco) desde Usuario Registrado → Usuario Anónimo</li>
+            </ul>
+        </li>
+        <li><strong>👤 Administrador</strong> (abajo a la izquierda, FUERA del rectángulo)
+            <ul>
+                <li>Usar figura de "Actor" (muñequito stick figure)</li>
+                <li>Dibujar flecha de HERENCIA (triángulo hueco) desde Administrador → Usuario Registrado</li>
+            </ul>
+        </li>
+    </ol>
+    
+    <p><strong>PASO 3 - Crear Casos de Uso (DENTRO del rectángulo sistema):</strong></p>
+    <p>Usar formas <strong>ÓVALOS/ELIPSES</strong> para cada caso de uso:</p>
+    <ol>
+        <li>⭕ <strong>Registrar Usuario</strong></li>
+        <li>⭕ <strong>Iniciar Sesión</strong></li>
+        <li>⭕ <strong>Buscar Videojuegos</strong></li>
+        <li>⭕ <strong>Ver Detalle de Videojuego</strong></li>
+        <li>⭕ <strong>Añadir a Favoritos</strong></li>
+        <li>⭕ <strong>Escribir Reseña</strong></li>
+        <li>⭕ <strong>Crear/Editar/Eliminar Juego</strong> (administración)</li>
+    </ol>
+    
+    <p><strong>PASO 4 - Conectar Actores con Casos de Uso (líneas simples):</strong></p>
     <ul>
-        <li>CU-01: Registrar Usuario</li>
-        <li>CU-02: Iniciar Sesión</li>
-        <li>CU-03: Buscar Videojuegos</li>
-        <li>CU-04: Ver Detalle de Videojuego</li>
-        <li>CU-05: Añadir a Favoritos</li>
-        <li>CU-06: Escribir Reseña</li>
-        <li>CU-07: Crear Videojuego</li>
+        <li><strong>Usuario Anónimo</strong> conectar con:
+            <ul>
+                <li>→ Registrar Usuario</li>
+                <li>→ Iniciar Sesión</li>
+                <li>→ Buscar Videojuegos</li>
+                <li>→ Ver Detalle de Videojuego</li>
+            </ul>
+        </li>
+        <li><strong>Usuario Registrado</strong> conectar con:
+            <ul>
+                <li>→ Añadir a Favoritos</li>
+                <li>→ Escribir Reseña</li>
+                <li><em>(Hereda automáticamente los casos de uso de Usuario Anónimo por la herencia)</em></li>
+            </ul>
+        </li>
+        <li><strong>Administrador</strong> conectar con:
+            <ul>
+                <li>→ Crear/Editar/Eliminar Juego</li>
+                <li><em>(Hereda automáticamente todos los anteriores por la cadena de herencia)</em></li>
+            </ul>
+        </li>
     </ul>
     
-    <p><strong>Relaciones (líneas que conectan actores con casos de uso):</strong></p>
+    <p><strong>PASO 5 - Añadir relaciones entre casos de uso (OPCIONAL):</strong></p>
     <ul>
-        <li>Usuario Anónimo → CU-01 (Registrar), CU-02 (Login), CU-03 (Buscar), CU-04 (Ver Detalle)</li>
-        <li>Usuario Registrado → CU-05 (Favoritos), CU-06 (Reseñas) [además hereda los del anónimo]</li>
-        <li>Administrador → CU-07 (Crear Juego) [además hereda todos los anteriores]</li>
+        <li>Línea punteada con <strong>&lt;&lt;include&gt;&gt;</strong> desde "Buscar Videojuegos" hacia "Ver Detalle de Videojuego"</li>
+        <li>Esto indica que al buscar, se puede incluir ver el detalle</li>
     </ul>
     
-    <p style="margin-top: 10px;"><em>Recuerda: El rectángulo grande representa los límites del sistema IVDb. Los actores están fuera del rectángulo, los casos de uso dentro.</em></p>
+    <p style="margin-top: 15px; padding: 10px; background-color: #e8f5e9; border-left: 3px solid #4caf50;">
+        <strong>💡 RESUMEN VISUAL:</strong><br>
+        Actores (👤 muñequitos) FUERA a la izquierda → Líneas → Óvalos (casos de uso) DENTRO del rectángulo sistema<br>
+        <em>Herencias: Usuario Registrado hereda de Anónimo, Administrador hereda de Registrado</em>
+    </p>
+    
+    <p style="margin-top: 20px; padding: 15px; background-color: #e3f2fd; border-left: 4px solid #2196f3;">
+        <strong>💻 OPCIÓN 2: GENERAR AUTOMÁTICAMENTE CON CÓDIGO PLANTUML</strong><br>
+        Copia este código en <a href="https://www.plantuml.com/plantuml/uml/" target="_blank">https://www.plantuml.com/plantuml/uml/</a> o en draw.io (Arrange → Insert → Advanced → PlantUML):
+    </p>
+    
+    <pre style="background-color: #263238; color: #aed581; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 12px;">@startuml
+title Diagrama de Casos de Uso - Sistema IVDb
+
+left to right direction
+
+' Actores
+actor "Usuario Anónimo" as Anonimo
+actor "Usuario Registrado" as Registrado
+actor "Administrador" as Admin
+
+' Herencias entre actores
+Registrado --|> Anonimo
+Admin --|> Registrado
+
+rectangle "Sistema IVDb" {
+    ' Casos de Uso - Usuario Anónimo
+    usecase "Registrar Usuario" as UC1
+    usecase "Iniciar Sesión" as UC2
+    usecase "Buscar Videojuegos" as UC3
+    usecase "Ver Detalle de Videojuego" as UC4
+    
+    ' Casos de Uso - Usuario Registrado
+    usecase "Añadir a Favoritos" as UC5
+    usecase "Escribir Reseña" as UC6
+    
+    ' Casos de Uso - Administrador
+    usecase "Crear Juego" as UC7
+    usecase "Editar Juego" as UC8
+    usecase "Eliminar Juego" as UC9
+    
+    ' Relación include
+    UC3 .> UC4 : <<include>>
+}
+
+' Relaciones Actor - Casos de Uso
+Anonimo --> UC1
+Anonimo --> UC2
+Anonimo --> UC3
+Anonimo --> UC4
+
+Registrado --> UC5
+Registrado --> UC6
+
+Admin --> UC7
+Admin --> UC8
+Admin --> UC9
+
+@enduml</pre>
 </div>
 
 <h3>Especificación de Actores del Sistema</h3>
@@ -1037,22 +1139,17 @@
     <tr>
         <td><strong>ACT-01</strong></td>
         <td>Usuario Anónimo</td>
-        <td>Este actor representa a los visitantes de la plataforma que no han iniciado sesión. Pueden buscar y visualizar información de videojuegos pero no pueden interactuar con funcionalidades personales (favoritos, reseñas).</td>
+        <td>Visitante de la plataforma sin autenticación. Puede registrarse, iniciar sesión, buscar juegos y ver sus detalles.</td>
     </tr>
     <tr>
         <td><strong>ACT-02</strong></td>
         <td>Usuario Registrado</td>
-        <td>Este actor representa a los usuarios que han creado una cuenta y han iniciado sesión. Tienen acceso completo a todas las funcionalidades: búsqueda, favoritos, reseñas y gestión de perfil.</td>
+        <td>Usuario autenticado con cuenta activa. Hereda todas las funcionalidades de Usuario Anónimo y además puede añadir favoritos y escribir reseñas.</td>
     </tr>
     <tr>
         <td><strong>ACT-03</strong></td>
-        <td>Administrador/Staff</td>
-        <td>Este actor representa a los usuarios con permisos especiales de staff. Además de todas las funcionalidades de usuario registrado, pueden gestionar el catálogo de juegos (crear, editar, eliminar, importar desde RAWG).</td>
-    </tr>
-    <tr>
-        <td><strong>ACT-04</strong></td>
-        <td>Sistema RAWG API</td>
-        <td>Este actor representa al sistema externo RAWG API que proporciona información de videojuegos. Interactúa con el sistema mediante peticiones HTTP para importar datos.</td>
+        <td>Administrador</td>
+        <td>Usuario con permisos especiales. Hereda todas las funcionalidades de Usuario Registrado y además puede crear, editar y eliminar juegos del catálogo.</td>
     </tr>
 </table>
 
@@ -1091,12 +1188,9 @@
                 <li>El sistema valida que todos los campos estén completos</li>
                 <li>El sistema verifica que el nombre de usuario y email no existan ya en la base de datos</li>
                 <li>El sistema verifica que las contraseñas coincidan</li>
-                <li>El sistema encripta la contraseña usando PBKDF2</li>
                 <li>El sistema crea el usuario en la base de datos</li>
-                <li>El sistema crea automáticamente un perfil asociado al usuario</li>
-                <li>El sistema autentica automáticamente al usuario y genera tokens JWT</li>
-                <li>El sistema redirige al usuario a la página principal como usuario autenticado</li>
-                <li>El sistema muestra un mensaje de éxito: "Registro completado exitosamente"</li>
+                <li>El sistema autentica automáticamente al usuario</li>
+                <li>El sistema redirige al usuario a la página principal</li>
             </ol>
         </td>
     </tr>
@@ -1127,7 +1221,7 @@
     </tr>
     <tr>
         <th style="background-color: #e6e6e6;">Postcondiciones</th>
-        <td>Se ha creado un nuevo usuario en el sistema y está autenticado con tokens JWT válidos</td>
+        <td>Se ha creado un nuevo usuario en el sistema y está autenticado</td>
     </tr>
 </table>
 
@@ -1143,7 +1237,7 @@
     </tr>
     <tr>
         <th style="background-color: #e6e6e6;">Actores</th>
-        <td>Usuario Registrado (ACT-02)</td>
+        <td>Usuario Anónimo (ACT-01)</td>
     </tr>
     <tr>
         <th style="background-color: #e6e6e6;">Descripción</th>
@@ -1163,12 +1257,8 @@
                 <li>El usuario hace clic en "Iniciar Sesión"</li>
                 <li>El sistema valida que ambos campos estén completos</li>
                 <li>El sistema verifica las credenciales contra la base de datos</li>
-                <li>El sistema genera un access token JWT (válido 5 minutos)</li>
-                <li>El sistema genera un refresh token JWT (válido 1 día)</li>
-                <li>El sistema devuelve los tokens al frontend</li>
-                <li>El frontend almacena los tokens en localStorage</li>
+                <li>El sistema autentica al usuario</li>
                 <li>El sistema redirige al usuario a la página principal</li>
-                <li>El sistema muestra un mensaje de bienvenida con el nombre del usuario</li>
             </ol>
         </td>
     </tr>
@@ -1189,7 +1279,7 @@
     </tr>
     <tr>
         <th style="background-color: #e6e6e6;">Postcondiciones</th>
-        <td>El usuario está autenticado y tiene tokens JWT válidos almacenados</td>
+        <td>El usuario está autenticado en el sistema</td>
     </tr>
 </table>
 
@@ -1528,71 +1618,6 @@
     </tr>
 </table>
 
-<h4>CU-08: Importar Juegos desde RAWG</h4>
-<table>
-    <tr>
-        <th style="width: 25%; background-color: #e6e6e6;">ID</th>
-        <td>CU-08</td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Nombre</th>
-        <td>Importar videojuegos desde RAWG API</td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Actores</th>
-        <td>Administrador (ACT-03), Sistema RAWG API (ACT-04)</td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Descripción</th>
-        <td>El sistema deberá comportarse como se describe en el siguiente caso de uso para importar automáticamente juegos desde la API externa de RAWG.</td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Precondiciones</th>
-        <td>El usuario debe ser administrador. La API de RAWG debe estar disponible. Se debe tener una API key válida.</td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Secuencia Normal</th>
-        <td>
-            <ol>
-                <li>El administrador accede a la funcionalidad de importación</li>
-                <li>El sistema verifica permisos de staff</li>
-                <li>El administrador hace clic en "Importar desde RAWG"</li>
-                <li>El sistema realiza petición GET a la API de RAWG con parámetros (page_size=100)</li>
-                <li>RAWG API devuelve un JSON con lista de juegos</li>
-                <li>Para cada juego recibido, el sistema:
-                    <ul>
-                        <li>Verifica si ya existe en la BD (por nombre)</li>
-                        <li>Si no existe, realiza petición adicional para obtener requisitos del sistema</li>
-                        <li>Crea un nuevo registro Game con toda la información</li>
-                        <li>Guarda la imagen de portada</li>
-                    </ul>
-                </li>
-                <li>El sistema registra cuántos juegos se importaron exitosamente</li>
-                <li>El sistema muestra mensaje: "Se importaron X juegos correctamente"</li>
-            </ol>
-        </td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Excepciones</th>
-        <td>
-            <p><strong>4a.</strong> Si la API de RAWG no responde:</p>
-            <ul>
-                <li>El sistema muestra error: "No se pudo conectar con RAWG API"</li>
-                <li>El proceso se cancela</li>
-            </ul>
-            <p><strong>4b.</strong> Si la API key es inválida:</p>
-            <ul>
-                <li>El sistema muestra error: "API key no válida"</li>
-                <li>El proceso se cancela</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Postcondiciones</th>
-        <td>Se han importado nuevos videojuegos al catálogo desde RAWG API</td>
-    </tr>
-</table>
-
 <!-- CONTINUACIÓN DEL DOCUMENTO PRINCIPAL - PARTE 4 -->
 <!-- Modelo de Clases y Trazabilidad -->
 
@@ -1748,6 +1773,84 @@
     </ul>
     
     <p style="margin-top: 10px;"><em>Tip: En draw.io usa rectángulos divididos en 3 secciones (nombre de clase, atributos, métodos). Conecta con líneas: línea simple con "1" y "1" para 1:1, línea simple con "1" y "*" para 1:N</em></p>
+    
+    <p style="margin-top: 20px; padding: 15px; background-color: #e3f2fd; border-left: 4px solid #2196f3;">
+        <strong>💻 OPCIÓN 2: GENERAR AUTOMÁTICAMENTE CON CÓDIGO PLANTUML</strong><br>
+        Copia este código en <a href="https://www.plantuml.com/plantuml/uml/" target="_blank">https://www.plantuml.com/plantuml/uml/</a> o en draw.io:
+    </p>
+    
+    <pre style="background-color: #263238; color: #aed581; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 11px;">@startuml
+title Diagrama de Clases - Sistema IVDb
+
+class User {
+    +id: int
+    +username: string
+    +email: string
+    +password: string
+    +is_staff: boolean
+    +date_joined: datetime
+    --
+    +login()
+    +logout()
+    +register()
+}
+
+class Profile {
+    +id: int
+    +user_id: int
+    +bio: text
+    +avatar: string
+    --
+    +updateProfile()
+}
+
+class Game {
+    +id: int
+    +title: string
+    +description: text
+    +genre: string
+    +platforms: string
+    +developer: string
+    +release_date: date
+    +image: string
+    +metacritic: int
+    --
+    +getDetails()
+    +search()
+    +filter()
+}
+
+class Review {
+    +id: int
+    +user_id: int
+    +game_id: int
+    +rating: int
+    +comment: text
+    +created_at: datetime
+    --
+    +create()
+    +update()
+    +delete()
+}
+
+class Favorite {
+    +id: int
+    +user_id: int
+    +game_id: int
+    +created_at: datetime
+    --
+    +add()
+    +remove()
+}
+
+' Relaciones
+User "1" -- "1" Profile : tiene
+User "1" -- "*" Review : escribe
+User "1" -- "*" Favorite : marca
+Game "1" -- "*" Review : recibe
+Game "1" -- "*" Favorite : es favorito de
+
+@enduml</pre>
 </div>
 
 <h3>Descripción de Entidades Principales</h3>
