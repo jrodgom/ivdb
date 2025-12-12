@@ -97,7 +97,12 @@
     <div class="indice-item" style="margin-left: 20px;"><a href="#casos-uso">4.1 Modelo de Casos de Uso</a></div>
     <div class="indice-item" style="margin-left: 20px;"><a href="#modelo-clases">4.2 Modelo de Clases</a></div>
     <div class="indice-item" style="margin-left: 20px;"><a href="#trazabilidad">4.3 Información Sobre Trazabilidad</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#modelo-funcional">4.4 Modelo funcional</a></div>
     <div class="indice-item"><a href="#interfaz">5. DEFINICIÓN INTERFAZ DE USUARIO</a></div>
+    <div class="indice-item"><a href="#manual-usuario">6. MANUAL DE USUARIO</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#manual-usuario">6.1 Descripción del despliegue: INSTALACIÓN Y CONFIGURACIÓN</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#manual-usuario">6.2 Descripción funcional del sistema</a></div>
+    <div class="indice-item" style="margin-left: 20px;"><a href="#manual-usuario">6.3 Guía del administrador</a></div>
 </div>
 
 <div style="page-break-before: always;"></div>
@@ -838,7 +843,7 @@
 
 <p>El sistema IVDb se divide en cuatro subsistemas principales que agrupan las funcionalidades relacionadas:</p>
 
-<h3>Subsistema 1: Gestión de Usuarios y Autenticación</h3>
+<h2>Subsistema 1: Gestión de Usuarios y Autenticación</h2>
 <table>
     <tr>
         <th style="width: 25%; background-color: #e6e6e6;">ID</th>
@@ -847,10 +852,6 @@
     <tr>
         <th style="background-color: #e6e6e6;">Nombre</th>
         <td>Gestión de Usuarios y Autenticación</td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Descripción</th>
-        <td>Este subsistema agrupa los requisitos relacionados con el registro, autenticación y gestión de perfiles de usuario. Incluye el sistema de login/logout con JWT, creación de cuentas nuevas y edición de información personal.</td>
     </tr>
     <tr>
         <th style="background-color: #e6e6e6;">Dependencias</th>
@@ -862,9 +863,17 @@
             </ul>
         </td>
     </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema agrupa los requisitos relacionados con el registro, autenticación y gestión de perfiles de usuario. Incluye el sistema de login/logout con JWT, creación de cuentas nuevas y edición de información personal.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Comentarios</th>
+        <td>Utiliza Django REST Framework Simple JWT para la autenticación basada en tokens. Los usuarios pueden tener tres roles: Usuario Anónimo, Usuario Registrado y Administrador.</td>
+    </tr>
 </table>
 
-<h3>Subsistema 2: Catálogo de Videojuegos</h3>
+<h2>Subsistema 2: Catálogo de Videojuegos</h2>
 <table>
     <tr>
         <th style="width: 25%; background-color: #e6e6e6;">ID</th>
@@ -873,10 +882,6 @@
     <tr>
         <th style="background-color: #e6e6e6;">Nombre</th>
         <td>Catálogo de Videojuegos</td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Descripción</th>
-        <td>Este subsistema agrupa los requisitos relacionados con la gestión del catálogo de videojuegos. Incluye búsqueda, filtrado, visualización de detalles, y operaciones CRUD para administradores. También maneja la importación automática desde RAWG API.</td>
     </tr>
     <tr>
         <th style="background-color: #e6e6e6;">Dependencias</th>
@@ -888,9 +893,17 @@
             </ul>
         </td>
     </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema agrupa los requisitos relacionados con la gestión del catálogo de videojuegos. Incluye búsqueda, filtrado, visualización de detalles, y operaciones CRUD para administradores. También maneja la importación automática desde RAWG API.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Comentarios</th>
+        <td>El catálogo se alimenta automáticamente desde RAWG API y permite búsquedas por nombre, filtrado por género y plataforma. Incluye información completa de cada videojuego: requisitos del sistema, fecha de lanzamiento, desarrollador, puntuación Metacritic, etc.</td>
+    </tr>
 </table>
 
-<h3>Subsistema 3: Sistema de Reseñas</h3>
+<h2>Subsistema 3: Sistema de Reseñas</h2>
 <table>
     <tr>
         <th style="width: 25%; background-color: #e6e6e6;">ID</th>
@@ -899,10 +912,6 @@
     <tr>
         <th style="background-color: #e6e6e6;">Nombre</th>
         <td>Sistema de Reseñas</td>
-    </tr>
-    <tr>
-        <th style="background-color: #e6e6e6;">Descripción</th>
-        <td>Este subsistema agrupa los requisitos relacionados con la creación, edición, eliminación y visualización de reseñas de usuarios sobre videojuegos. Cada reseña incluye una puntuación y comentarios.</td>
     </tr>
     <tr>
         <th style="background-color: #e6e6e6;">Dependencias</th>
@@ -914,9 +923,17 @@
             </ul>
         </td>
     </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema agrupa los requisitos relacionados con la creación, edición, eliminación y visualización de reseñas de usuarios sobre videojuegos. Cada reseña incluye una puntuación y comentarios.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Comentarios</th>
+        <td>Solo los usuarios autenticados pueden crear reseñas. Cada usuario puede escribir una sola reseña por videojuego, pero puede editarla o eliminarla posteriormente. Las reseñas se muestran en la página de detalle de cada juego.</td>
+    </tr>
 </table>
 
-<h3>Subsistema 4: Sistema de Favoritos</h3>
+<h2>Subsistema 4: Sistema de Favoritos</h2>
 <table>
     <tr>
         <th style="width: 25%; background-color: #e6e6e6;">ID</th>
@@ -927,10 +944,6 @@
         <td>Sistema de Favoritos</td>
     </tr>
     <tr>
-        <th style="background-color: #e6e6e6;">Descripción</th>
-        <td>Este subsistema agrupa los requisitos relacionados con la gestión de listas personales de juegos favoritos. Permite a los usuarios marcar y desmarcar juegos para acceso rápido.</td>
-    </tr>
-    <tr>
         <th style="background-color: #e6e6e6;">Dependencias</th>
         <td>
             <ul>
@@ -939,6 +952,14 @@
                 <li>SS-002 (Favoritos asociados a juegos)</li>
             </ul>
         </td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+        <td>Este subsistema agrupa los requisitos relacionados con la gestión de listas personales de juegos favoritos. Permite a los usuarios marcar y desmarcar juegos para acceso rápido.</td>
+    </tr>
+    <tr>
+        <th style="background-color: #e6e6e6;">Comentarios</th>
+        <td>Cada usuario autenticado puede mantener su propia lista de favoritos. La funcionalidad está disponible tanto en la página de detalle del juego como en el perfil del usuario, donde se visualiza la lista completa de favoritos.</td>
     </tr>
 </table>
 
@@ -1625,9 +1646,7 @@ Admin --> UC9
 
 <h2 id="modelo-clases">Modelo de Clases</h2>
 
-<p>El modelo de clases de IVDb representa las entidades principales del dominio y sus relaciones. Se utiliza el ORM de Django para mapear estas clases a tablas de la base de datos relacional.</p>
-
-<h3>Diagrama Entidad-Relación</h3>
+<p style="color: #666666; font-weight: 700; font-size: 14pt; font-family: 'Eras Bk BT';">Diagrama de clases.</p>
 
 <div class="destacado">
     <pre style="font-family: monospace; line-height: 1.6; font-size: 11px;">
@@ -1853,24 +1872,115 @@ Game "1" -- "*" Favorite : es favorito de
 @enduml</pre>
 </div>
 
-<h3>Descripción de Entidades Principales</h3>
+<p style="color: #666666; font-weight: 700; font-size: 14pt; font-family: 'Eras Bk BT'; margin-top: 30px;">Diseño de clases.</p>
 
-<p>El sistema gestiona cinco entidades principales que se relacionan entre sí:</p>
+<p>A continuación se presenta el código de las clases del modelo diseñadas, describiendo los detalles más relevantes de cada una. El sistema utiliza Django ORM para la gestión de la base de datos relacional.</p>
 
-<h4>User (Usuario)</h4>
-<p>Representa las cuentas de usuario del sistema. Almacena información de autenticación como nombre de usuario, email y contraseña encriptada. Incluye campos para identificar si un usuario tiene permisos de administrador.</p>
+<h4 style="color: #b45f06; margin-top: 20px;">Modelo User (Django Auth)</h4>
+<p>Para la gestión de usuarios, IVDb utiliza el modelo <code>User</code> predefinido de Django que proporciona funcionalidades de autenticación, autorización y gestión de sesiones. Este modelo incluye campos como <code>username</code>, <code>email</code>, <code>password</code>, <code>first_name</code>, <code>last_name</code>, y métodos de autenticación seguros con hash de contraseñas.</p>
 
-<h4>Profile (Perfil)</h4>
-<p>Información adicional del usuario. Cada usuario tiene un perfil asociado que contiene su biografía personal y una imagen de avatar opcional.</p>
+<h4 style="color: #b45f06; margin-top: 20px;">Modelo Profile</h4>
+<pre style="background-color: #f5f5f5; padding: 15px; border-left: 4px solid #b45f06; overflow-x: auto;">
+<code class="language-python">from django.db import models
+from django.contrib.auth.models import User
 
-<h4>Game (Juego)</h4>
-<p>Representa un videojuego en el catálogo. Contiene información como título, descripción, fecha de lanzamiento, género, plataformas, desarrollador, imagen de portada, puntuación Metacritic y requisitos del sistema (mínimos y recomendados).</p>
+class Profile(models.Model):
+    """
+    Modelo que extiende la información del usuario con datos adicionales de perfil.
+    Relación OneToOne con User - cada usuario tiene exactamente un perfil.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)  # Biografía opcional del usuario
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)  # Imagen de perfil
 
-<h4>Review (Reseña)</h4>
-<p>Reseña escrita por un usuario sobre un juego específico. Incluye una puntuación de 1 a 5 estrellas y un comentario de texto. Se registra la fecha de creación y modificación.</p>
+    def __str__(self):
+        return self.user.username</code>
+</pre>
 
-<h4>Favorite (Favorito)</h4>
-<p>Relaciona usuarios con sus juegos favoritos. Cada registro vincula un usuario con un juego y almacena la fecha en que se añadió a favoritos. El sistema impide que un usuario marque el mismo juego como favorito más de una vez.</p>
+<h4 style="color: #b45f06; margin-top: 20px;">Modelo Game</h4>
+<pre style="background-color: #f5f5f5; padding: 15px; border-left: 4px solid #b45f06; overflow-x: auto;">
+<code class="language-python">from django.db import models
+
+class Game(models.Model):
+    """
+    Modelo principal que representa un videojuego en el catálogo.
+    Contiene toda la información descriptiva y técnica del juego.
+    """
+    title = models.CharField(max_length=200)  # Título del juego
+    description = models.TextField(blank=True)  # Descripción detallada
+    release_date = models.DateField(null=True, blank=True)  # Fecha de lanzamiento
+    genre = models.CharField(max_length=100, blank=True)  # Género del juego
+    platform = models.CharField(max_length=100, blank=True)  # Plataforma(s)
+    developer = models.CharField(max_length=100, blank=True)  # Desarrollador
+    cover_image = models.URLField(blank=True)  # URL de la imagen de portada
+    metacritic = models.IntegerField(null=True, blank=True)  # Puntuación Metacritic
+    rating = models.FloatField(null=True, blank=True)  # Rating promedio del juego
+    
+    # Requisitos del sistema almacenados como JSON para flexibilidad
+    minimum_requirements = models.JSONField(null=True, blank=True)
+    recommended_requirements = models.JSONField(null=True, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación en BD
+
+    def __str__(self):
+        return self.title</code>
+</pre>
+
+<h4 style="color: #b45f06; margin-top: 20px;">Modelo Review</h4>
+<pre style="background-color: #f5f5f5; padding: 15px; border-left: 4px solid #b45f06; overflow-x: auto;">
+<code class="language-python">from django.db import models
+from django.contrib.auth.models import User
+from game.models import Game
+
+class Review(models.Model):
+    """
+    Modelo que representa una reseña de un usuario sobre un videojuego.
+    Relación Many-to-One: Un usuario puede escribir múltiples reseñas,
+    y un juego puede recibir múltiples reseñas.
+    Restricción: Un usuario solo puede crear una reseña por juego.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Usuario autor
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)  # Juego reseñado
+    rating = models.IntegerField()  # Puntuación del 1 al 5
+    comment = models.TextField(blank=True)  # Comentario opcional
+    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
+
+    def __str__(self):
+        return f"{self.user.username} - {self.game.title}"</code>
+</pre>
+
+<h4 style="color: #b45f06; margin-top: 20px;">Modelo Favorite</h4>
+<pre style="background-color: #f5f5f5; padding: 15px; border-left: 4px solid #b45f06; overflow-x: auto;">
+<code class="language-python">from django.db import models
+from django.contrib.auth.models import User
+from game.models import Game
+
+class Favorite(models.Model):
+    """
+    Modelo que representa la relación Many-to-Many entre usuarios y juegos favoritos.
+    Permite a los usuarios marcar juegos como favoritos para acceso rápido.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='favorited_by')
+    created_at = models.DateTimeField(auto_now_add=True)  # Fecha en que se marcó como favorito
+
+    class Meta:
+        # Restricción de integridad: Un usuario no puede marcar el mismo juego dos veces
+        unique_together = ('user', 'game')
+        ordering = ['-created_at']  # Ordenar por más recientes primero
+
+    def __str__(self):
+        return f"{self.user.username} - {self.game.title}"</code>
+</pre>
+
+<h4 style="color: #000000; margin-top: 20px;">Consideraciones de Diseño</h4>
+<ul style="font-size: 10pt; font-family: 'NewsGotT';">
+    <li><strong>Integridad referencial:</strong> Todas las relaciones utilizan <code>on_delete=models.CASCADE</code> para mantener la consistencia de datos cuando se eliminan registros padre.</li>
+    <li><strong>Campos opcionales:</strong> Se utilizan <code>blank=True</code> y <code>null=True</code> estratégicamente para permitir flexibilidad en la entrada de datos sin comprometer la integridad.</li>
+    <li><strong>Timestamps automáticos:</strong> Los modelos incluyen campos <code>created_at</code> con <code>auto_now_add=True</code> para auditoría y seguimiento temporal.</li>
+    <li><strong>Relaciones nombradas:</strong> Se emplean <code>related_name</code> para facilitar consultas inversas desde el modelo relacionado.</li>
+    <li><strong>Almacenamiento JSON:</strong> Los requisitos del sistema se almacenan como JSON para permitir estructura flexible sin crear múltiples tablas adicionales.</li>
+</ul>
 
 <div style="page-break-before: always;"></div>
 
@@ -2111,6 +2221,321 @@ Game "1" -- "*" Favorite : es favorito de
 </table>
 
 <!-- CONTINUACIÓN DEL DOCUMENTO PRINCIPAL - PARTE 5 -->
+<!-- Modelo funcional -->
+
+<div style="page-break-before: always;"></div>
+
+<h2 id="modelo-funcional">Modelo funcional</h2>
+
+<p>El modelo funcional de IVDb describe el comportamiento dinámico del sistema a través de diagramas de secuencia que representan los flujos de interacción entre usuarios y componentes del sistema para los casos de uso más relevantes.</p>
+
+<h3>Diagrama de Secuencia: Registro de Usuario</h3>
+
+<p>Este diagrama muestra la interacción completa durante el proceso de registro de un nuevo usuario en el sistema:</p>
+
+<div class="destacado">
+<pre>@startuml
+actor Usuario
+participant "Frontend\n(React)" as Frontend
+participant "Backend\n(Django REST)" as Backend
+participant "Base de Datos\n(SQLite)" as DB
+
+Usuario -> Frontend: Completa formulario de registro
+activate Frontend
+Frontend -> Frontend: Valida formato de campos
+Frontend -> Backend: POST /api/accounts/register/\n{username, email, password}
+activate Backend
+
+Backend -> Backend: Valida datos\n(unicidad username/email)
+Backend -> DB: Crea User
+activate DB
+DB --> Backend: User creado
+deactivate DB
+
+Backend -> DB: Crea Profile asociado
+activate DB
+DB --> Backend: Profile creado
+deactivate DB
+
+Backend -> Backend: Genera Token JWT
+Backend --> Frontend: {token, user_id, username}\n[Status: 201 Created]
+deactivate Backend
+
+Frontend -> Frontend: Almacena token\nen localStorage
+Frontend --> Usuario: Muestra mensaje de éxito\ny redirige a página principal
+deactivate Frontend
+
+@enduml</pre>
+</div>
+
+<h3>Diagrama de Secuencia: Inicio de Sesión</h3>
+
+<div class="destacado">
+<pre>@startuml
+actor Usuario
+participant "Frontend\n(React)" as Frontend
+participant "Backend\n(Django REST)" as Backend
+participant "Base de Datos\n(SQLite)" as DB
+
+Usuario -> Frontend: Introduce credenciales\n(username, password)
+activate Frontend
+Frontend -> Backend: POST /api/accounts/login/\n{username, password}
+activate Backend
+
+Backend -> DB: Busca usuario por username
+activate DB
+DB --> Backend: Usuario encontrado
+deactivate DB
+
+Backend -> Backend: Verifica password\ncon hash almacenado
+
+alt Credenciales válidas
+    Backend -> Backend: Genera Token JWT\n(access + refresh)
+    Backend --> Frontend: {access, refresh, user_id}\n[Status: 200 OK]
+    Frontend -> Frontend: Almacena tokens\nen localStorage
+    Frontend --> Usuario: Redirige a Home
+else Credenciales inválidas
+    Backend --> Frontend: {error: "Invalid credentials"}\n[Status: 401 Unauthorized]
+    Frontend --> Usuario: Muestra mensaje de error
+end
+
+deactivate Backend
+deactivate Frontend
+
+@enduml</pre>
+</div>
+
+<h3>Diagrama de Secuencia: Consulta de Detalle de Juego</h3>
+
+<div class="destacado">
+<pre>@startuml
+actor Usuario
+participant "Frontend\n(React)" as Frontend
+participant "Backend\n(Django REST)" as Backend
+participant "Base de Datos\n(SQLite)" as DB
+
+Usuario -> Frontend: Hace clic en juego
+activate Frontend
+Frontend -> Backend: GET /api/games/{id}/
+activate Backend
+
+Backend -> DB: SELECT Game WHERE id={id}
+activate DB
+DB --> Backend: Datos del Game
+deactivate DB
+
+Backend -> DB: SELECT Reviews WHERE game_id={id}
+activate DB
+DB --> Backend: Lista de Reviews
+deactivate DB
+
+Backend -> DB: SELECT Favorites WHERE game_id={id}\nAND user_id={current_user}
+activate DB
+DB --> Backend: Estado de favorito
+deactivate DB
+
+Backend -> Backend: Calcula rating promedio
+Backend --> Frontend: JSON completo\n{game, reviews, is_favorite, avg_rating}
+deactivate Backend
+
+Frontend -> Frontend: Renderiza GameDetail
+Frontend --> Usuario: Muestra información completa\n+ reseñas + botón favorito
+deactivate Frontend
+
+@enduml</pre>
+</div>
+
+<h3>Diagrama de Secuencia: Crear Reseña</h3>
+
+<div class="destacado">
+<pre>@startuml
+actor "Usuario\nAutenticado" as Usuario
+participant "Frontend\n(React)" as Frontend
+participant "Backend\n(Django REST)" as Backend
+participant "Base de Datos\n(SQLite)" as DB
+
+Usuario -> Frontend: Completa formulario de reseña\n(rating: 1-5, comment)
+activate Frontend
+Frontend -> Frontend: Valida que rating esté entre 1-5
+Frontend -> Backend: POST /api/reviews/\n{game_id, rating, comment}\n+ Authorization: Bearer {token}
+activate Backend
+
+Backend -> Backend: Verifica autenticación JWT
+
+alt Usuario autenticado
+    Backend -> DB: Verifica si existe review\nde este usuario para este juego
+    activate DB
+    
+    alt Review ya existe
+        DB --> Backend: Review existente encontrada
+        Backend --> Frontend: {error: "Ya existe una review"}\n[Status: 400 Bad Request]
+    else Review no existe
+        DB --> Backend: No hay review previa
+        Backend -> DB: INSERT Review\n(user_id, game_id, rating, comment)
+        DB --> Backend: Review creada [ID: X]
+        deactivate DB
+        Backend --> Frontend: {review_data}\n[Status: 201 Created]
+        Frontend --> Usuario: Muestra mensaje de éxito\ny actualiza lista de reseñas
+    end
+else Usuario no autenticado
+    Backend --> Frontend: {error: "Not authenticated"}\n[Status: 401 Unauthorized]
+    Frontend --> Usuario: Redirige a Login
+end
+
+deactivate Backend
+deactivate Frontend
+
+@enduml</pre>
+</div>
+
+<h3>Diagrama de Secuencia: Gestión de Favoritos</h3>
+
+<div class="destacado">
+<pre>@startuml
+actor "Usuario\nAutenticado" as Usuario
+participant "Frontend\n(React)" as Frontend
+participant "Backend\n(Django REST)" as Backend
+participant "Base de Datos\n(SQLite)" as DB
+
+Usuario -> Frontend: Hace clic en botón\n"Añadir a Favoritos"
+activate Frontend
+Frontend -> Backend: POST /api/favorites/\n{game_id}\n+ Authorization: Bearer {token}
+activate Backend
+
+Backend -> Backend: Verifica autenticación JWT
+
+Backend -> DB: Busca Favorite\nWHERE user_id={user} AND game_id={game}
+activate DB
+
+alt Favorito ya existe
+    DB --> Backend: Favorito encontrado
+    Backend -> DB: DELETE Favorite
+    DB --> Backend: Eliminado exitosamente
+    deactivate DB
+    Backend --> Frontend: {message: "Removed from favorites"}\n[Status: 200 OK]
+    Frontend -> Frontend: Actualiza UI\n(botón a estado "Añadir")
+else Favorito no existe
+    DB --> Backend: No existe favorito
+    Backend -> DB: INSERT Favorite\n(user_id, game_id, created_at)
+    activate DB
+    DB --> Backend: Favorito creado
+    deactivate DB
+    Backend --> Frontend: {favorite_data}\n[Status: 201 Created]
+    Frontend -> Frontend: Actualiza UI\n(botón a estado "Quitar")
+end
+
+deactivate Backend
+Frontend --> Usuario: Muestra feedback visual
+deactivate Frontend
+
+@enduml</pre>
+</div>
+
+<h3>Diagrama de Secuencia: Importación de Juego desde RAWG API</h3>
+
+<div class="destacado">
+<pre>@startuml
+actor "Staff\nAutenticado" as Staff
+participant "Frontend\n(React)" as Frontend
+participant "Backend\n(Django REST)" as Backend
+participant "RAWG API" as RAWG
+participant "Base de Datos\n(SQLite)" as DB
+
+Staff -> Frontend: Busca juego en formulario\nde importación
+activate Frontend
+Frontend -> Backend: GET /api/games/search_rawg/\n?query={nombre_juego}
+activate Backend
+
+Backend -> RAWG: GET /games\n?search={nombre_juego}&key={API_KEY}
+activate RAWG
+RAWG --> Backend: {results: [lista de juegos]}
+deactivate RAWG
+
+Backend --> Frontend: Lista de juegos encontrados
+deactivate Backend
+Frontend --> Staff: Muestra resultados
+deactivate Frontend
+
+Staff -> Frontend: Selecciona juego\ny confirma importación
+activate Frontend
+Frontend -> Backend: POST /api/games/import_from_rawg/\n{rawg_id: 12345}
+activate Backend
+
+Backend -> RAWG: GET /games/{rawg_id}\n?key={API_KEY}
+activate RAWG
+RAWG --> Backend: Datos completos del juego\n+ screenshots + requisitos
+deactivate RAWG
+
+Backend -> Backend: Mapea campos de RAWG\na modelo Game de Django
+
+Backend -> DB: Verifica si juego ya existe\n(por rawg_id o título)
+activate DB
+
+alt Juego ya existe
+    DB --> Backend: Juego encontrado
+    Backend --> Frontend: {error: "Game already exists"}\n[Status: 400 Bad Request]
+    Frontend --> Staff: Muestra mensaje de error
+else Juego no existe
+    DB --> Backend: Juego no encontrado
+    Backend -> DB: INSERT Game\n(todos los campos mapeados)
+    DB --> Backend: Game creado [ID: X]
+    deactivate DB
+    Backend --> Frontend: {game_data, message: "Imported"}\n[Status: 201 Created]
+    deactivate Backend
+    Frontend --> Staff: Muestra mensaje de éxito\ny redirige a detalle
+    deactivate Frontend
+end
+
+@enduml</pre>
+</div>
+
+<h3>Diagrama de Secuencia: Búsqueda y Filtrado de Juegos</h3>
+
+<div class="destacado">
+<pre>@startuml
+actor Usuario
+participant "Frontend\n(React)" as Frontend
+participant "Backend\n(Django REST)" as Backend
+participant "Base de Datos\n(SQLite)" as DB
+
+Usuario -> Frontend: Introduce término de búsqueda\ny aplica filtros (género, plataforma)
+activate Frontend
+Frontend -> Frontend: Construye query string
+Frontend -> Backend: GET /api/games/\n?search={term}&genre={genre}&platform={platform}
+activate Backend
+
+Backend -> Backend: Parsea parámetros\ny construye query SQL
+
+Backend -> DB: SELECT Games\nWHERE title LIKE '%{term}%'\nAND genre={genre}\nAND platform={platform}\nORDER BY rating DESC
+activate DB
+DB --> Backend: Lista de Games filtrados
+deactivate DB
+
+Backend -> Backend: Serializa datos\ny aplica paginación
+
+Backend --> Frontend: {count, next, previous, results}\n[Status: 200 OK]
+deactivate Backend
+
+Frontend -> Frontend: Renderiza GameList\ncon resultados paginados
+Frontend --> Usuario: Muestra juegos filtrados\n+ paginación
+deactivate Frontend
+
+@enduml</pre>
+</div>
+
+<h3>Diagrama de Actividad: Gestión de Favoritos</h3>
+
+<div class="destacado">
+<pre>
+[Inicio] -> Usuario autenticado?
+  No -> [Mostrar mensaje: Debe iniciar sesión]
+  Sí -> Consultar si juego está en favoritos
+        -> Está en favoritos?
+           Sí -> [Eliminar de favoritos] -> [Actualizar UI] -> [Fin]
+           No -> [Agregar a favoritos] -> [Actualizar UI] -> [Fin]
+</pre>
+</div>
+
 <!-- Interfaz de Usuario -->
 
 <div style="page-break-before: always;"></div>
@@ -2322,11 +2747,63 @@ Game "1" -- "*" Favorite : es favorito de
     </tr>
 </table>
 
+<h2>Definición de Informes</h2>
+
+<p>IVDb no genera informes tradicionales en formato impreso o PDF. La información se presenta de forma dinámica en la interfaz web con las siguientes vistas de datos agregados:</p>
+
+<table>
+    <tr>
+        <th style="width: 30%; background-color: #e6e6e6;">Vista/Informe</th>
+        <th style="background-color: #e6e6e6;">Descripción</th>
+    </tr>
+    <tr>
+        <td><strong>Página de Perfil</strong></td>
+        <td>
+            Muestra estadísticas del usuario:
+            <ul>
+                <li>Número total de favoritos</li>
+                <li>Número total de reseñas escritas</li>
+                <li>Lista completa de favoritos con imágenes</li>
+                <li>Historial de reseñas con puntuaciones</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Detalle de Juego</strong></td>
+        <td>
+            Agrega información de múltiples fuentes:
+            <ul>
+                <li>Puntuación promedio de reseñas de usuarios</li>
+                <li>Número total de reseñas</li>
+                <li>Número de usuarios que tienen el juego en favoritos</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Listado con Filtros</strong></td>
+        <td>
+            Permite generar vistas filtradas:
+            <ul>
+                <li>Juegos por género</li>
+                <li>Juegos por plataforma</li>
+                <li>Ordenación por fecha, nombre, popularidad</li>
+                <li>Paginación para grandes conjuntos de datos</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<p><em>Nota: Para generar reportes administrativos más detallados, se puede acceder al panel de administración de Django que ofrece vistas tabulares y exportación de datos.</em></p>
+
 <div style="page-break-before: always;"></div>
 
-<h1 id="manual-instalacion">MANUAL DE INSTALACIÓN</h1>
+<h1 id="manual-usuario">MANUAL DE USUARIO</h1>
 
-<h2>Requisitos Previos</h2>
+<p>Este manual describe las funcionalidades de IVDb desde la perspectiva del usuario final, cubriendo la instalación, el uso cotidiano del sistema y las tareas administrativas.</p>
+
+<h2>Descripción del despliegue: INSTALACIÓN Y CONFIGURACIÓN</h2>
+
+<h3>Requisitos Previos</h3>
 
 <p>Para instalar y ejecutar IVDb en un entorno local, se necesitan los siguientes requisitos:</p>
 
@@ -2338,71 +2815,71 @@ Game "1" -- "*" Favorite : es favorito de
     <li><strong>Navegador web moderno:</strong> Chrome, Firefox, Edge o Safari</li>
 </ul>
 
-<h2>Instalación del Backend</h2>
+<h3>Instalación del Backend</h3>
 
-<h3>Paso 1: Clonar el Repositorio</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-git clone https://github.com/jrodgom/ivdb-backend.git
-cd ivdb-backend
+<h4>Paso 1: Clonar el Repositorio</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #4caf50;">
+<span style="color: #50fa7b;">$</span> git clone https://github.com/jrodgom/ivdb-backend.git
+<span style="color: #50fa7b;">$</span> cd ivdb-backend
 </pre>
 
-<h3>Paso 2: Crear Entorno Virtual</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-python -m venv venv
-venv\Scripts\activate  # En Windows
-source venv/bin/activate  # En Linux/Mac
+<h4>Paso 2: Crear Entorno Virtual</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #4caf50;">
+<span style="color: #50fa7b;">$</span> python -m venv venv
+<span style="color: #50fa7b;">$</span> venv\Scripts\activate  <span style="color: #6272a4;"># En Windows</span>
+<span style="color: #50fa7b;">$</span> source venv/bin/activate  <span style="color: #6272a4;"># En Linux/Mac</span>
 </pre>
 
-<h3>Paso 3: Instalar Dependencias</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-pip install -r requirements.txt
+<h4>Paso 3: Instalar Dependencias</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #4caf50;">
+<span style="color: #50fa7b;">$</span> pip install -r requirements.txt
 </pre>
 
-<h3>Paso 4: Configurar Base de Datos</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-cd ivdb
-python manage.py makemigrations
-python manage.py migrate
+<h4>Paso 4: Configurar Base de Datos</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #4caf50;">
+<span style="color: #50fa7b;">$</span> cd ivdb
+<span style="color: #50fa7b;">$</span> python manage.py makemigrations
+<span style="color: #50fa7b;">$</span> python manage.py migrate
 </pre>
 
-<h3>Paso 5: Crear Usuario Administrador</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-python manage.py createsuperuser
+<h4>Paso 5: Crear Usuario Administrador</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #4caf50;">
+<span style="color: #50fa7b;">$</span> python manage.py createsuperuser
 </pre>
 <p>Introducir nombre de usuario, email y contraseña cuando se solicite.</p>
 
-<h3>Paso 6: Iniciar Servidor Backend</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-python manage.py runserver
+<h4>Paso 6: Iniciar Servidor Backend</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #4caf50;">
+<span style="color: #50fa7b;">$</span> python manage.py runserver
 </pre>
 <p>El backend estará disponible en <code>http://localhost:8000</code></p>
 
-<h2>Instalación del Frontend</h2>
+<h3>Instalación del Frontend</h3>
 
-<h3>Paso 1: Clonar el Repositorio Frontend</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-git clone https://github.com/jrodgom/ivdb-frontend.git
-cd ivdb-frontend
+<h4>Paso 1: Clonar el Repositorio Frontend</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #2196f3;">
+<span style="color: #50fa7b;">$</span> git clone https://github.com/jrodgom/ivdb-frontend.git
+<span style="color: #50fa7b;">$</span> cd ivdb-frontend
 </pre>
 
-<h3>Paso 2: Instalar Dependencias</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-npm install
+<h4>Paso 2: Instalar Dependencias</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #2196f3;">
+<span style="color: #50fa7b;">$</span> npm install
 </pre>
 
-<h3>Paso 3: Configurar Variables de Entorno</h3>
+<h4>Paso 3: Configurar Variables de Entorno</h4>
 <p>Crear un archivo <code>.env</code> en la raíz del proyecto con:</p>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-VITE_API_URL=http://localhost:8000
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #ff9800;">
+<span style="color: #f1fa8c;">VITE_API_URL</span>=<span style="color: #8be9fd;">http://localhost:8000</span>
 </pre>
 
-<h3>Paso 4: Iniciar Servidor de Desarrollo</h3>
-<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-npm run dev
+<h4>Paso 4: Iniciar Servidor de Desarrollo</h4>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; border-left: 4px solid #2196f3;">
+<span style="color: #50fa7b;">$</span> npm run dev
 </pre>
 <p>El frontend estará disponible en <code>http://localhost:5173</code></p>
 
-<h2>Importar Datos Iniciales (Opcional)</h2>
+<h3>Importar Datos Iniciales (Opcional)</h3>
 
 <p>Para poblar la base de datos con juegos desde RAWG API:</p>
 
@@ -2412,7 +2889,7 @@ npm run dev
     <li>Los juegos se importarán automáticamente a la base de datos</li>
 </ol>
 
-<h2>Verificación de Instalación</h2>
+<h3>Verificación de Instalación</h3>
 
 <ul>
     <li>Acceder a <code>http://localhost:5173</code> en el navegador</li>
@@ -2422,7 +2899,7 @@ npm run dev
     <li>Verificar que todas las funcionalidades son accesibles</li>
 </ul>
 
-<h2>Solución de Problemas Comunes</h2>
+<h3>Solución de Problemas Comunes</h3>
 
 <table>
     <tr>
@@ -2447,17 +2924,13 @@ npm run dev
     </tr>
 </table>
 
-<div style="page-break-before: always;"></div>
+<h2>Descripción funcional del sistema</h2>
 
-<h1 id="manual-usuario">MANUAL DE USUARIO</h1>
+<p>IVDb es una plataforma web para gestionar información de videojuegos, escribir reseñas y crear listas personales de favoritos. Esta sección explica cómo utilizar las funcionalidades principales del sistema desde la perspectiva del usuario final.</p>
 
-<h2>Introducción</h2>
+<h3>Acceso al Sistema</h3>
 
-<p>IVDb es una plataforma web para gestionar información de videojuegos, escribir reseñas y crear listas personales de favoritos. Este manual explica cómo utilizar las funcionalidades principales del sistema.</p>
-
-<h2>Acceso al Sistema</h2>
-
-<h3>Registro de Nueva Cuenta</h3>
+<h4>Registro de Nueva Cuenta</h4>
 <ol>
     <li>Acceder a la página principal de IVDb</li>
     <li>Hacer clic en el botón "Registrarse" en la esquina superior derecha</li>
@@ -2473,16 +2946,16 @@ npm run dev
     <li>El sistema redirigirá automáticamente a la página principal con la sesión iniciada</li>
 </ol>
 
-<h3>Inicio de Sesión</h3>
+<h4>Inicio de Sesión</h4>
 <ol>
     <li>Hacer clic en "Iniciar Sesión" en la barra de navegación</li>
     <li>Introducir nombre de usuario y contraseña</li>
     <li>Hacer clic en "Entrar"</li>
 </ol>
 
-<h2>Búsqueda y Exploración de Juegos</h2>
+<h3>Búsqueda y Exploración de Juegos</h3>
 
-<h3>Búsqueda por Nombre</h3>
+<h4>Búsqueda por Nombre</h4>
 <ul>
     <li>Utilizar la barra de búsqueda en la parte superior de cualquier página</li>
     <li>Introducir el nombre del juego que se desea buscar</li>
@@ -2490,7 +2963,7 @@ npm run dev
     <li>Se mostrarán los resultados coincidentes</li>
 </ul>
 
-<h3>Filtrado de Juegos</h3>
+<h4>Filtrado de Juegos</h4>
 <ul>
     <li>En la página principal, utilizar el panel de filtros lateral</li>
     <li>Seleccionar uno o varios géneros (Acción, RPG, Aventura, etc.)</li>
@@ -2498,14 +2971,14 @@ npm run dev
     <li>Los resultados se actualizarán automáticamente</li>
 </ul>
 
-<h3>Navegación por Páginas</h3>
+<h4>Navegación por Páginas</h4>
 <ul>
     <li>Utilizar los botones de paginación en la parte inferior del listado</li>
     <li>Hacer clic en "Siguiente" para ver más juegos</li>
     <li>Hacer clic en "Anterior" para volver a páginas previas</li>
 </ul>
 
-<h2>Visualización de Información de Juegos</h2>
+<h4>Visualización de Información de Juegos</h4>
 
 <p>Al hacer clic en cualquier juego, se accede a su página de detalle que muestra:</p>
 
@@ -2518,9 +2991,9 @@ npm run dev
     <li><strong>Reseñas de usuarios:</strong> Opiniones y valoraciones de otros jugadores</li>
 </ul>
 
-<h2>Gestión de Favoritos</h2>
+<h3>Gestión de Favoritos</h3>
 
-<h3>Añadir a Favoritos</h3>
+<h4>Añadir a Favoritos</h4>
 <ol>
     <li>Navegar a la página de detalle de un juego</li>
     <li>Hacer clic en el icono de corazón vacío</li>
@@ -2528,22 +3001,22 @@ npm run dev
     <li>Aparecerá un mensaje de confirmación</li>
 </ol>
 
-<h3>Ver Lista de Favoritos</h3>
+<h4>Ver Lista de Favoritos</h4>
 <ol>
     <li>Hacer clic en "Mis Favoritos" en la barra de navegación</li>
     <li>Se mostrará la lista completa de juegos marcados como favoritos</li>
 </ol>
 
-<h3>Eliminar de Favoritos</h3>
+<h4>Eliminar de Favoritos</h4>
 <ol>
     <li>En la página de favoritos o en el detalle del juego</li>
     <li>Hacer clic en el icono de corazón relleno</li>
     <li>El juego se eliminará de la lista de favoritos</li>
 </ol>
 
-<h2>Escribir y Gestionar Reseñas</h2>
+<h3>Escribir y Gestionar Reseñas</h3>
 
-<h3>Crear una Reseña</h3>
+<h4>Crear una Reseña</h4>
 <ol>
     <li>Navegar a la página de detalle del juego a reseñar</li>
     <li>Desplazarse hasta la sección "Escribe tu reseña"</li>
@@ -2553,7 +3026,7 @@ npm run dev
     <li>La reseña aparecerá inmediatamente en la lista</li>
 </ol>
 
-<h3>Editar una Reseña</h3>
+<h4>Editar una Reseña</h4>
 <ol>
     <li>Acceder al perfil personal</li>
     <li>Localizar la reseña a editar en "Mis Reseñas"</li>
@@ -2562,7 +3035,7 @@ npm run dev
     <li>Guardar los cambios</li>
 </ol>
 
-<h3>Eliminar una Reseña</h3>
+<h4>Eliminar una Reseña</h4>
 <ol>
     <li>Acceder al perfil personal</li>
     <li>Localizar la reseña a eliminar</li>
@@ -2570,16 +3043,16 @@ npm run dev
     <li>Confirmar la eliminación</li>
 </ol>
 
-<h2>Gestión de Perfil Personal</h2>
+<h3>Gestión de Perfil Personal</h3>
 
-<h3>Ver Perfil</h3>
+<h4>Ver Perfil</h4>
 <ul>
     <li>Hacer clic en "Perfil" en la barra de navegación</li>
     <li>Se mostrará la imagen de perfil, biografía y estadísticas</li>
     <li>También se visualizarán las reseñas escritas</li>
 </ul>
 
-<h3>Editar Perfil</h3>
+<h4>Editar Perfil</h4>
 <ol>
     <li>En la página de perfil, hacer clic en "Editar Perfil"</li>
     <li>Modificar los siguientes campos:
@@ -2591,18 +3064,22 @@ npm run dev
     <li>Hacer clic en "Guardar Cambios"</li>
 </ol>
 
-<h2>Funciones de Administrador</h2>
+<h2>Guía del administrador</h2>
+
+<p>Los usuarios con permisos de staff (administradores) tienen acceso a funcionalidades adicionales para gestionar el contenido de la plataforma.</p>
+
+<h3>Funciones de Administrador</h3>
 
 <p><em>Disponibles solo para usuarios con permisos de administrador:</em></p>
 
-<h3>Crear Nuevo Juego</h3>
+<h4>Crear Nuevo Juego</h4>
 <ol>
     <li>Hacer clic en "Añadir Juego" en la barra de navegación</li>
     <li>Completar el formulario con toda la información del juego</li>
     <li>Hacer clic en "Crear Juego"</li>
 </ol>
 
-<h3>Editar Juego Existente</h3>
+<h4>Editar Juego Existente</h4>
 <ol>
     <li>Navegar a la página de detalle del juego</li>
     <li>Hacer clic en el botón "Editar"</li>
@@ -2610,21 +3087,21 @@ npm run dev
     <li>Guardar los cambios</li>
 </ol>
 
-<h3>Eliminar Juego</h3>
+<h4>Eliminar Juego</h4>
 <ol>
     <li>Navegar a la página de detalle del juego</li>
     <li>Hacer clic en el botón "Eliminar"</li>
     <li>Confirmar la eliminación</li>
 </ol>
 
-<h2>Cerrar Sesión</h2>
+<h4>Cerrar Sesión</h4>
 
 <ul>
     <li>Hacer clic en "Cerrar Sesión" en la barra de navegación</li>
     <li>La sesión se cerrará y se redirigirá a la página principal</li>
 </ul>
 
-<h2>Consejos de Uso</h2>
+<h3>Consejos de Uso para Administradores</h3>
 
 <ul>
     <li>Las reseñas ayudan a la comunidad a descubrir buenos juegos, escribir reseñas detalladas y honestas</li>
