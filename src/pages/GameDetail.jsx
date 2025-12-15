@@ -45,6 +45,8 @@ export default function GameDetail() {
       const gameData = await rawgService.getGameDetails(id);
       setGame(gameData);
 
+      let existingGame = null;
+
       // Buscar si el juego existe en la BD
       const response = await fetch(
         `http://localhost:8000/game/games/?search=${encodeURIComponent(gameData.name)}`
@@ -52,7 +54,7 @@ export default function GameDetail() {
       
       if (response.ok) {
         const data = await response.json();
-        const existingGame = data.results?.find(
+        existingGame = data.results?.find(
           (g) => g.title.toLowerCase() === gameData.name.toLowerCase()
         );
         
@@ -69,6 +71,12 @@ export default function GameDetail() {
           setRating(existingReview.rating);
           setComment(existingReview.comment || "");
         }
+      }
+
+      // Cargar todas las reseñas si el juego existe en BD
+      if (existingGame && existingGame.id) {
+        const allReviews = await reviewService.getGameReviews(existingGame.id);
+        setReviews(allReviews);
       }
     } catch (error) {
       console.error("Error loading game:", error);
@@ -508,6 +516,53 @@ export default function GameDetail() {
                 >
                   Iniciar Sesión
                 </a>
+              </div>
+            )}
+
+            {/* Reseñas de la Comunidad */}
+            {reviews.length > 0 && (
+              <div className="bg-gray-900/80 border border-gray-800/60 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#000a] p-6">
+                <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-fuchsia-500 mb-6 flex items-center gap-2">
+                  <MessageSquare size={32} />
+                  Reseñas de la Comunidad
+                  <span className="text-sm text-gray-400 font-normal">({reviews.length})</span>
+                </h2>
+                <div className="space-y-4">
+                  {reviews.map((review) => (
+                    <div
+                      key={review.id}
+                      className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-5 hover:border-indigo-500/30 transition-all duration-300"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-linear-to-br from-indigo-500 to-fuchsia-600 flex items-center justify-center text-white font-bold text-lg shadow-[0_0_15px_#6366f188]">
+                            {review.user_username?.charAt(0).toUpperCase() || 'U'}
+                          </div>
+                          <div>
+                            <p className="text-white font-semibold">{review.user_username || 'Usuario'}</p>
+                            <p className="text-gray-500 text-xs">
+                              {new Date(review.created_at).toLocaleDateString('es-ES', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 bg-gray-900/60 px-3 py-1.5 rounded-lg">
+                          <Star className="fill-yellow-400 text-yellow-400" size={18} />
+                          <span className="text-yellow-400 font-bold text-lg">{review.rating}</span>
+                          <span className="text-gray-400 text-sm">/10</span>
+                        </div>
+                      </div>
+                      {review.comment && (
+                        <p className="text-gray-300 leading-relaxed">
+                          {review.comment}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
